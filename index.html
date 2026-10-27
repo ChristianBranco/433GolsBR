@@ -1,0 +1,533 @@
+<title>433 Gols Brasileirão</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Archivo:wght@400;500;600;700&family=Doto:wght@700;900&display=swap">
+<style>
+/* Layout: placar de LED + caça-níquel de clubes à esquerda, campo 4-3-3 com figurinhas à direita; uma coluna no celular. */
+:root{
+  --grass:#0d2b1f;        /* fundo: gramado à noite */
+  --grass-2:#123826;      /* faixas do gramado */
+  --chalk:#e9f1e6;        /* cal das linhas / texto principal */
+  --muted:#93ac9c;        /* texto secundário */
+  --led:#ffb330;          /* placar de LED âmbar */
+  --sticker:#f6f1e3;      /* papel da figurinha */
+  --ink:#16201a;          /* tinta sobre a figurinha */
+  --hit:#4fd17a;          /* acerto */
+  --miss:#ff6b5a;         /* estouro */
+  --panel:#0a2219;
+  --line:rgba(233,241,230,.16);
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-led:"Doto","Courier New",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--grass);color:var(--chalk)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.45;
+  background:
+    repeating-linear-gradient(180deg,var(--grass) 0 64px,var(--grass-2) 64px 128px);
+  min-height:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--led);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+
+/* topo */
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin-bottom:20px}
+.brand h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,6vw,58px);line-height:.9;margin:0;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
+.brand h1 span{color:var(--led)}
+.brand p{margin:6px 0 0;color:var(--muted);max-width:56ch}
+.tabs{display:flex;gap:4px;background:var(--panel);padding:4px;border-radius:999px;border:1px solid var(--line)}
+.tabs button{border:0;background:transparent;padding:8px 18px;border-radius:999px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:12px;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--chalk);color:var(--ink)}
+
+/* jogo */
+.game{display:grid;grid-template-columns:minmax(0,390px) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:880px){.game{grid-template-columns:minmax(0,1fr)}}
+.side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.setup{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.setup select{background:var(--panel);color:var(--chalk);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:inherit;font-size:13px;text-transform:none;letter-spacing:0;min-width:0}
+.board{background:#050d09;border:1px solid var(--line);border-radius:14px;padding:14px 16px 12px;box-shadow:inset 0 0 40px rgba(0,0,0,.6)}
+.board .lbl{display:flex;justify-content:space-between;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.led{font-family:var(--f-led);font-weight:900;color:var(--led);font-size:clamp(56px,11vw,84px);line-height:1;letter-spacing:.04em;text-shadow:0 0 18px rgba(255,179,48,.45);font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:10px}
+.led small{font-size:.38em;color:rgba(255,179,48,.55);text-shadow:none}
+.led.over{color:var(--miss);text-shadow:0 0 18px rgba(255,107,90,.45)}
+.led.exact{color:var(--hit);text-shadow:0 0 18px rgba(79,209,122,.5)}
+.meter{height:8px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:8px;position:relative}
+.meter i{position:absolute;inset:0 auto 0 0;background:var(--led);transition:width .5s ease}
+.meter.over i{background:var(--miss)}
+.status{font-size:13px;color:var(--muted);margin-top:8px;min-height:1.4em}
+
+.reel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.reel-window{display:flex;align-items:center;gap:14px;background:#04100b;border-radius:10px;padding:12px;border:1px solid var(--line);min-height:84px}
+.reel-window .bigbadge{width:56px;height:56px;border-radius:12px;flex:0 0 auto;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:18px;border:2px solid rgba(255,255,255,.25)}
+.reel-name{font-family:var(--f-display);font-weight:800;font-size:28px;line-height:1;text-transform:uppercase;min-width:0}
+.reel-name small{display:block;font-family:var(--f-body);font-size:12px;font-weight:500;color:var(--muted);text-transform:none;margin-top:4px}
+.spin-btn{width:100%;margin-top:12px;border:0;border-radius:10px;padding:14px;background:var(--led);color:#1d1300;font-family:var(--f-display);font-weight:900;font-size:22px;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 4px 0 #a86e0b}
+.spin-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #a86e0b}
+.spin-btn:disabled{opacity:.4;cursor:default;transform:none}
+
+.offers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.offer{border:0;padding:0;background:none;text-align:left}
+.fig{background:var(--sticker);color:var(--ink);border-radius:8px;overflow:hidden;box-shadow:0 2px 0 rgba(0,0,0,.35),0 8px 18px rgba(0,0,0,.25);display:flex;flex-direction:column;height:100%;transition:transform .15s ease}
+.offer:hover .fig,.offer:focus-visible .fig{transform:translateY(-3px) rotate(-1deg)}
+.fig .band{height:8px}
+.fig .pos{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:8px 8px 0;color:#566055}
+.fig .nm{font-family:var(--f-display);font-weight:800;font-size:19px;line-height:1;padding:3px 8px 6px;text-transform:uppercase;overflow-wrap:anywhere}
+.fig .cl{display:flex;flex-wrap:wrap;gap:3px;padding:0 8px 8px}
+.fig .gl{margin-top:auto;border-top:1px dashed rgba(22,32,26,.25);padding:6px 8px;font-family:var(--f-led);font-weight:900;font-size:20px;display:flex;justify-content:space-between;align-items:baseline}
+.fig .gl small{font-family:var(--f-body);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#566055}
+.fig .gl.hidden b{color:#9aa39a}
+
+.wild{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wild button{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:600}
+.wild button b{font-family:var(--f-display);font-size:22px;color:var(--led);line-height:1}
+.wild button[aria-pressed="true"]{border-color:var(--led);background:#2a1f05}
+.wild button:disabled{opacity:.35;cursor:default}
+.wild button span{color:var(--muted);font-weight:500;font-size:11px}
+
+/* campo */
+.pitch-wrap{min-width:0}
+.pitch{position:relative;width:100%;max-width:720px;margin:0 auto;aspect-ratio:68/88;border-radius:12px;border:2px solid rgba(233,241,230,.55);
+  background:repeating-linear-gradient(180deg,#1b6a3d 0 11.1%,#1f7444 11.1% 22.2%);overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.pitch .ln{position:absolute;border:2px solid rgba(233,241,230,.55);pointer-events:none}
+.pitch .half{left:-2px;right:-2px;top:50%;height:0;border-width:2px 0 0}
+.pitch .circ{left:50%;top:50%;width:26%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%)}
+.pitch .box-b{left:22%;right:22%;bottom:-2px;height:16%}
+.pitch .box-t{left:22%;right:22%;top:-2px;height:16%}
+.pitch .six-b{left:36%;right:36%;bottom:-2px;height:6%}
+.pitch .six-t{left:36%;right:36%;top:-2px;height:6%}
+.rows{position:absolute;inset:3% 2% 2%;display:grid;grid-template-rows:repeat(4,1fr);gap:2%}
+.row{display:flex;justify-content:space-evenly;align-items:center}
+.slot{width:clamp(66px,21%,128px);border:0;background:none;padding:0}
+.slot .empty{aspect-ratio:3/3.6;border:2px dashed rgba(233,241,230,.55);border-radius:8px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:clamp(14px,2.6vw,20px);color:rgba(233,241,230,.8);background:rgba(0,0,0,.12)}
+.slot .fig .nm{font-size:clamp(12px,2.1vw,17px);padding:5px 6px 4px}
+.slot .fig .pos{padding:5px 6px 0;font-size:9px}
+.slot .fig .gl{font-size:clamp(14px,2.4vw,20px);padding:3px 6px}
+.slot .fig .cl{padding:0 6px 4px}
+.slot.removable .fig{outline:3px solid var(--miss);outline-offset:2px;animation:wob .5s ease-in-out infinite alternate}
+@keyframes wob{from{transform:rotate(-1.5deg)}to{transform:rotate(1.5deg)}}
+.slot.just .fig{animation:pop .45s ease}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+
+.badge{display:inline-grid;place-items:center;min-width:28px;height:16px;padding:0 3px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:.04em;line-height:1;border:1px solid rgba(0,0,0,.25)}
+
+/* resultado */
+.result{background:var(--sticker);color:var(--ink);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.result h2{font-family:var(--f-display);font-weight:900;font-size:34px;line-height:1;margin:0;text-transform:uppercase;text-wrap:balance}
+.result .pts{font-family:var(--f-led);font-weight:900;font-size:44px;line-height:1}
+.result dl{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0;font-size:14px;font-variant-numeric:tabular-nums}
+.result dt{color:#4b564d}.result dd{margin:0;font-weight:700;text-align:right}
+.result .acts{display:flex;gap:8px;flex-wrap:wrap}
+.result .acts button{border:0;border-radius:8px;padding:10px 14px;font-weight:700;background:var(--ink);color:var(--sticker)}
+.result .acts button.alt{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.result .best{font-size:12px;color:#4b564d}
+
+/* tabela */
+.tbl-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.tbl-tools input,.tbl-tools select{background:var(--panel);color:var(--chalk);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;min-width:0}
+.tbl-tools input{flex:1 1 220px}
+.tbl-tools label{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.count{font-size:13px;color:var(--muted);margin-left:auto}
+.clubs-strip{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.clubs-strip button{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:4px 10px 4px 4px;display:flex;gap:6px;align-items:center;font-size:12px}
+.clubs-strip button[aria-pressed="true"]{border-color:var(--led);background:#2a1f05}
+.clubs-strip button em{font-style:normal;color:var(--muted);font-variant-numeric:tabular-nums}
+.tbl-box{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;position:sticky;top:0;background:var(--panel)}
+th button{border:0;background:none;padding:0;font:inherit;color:inherit;text-transform:inherit;letter-spacing:inherit}
+td.g{font-family:var(--f-led);font-weight:900;color:var(--led);font-size:18px;text-align:right;font-variant-numeric:tabular-nums}
+th.g{text-align:right}
+td .cls{display:flex;gap:3px;flex-wrap:wrap}
+tr:hover td{background:rgba(255,255,255,.03)}
+.src{font-size:11px;font-weight:600;letter-spacing:.04em;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.src.ok{background:rgba(79,209,122,.16);color:var(--hit)}
+.src.pq{background:rgba(90,160,255,.16);color:#7fb2ff}
+.src.est{background:rgba(255,255,255,.06);color:var(--muted)}
+.note{font-size:12px;color:var(--muted);margin-top:14px;max-width:80ch}
+.rules{font-size:13px;color:var(--muted);line-height:1.55}
+.rules b{color:var(--chalk)}
+@media (max-width:560px){
+  .pitch{aspect-ratio:auto}
+  .rows{position:relative;inset:auto;padding:14px 4px;gap:14px;grid-template-rows:none}
+  .slot{width:23%}
+  .slot .fig .nm{font-size:11.5px;overflow-wrap:normal;word-break:normal;hyphens:auto}
+  .slot .fig .pos{font-size:8px;letter-spacing:.06em}
+  .slot .fig .gl small{display:none}
+  .offers .fig .nm{font-size:16px}
+}
+.fig .nm{hyphens:auto}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap" lang="pt-BR">
+  <header class="top">
+    <div class="brand">
+      <h1><span id="h-target">433</span> Gols <span>Brasileirão</span></h1>
+      <p>Gire o caça-níquel, escolha jogadores que passaram pelos 20 clubes com mais temporadas na Série A, de 1971 até hoje, e monte um 4-3-3 que some exatamente 433 gols no Brasileirão.</p>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Seções">
+      <button id="tab-play" role="tab" aria-selected="true" aria-controls="view-play">Jogar</button>
+      <button id="tab-table" role="tab" aria-selected="false" aria-controls="view-table">Tabela de jogadores</button>
+    </nav>
+  </header>
+
+  <section id="view-play" role="tabpanel" aria-labelledby="tab-play">
+    <div class="game">
+      <div class="side">
+        <div class="setup" role="group" aria-label="Configuração da partida">
+          <label for="opt-era">Era</label>
+          <select id="opt-era">
+            <option value="">Todas (1971–2026)</option>
+            <option value="70">Anos 70</option><option value="80">Anos 80</option><option value="90">Anos 90</option>
+            <option value="00">Anos 2000</option><option value="10">Anos 2010</option><option value="20">Anos 2020</option>
+            <option value="old">Clássicos (70–80)</option><option value="mid">1990–2009</option><option value="new">2010–2026</option>
+          </select>
+        </div>
+        <div class="board">
+          <div class="lbl"><span>Gols do seu XI</span><span id="slots-left">11 vagas</span></div>
+          <div class="led" id="led"><span id="total">000</span><small>/ <span id="led-target">433</span></small></div>
+          <div class="meter" id="meter"><i id="meter-bar" style="width:0%"></i></div>
+          <div class="status" id="status">Gire para sortear o primeiro clube.</div>
+        </div>
+
+        <div class="reel" id="reel">
+          <div class="reel-window" aria-live="polite">
+            <div class="bigbadge" id="reel-badge">?</div>
+            <div class="reel-name" id="reel-name">Sorteio<small>20 clubes com mais temporadas na Série A</small></div>
+          </div>
+          <div class="offers" id="offers"></div>
+          <button class="spin-btn" id="spin">Girar</button>
+        </div>
+
+        <div class="wild" role="group" aria-label="Coringas">
+          <button id="w-reroll" title="Sorteia outro clube e outras 3 opções"><b id="n-reroll">2</b>Girar de novo<span>troca as opções</span></button>
+          <button id="w-scout" title="Mostra os gols das 3 opções na mesa"><b id="n-scout">2</b>Olheiro<span>revela os gols</span></button>
+          <button id="w-sub" aria-pressed="false" title="Tire um jogador do campo para liberar a vaga"><b id="n-sub">2</b>Substituição<span>tira do campo</span></button>
+        </div>
+
+        <div id="result" class="result" hidden></div>
+
+        <div class="rules">
+          <b>Como jogar.</b> Cada giro sorteia um clube e mostra 3 jogadores que já defenderam esse time no Brasileirão, de 1971 a 2026. Escolha um: ele entra na primeira vaga livre da posição dele no 4-3-3 e os gols dele no Brasileirão (carreira toda) somam no placar. Acertar <b>433 em cheio</b> vale o bônus máximo. Trocar a era começa uma partida nova. Jogadores do mesmo clube sorteado dão <b>bônus de entrosamento</b>.
+        </div>
+      </div>
+
+      <div class="pitch-wrap">
+        <div class="pitch" id="pitch">
+          <div class="ln half"></div><div class="ln circ"></div>
+          <div class="ln box-t"></div><div class="ln six-t"></div>
+          <div class="ln box-b"></div><div class="ln six-b"></div>
+          <div class="rows">
+            <div class="row" data-pos="ATA"></div>
+            <div class="row" data-pos="MEI"></div>
+            <div class="row" data-pos="DEF"></div>
+            <div class="row" data-pos="GOL"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-table" role="tabpanel" aria-labelledby="tab-table" hidden>
+    <div class="clubs-strip" id="clubs-strip"></div>
+    <div class="tbl-tools">
+      <input id="q" type="search" placeholder="Buscar jogador" aria-label="Buscar jogador">
+      <select id="f-pos" aria-label="Posição">
+        <option value="">Todas as posições</option>
+        <option value="GOL">Goleiros</option>
+        <option value="DEF">Defensores</option>
+        <option value="MEI">Meio-campistas</option>
+        <option value="ATA">Atacantes</option>
+      </select>
+      <select id="f-era" aria-label="Década">
+        <option value="">Todas as décadas</option>
+        <option value="70">Anos 70</option><option value="80">Anos 80</option><option value="90">Anos 90</option>
+        <option value="00">Anos 2000</option><option value="10">Anos 2010</option><option value="20">Anos 2020</option>
+      </select>
+      <label><input type="checkbox" id="f-show" checked> Mostrar gols</label>
+      <label><input type="checkbox" id="f-ver"> Só verificados</label>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="tbl-box">
+      <table>
+        <thead><tr>
+          <th><button id="s-name">Jogador</button></th>
+          <th>Pos.</th>
+          <th>Década</th>
+          <th class="g"><button id="s-goals">Gols Série A ▾</button></th>
+          <th>Clubes</th>
+          <th>Fonte</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="note">Base curada com pelo menos 50 jogadores de cada um dos 20 clubes com mais temporadas na Série A, dos anos 70 até hoje. Os gols são o total do jogador no Campeonato Brasileiro, somando todos os clubes brasileiros por onde passou. "Verificado" indica número tirado de fonte: ranking histórico da CBF, ranking dos 25 maiores artilheiros, artilheiros de cada clube desde 2003, top 50 da década 2011–2020, estrangeiros com mais gols e estatísticas por temporada da Wikipédia; números de jogadores em atividade incluem gols de 2026 até onde foi possível apurar. "Pesquisa ogol" indica número levantado no ogol.com.br em pesquisa externa (gols na Série A de 1971 em diante).</p>
+  </section>
+</div>
+
+<script>
+const PLAYERS_RAW=[["Zico","M",135,"70","FLA",1],["Júnior","M",17,"70","FLA",1],["Leandro","D",10,"80","FLA",2],["Mozer","D",8,"80","FLA",1],["Raul","G",0,"70","CRU FLA",1],["Cantarele","G",0,"70","FLA",1],["Rondinelli","D",5,"70","FLA COR VAS CAP",2],["Adílio","M",26,"70","FLA",1],["Andrade","M",10,"70","FLA VAS CAP",2],["Tita","M",50,"70","FLA GRE INT VAS",1],["Nunes","A",60,"70","FLA FLU BOT CAM",1],["Cláudio Adão","A",91,"70","SAN FLA BOT FLU VAS COR",1],["Lico","M",4,"80","FLA",1],["Carpegiani","M",10,"70","INT FLA",2],["Geraldo","M",1,"70","FLA",1],["Doval","A",34,"70","FLA FLU",1],["Bebeto","A",88,"80","FLA VAS CRU BOT VIT",1],["Aldair","D",3,"80","FLA",1],["Jorginho","D",8,"80","FLA SAO VAS FLU",2],["Zé Carlos","G",0,"80","FLA",1],["Gilmar Rinaldi","G",0,"80","INT SAO FLA",1],["Leonardo","D",6,"80","SAO FLA",2],["Renato Gaúcho","A",50,"80","GRE FLA BOT CRU FLU CAM",1],["Zinho","M",46,"80","FLA PAL GRE CRU",1],["Gaúcho","A",39,"80","FLA PAL CAM FLU",1],["Marcelinho Carioca","M",90,"90","FLA COR SAN VAS",1],["Sávio","A",20,"90","FLA",1],["Djalminha","M",29,"90","FLA GRE PAL",1],["Romário","A",154,"80","VAS FLA FLU",1],["Petković","M",83,"90","VIT VAS FLA FLU SAN CAM",1],["Athirson","D",17,"90","FLA CRU BOT SAN POR",1],["Juan","D",9,"90","FLA INT",1],["Júlio César","G",0,"90","FLA",1],["Adriano","A",30,"00","FLA COR SAO CAP",1],["Obina","A",55,"00","VIT FLA PAL BAH",1],["Ronaldo Angelim","D",7,"00","FLA",1],["Léo Moura","D",40,"00","BOT VAS PAL FLU FLA GRE",1],["Ibson","M",30,"00","FLA SAN COR",1],["Renato Abreu","M",45,"00","FLA",1],["Fábio Luciano","D",9,"00","COR FLA INT",2],["Kléberson","M",25,"00","CAP FLA BAH",1],["Vágner Love","A",50,"00","PAL FLA COR",1],["Ronaldinho","M",33,"00","GRE FLA CAM FLU",1],["Hernane","A",26,"10","FLA BAH SPO GRE",1],["Elias","M",30,"10","COR FLA",1],["Paolo Guerrero","A",56,"10","COR FLA INT",1],["Diego","M",42,"00","SAN FLA",1],["Everton Ribeiro","M",52,"10","CFC CRU FLA BAH",1],["Vinícius Júnior","A",7,"10","FLA",1],["Lucas Paquetá","M",14,"10","FLA",1],["Gabigol","A",132,"10","SAN FLA CRU",1],["Bruno Henrique","A",81,"10","SAN FLA GOI",1],["Arrascaeta","M",80,"10","CRU FLA",1],["Gerson","M",12,"10","FLU FLA CRU",1],["Pedro","A",103,"10","FLU FLA",1],["Filipe Luís","D",3,"10","FLA",2],["Rafinha","D",3,"10","CFC FLA SAO GRE",1],["Rodrigo Caio","D",7,"10","SAO FLA GRE",1],["Léo Pereira","D",14,"10","CAP FLA",1],["Fabrício Bruno","D",8,"10","FLA CRU",2],["Michael","A",27,"10","FLA GOI",1],["Ayrton Lucas","D",11,"20","FLU FLA",1],["Guillermo Varela","D",3,"20","FLA",2],["Erick Pulgar","M",3,"20","FLA",1],["Gonzalo Plata","A",8,"20","FLA",2],["Rossi","G",0,"20","FLA",1],["Hugo Souza","G",0,"20","FLA COR",1],["Diego Alves","G",0,"10","CAM FLA",1],["Jorginho","M",6,"20","FLA",1],["Nicolás De la Cruz","M",2,"20","FLA",1],["Jorge Carrascal","M",4,"20","FLA",1],["Saúl Ñíguez","M",0,"20","FLA",1],["Luiz Araújo","A",20,"20","SAO CAM FLA",2],["Everton Cebolinha","A",44,"10","GRE FLA",1],["Thiago Maia","M",6,"10","SAN FLA INT",1],["Willian Arão","M",14,"10","COR BOT FLA POR SAN",1],["João Gomes","M",3,"20","FLA",2],["Rodinei","D",3,"10","COR FLA INT",1],["Renê","D",6,"10","FLA INT SPO FLU",2],["Pará","D",4,"10","SAN GRE FLA BAH",1],["Alex Muralha","G",0,"10","FLA",1],["Danilo","D",3,"20","SAN FLA",2],["Alex Sandro","D",3,"20","SAN FLA",2],["Léo Ortiz","D",17,"20","FLA",1],["Wesley","D",3,"20","FLA",2],["Roberto Dinamite","A",190,"70","VAS POR",1],["Paulinho (anos 70)","A",32,"70","VAS",1],["Mazarópi","G",0,"70","VAS GRE",1],["Dirceu","M",12,"70","BOT FLU VAS CFC",2],["Jorge Mendonça","M",91,"70","PAL VAS NAU",1],["Leão","G",0,"70","PAL VAS GRE COR",1],["Geovani","M",14,"80","VAS",1],["Acácio","G",0,"80","VAS",1],["Mazinho","D",5,"80","VAS PAL VIT",2],["Bismarck","M",29,"80","VAS FLU GOI",1],["Sorato","A",20,"80","VAS PAL CRU BOT FLU VIT",2],["Vivinho","A",26,"80","VAS BOT GOI",1],["Luís Carlos Winck","D",5,"80","INT VAS GRE COR CAM BOT FLA",2],["Edmundo","A",153,"90","VAS PAL CRU SAN FLA COR",1],["Juninho Pernambucano","M",43,"90","VAS SPO",1],["Felipe","M",14,"90","VAS FLA FLU",1],["Pedrinho","M",25,"90","VAS",2],["Ramón","M",98,"90","VAS CRU VIT CAM FLU BOT BAH CAP",1],["Carlos Germano","G",0,"90","VAS SAN",1],["Hélton","G",0,"90","VAS",1],["Odvan","D",3,"90","VAS BOT CFC FLU",1],["Mauro Galvão","D",22,"80","INT GRE VAS BOT",1],["Alexandre Torres","D",6,"90","VAS FLU",1],["Valdir Bigode","A",80,"90","VAS CAM BOT SAO SAN",2],["Euller","A",41,"90","SAO PAL VAS CAM",1],["Mário Jardel","A",14,"90","VAS GRE GOI",1],["Juninho Paulista","M",40,"90","SAO PAL VAS FLA",1],["Viola","A",91,"90","COR PAL SAN VAS",1],["Donizete","A",26,"90","BOT VAS COR PAL CRU",1],["Alex Teixeira","M",8,"00","VAS",2],["Philippe Coutinho","M",9,"20","VAS",1],["Dedé","D",16,"10","VAS CRU",1],["Fagner","D",13,"10","VAS COR CRU",1],["Éder Luís","A",40,"10","CAM VAS",1],["Diego Souza","M",130,"00","FLA FLU PAL GRE CAM CRU VAS SAN BOT SAO SPO",1],["Alecsandro","A",105,"00","VIT CRU INT VAS FLA CAM PAL CFC",1],["Nenê","M",40,"10","PAL VAS SAO FLU",1],["Germán Cano","A",62,"20","VAS FLU",1],["Pablo Vegetti","A",38,"20","VAS",1],["Dimitri Payet","M",5,"20","VAS",1],["Léo Jardim","G",0,"20","VAS",1],["Rayan","A",16,"20","VAS",1],["Leandro Castán","D",4,"10","COR VAS CRU CAM",2],["Anderson Martins","D",3,"10","VAS COR SAO BAH VIT",1],["Fernando Prass","G",0,"10","VAS PAL",1],["Rivellino","M",55,"70","COR FLU",1],["Paulo César Caju","M",30,"70","BOT FLA FLU VAS GRE COR",2],["Pintinho","M",3,"70","FLU VAS",2],["Edinho","D",15,"70","FLU FLA GRE",1],["Félix","G",0,"70","FLU",1],["Carlos Alberto Torres","D",26,"70","SAN FLU FLA BOT",1],["Gil","A",20,"70","FLU BOT COR CFC",2],["Manfrini","A",25,"70","FLU PAL BOT",2],["Marinho Chagas","D",10,"70","BOT FLU NAU SAO",2],["Assis","M",33,"80","CAP FLU SAO INT",1],["Washington (Casal 20)","A",30,"80","CAP FLU",2],["Romerito","M",15,"80","FLU",2],["Deley","M",8,"80","FLU PAL BOT CAP",1],["Ricardo Gomes","D",5,"80","FLU",2],["Paulo Victor","G",0,"80","FLU",1],["Branco","D",3,"80","GRE FLU INT COR",2],["Ézio","A",30,"90","FLU",2],["Magno Alves","A",56,"90","FLU",1],["Roger","A",82,"00","INT CRU BOT COR FLU SPO",1],["Fred","A",158,"00","FLU CRU CAM",1],["Washington","A",126,"00","CAP FLU SAO",1],["Thiago Neves","M",60,"00","FLU FLA CRU GRE SPO",1],["Darío Conca","M",36,"00","FLU FLA",1],["Deco","M",2,"10","FLU",1],["Emerson Sheik","A",40,"10","FLU COR BOT FLA SAO",1],["Wellington Nem","A",18,"10","FLU SAO",1],["Rafael Sóbis","A",67,"00","INT FLU CRU",1],["Diego Cavalieri","G",0,"10","PAL FLU BOT",1],["Gum","D",18,"10","FLU INT",1],["Leandro Euzébio","D",8,"00","FLU",2],["Thiago Silva","D",6,"00","FLU",2],["Rafael Moura","A",95,"00","FLU CAM INT GOI",1],["Henrique Dourado","A",47,"10","FLU FLA PAL",1],["Gustavo Scarpa","M",39,"10","FLU PAL CAM",1],["Richarlison","A",12,"10","FLU",2],["Cícero","M",67,"00","FLU SAO SAN GRE BAH BOT",1],["Paulo Henrique Ganso","M",35,"00","SAN SAO FLU",1],["Luiz Henrique","A",17,"20","FLU BOT",1],["Jhon Arias","M",25,"20","FLU",1],["John Kennedy","A",24,"20","FLU",1],["André","M",4,"20","FLU",2],["Martinelli","M",8,"20","FLU",2],["Marcelo","D",3,"20","FLU",2],["Samuel Xavier","D",6,"20","FLU SPO CAM",1],["Nino","D",4,"20","FLU",2],["Fábio","G",0,"00","CRU VAS FLU",1],["Keno","A",42,"10","PAL CAM FLU",1],["Marcos Felipe","G",0,"20","FLU BAH",1],["Agustín Canobbio","M",17,"20","CAP FLU",1],["Jairzinho","A",36,"70","BOT CRU POR",2],["Mendonça","M",49,"70","BOT PAL SAN",2],["Wendell","G",0,"70","BOT",1],["Maurício","A",20,"80","BOT",2],["Josimar","D",8,"80","BOT FLA INT",2],["Túlio Maravilha","A",129,"90","BOT COR VIT GOI",1],["Gonçalves","D",3,"90","BOT FLA CRU INT",2],["Wagner","G",0,"90","BOT",1],["Sérgio Manoel","M",22,"90","BOT SAN GRE CRU CFC",1],["Dodô","A",96,"90","SAO SAN BOT VAS FLU",1],["Lúcio Flávio","M",35,"00","BOT",1],["André Lima","A",55,"00","BOT GRE VIT",1],["Herrera","A",20,"10","BOT",1],["Loco Abreu","A",24,"10","BOT",1],["Maicosuel","M",27,"00","BOT CAM CRU PAL",1],["Jefferson","G",0,"00","CRU BOT",1],["Seedorf","M",16,"10","BOT",1],["Elkeson","A",30,"10","VIT BOT",1],["Joel Carli","D",2,"10","BOT",1],["Dória","D",4,"10","BOT SAO",2],["Rodrigo Pimpão","A",6,"10","BOT",1],["Erik","A",40,"20","BOT GOI",1],["Tiquinho Soares","A",32,"20","BOT SAN",1],["Eduardo","M",11,"20","BOT",1],["Júnior Santos","A",14,"20","BOT CAM",1],["Igor Jesus","A",10,"20","BOT CFC",2],["Thiago Almada","M",1,"20","BOT",1],["Jefferson Savarino","M",25,"20","CAM BOT FLU",1],["Marlon Freitas","M",12,"20","BOT PAL",2],["Gregore","M",2,"20","BOT",2],["Alex Telles","D",4,"20","BOT",2],["Alexander Barboza","D",2,"20","BOT",2],["Bastos","D",3,"20","BOT",2],["Danilo (Botafogo)","M",13,"20","PAL BOT",1],["Arthur Cabral","A",12,"20","BOT",2],["John","G",0,"20","SAN BOT",1],["Gatito Fernández","G",0,"10","BOT",1],["Lucas Perri","G",0,"20","BOT",1],["Víctor Cuesta","D",8,"10","INT BOT",1],["Diego Hernández","A",1,"20","BOT",1],["Igor Rabello","D",5,"10","BOT CAM FLU",1],["Sócrates","M",48,"70","COR FLA SAN",1],["Palhinha (anos 70)","A",68,"70","CRU COR CAM SAN",1],["Zé Maria","D",5,"70","COR",2],["Wladimir","D",5,"70","COR",2],["Basílio","M",10,"70","COR",2],["Geraldão","A",25,"70","COR",2],["Biro-Biro","M",15,"70","COR",2],["Zenon","M",20,"70","COR CAM",2],["Casagrande","A",39,"80","COR FLA",1],["Neto","M",50,"80","COR SAO PAL SAN CAM",2],["Ronaldo Giovanelli","G",0,"80","COR",1],["Tupãzinho","A",15,"90","COR",2],["Rivaldo","M",28,"90","COR PAL SAO CRU",1],["Ricardinho","M",52,"90","COR SAO SAN CAM BAH",1],["Vampeta","M",7,"90","VIT COR FLA INT FLU GOI",1],["Edílson","A",82,"90","PAL COR CRU FLA VIT BAH VAS",1],["Dida","G",0,"90","VIT CRU COR GRE INT POR",1],["Freddy Rincón","M",15,"90","PAL COR SAN CRU",2],["Carlos Gamarra","D",10,"90","INT COR PAL",1],["Luizão","A",124,"90","PAL VAS COR GRE BOT SAO FLA",1],["Gil","D",12,"00","CRU COR SAN",1],["Kléber","D",20,"00","COR SAN INT GRE",2],["Deivid","A",91,"00","COR SAN CRU FLA CFC",1],["Fábio Costa","G",0,"00","VIT COR SAN",1],["Carlos Tevez","A",25,"00","COR",1],["Nilmar","A",51,"00","INT COR SAN",1],["Carlos Alberto","M",31,"00","FLU COR VAS BOT GRE SAO CAP BAH GOI",1],["Ronaldo","A",30,"90","CRU COR",2],["Jorge Henrique","A",21,"00","COR VAS BOT CAP",1],["Dentinho","A",12,"00","COR",1],["Chicão","D",24,"00","COR FLA BAH",1],["Ralf","M",4,"10","COR",2],["Paulinho","M",22,"10","COR",1],["Danilo","M",41,"00","SAO COR GOI",1],["Liédson","A",28,"10","COR FLA",1],["Romarinho","A",12,"10","COR SPO",1],["Renato Augusto","M",17,"10","FLA COR FLU",1],["Jadson","M",58,"00","CAP SAO COR",1],["Malcom","A",7,"10","COR",1],["Cássio","G",0,"10","COR CRU",1],["Jô","A",55,"00","COR INT CAM",1],["Rodriguinho","M",36,"10","COR CRU BAH GRE",1],["Ángel Romero","A",30,"10","COR",1],["Pedrinho (Corinthians)","A",5,"10","COR CAM",1],["Fabián Balbuena","D",7,"10","COR",1],["Róger Guedes","A",55,"10","PAL CAM COR",1],["Yuri Alberto","A",66,"20","SAN INT COR",1],["Memphis Depay","A",12,"20","COR",2],["Rodrigo Garro","M",12,"20","COR",2],["Félix Torres","D",1,"20","COR INT",1],["Matheuzinho","D",5,"20","COR FLA",1],["Guilherme Arana","D",12,"10","COR CAM CAP",1],["Walter","G",0,"10","COR",1],["Ademir da Guia","M",36,"70","PAL",1],["Luís Pereira","D",10,"70","PAL FLA POR COR",2],["Leivinha","M",40,"70","PAL",1],["César Maluco","A",65,"70","PAL",1],["Edu Bala","A",27,"70","PAL",1],["Jorginho Putinatti","A",29,"80","PAL COR GRE SAN",1],["Evair","A",101,"80","PAL VAS SAO POR",1],["Antônio Carlos","D",13,"90","SAO PAL COR SAN",1],["Roberto Carlos","D",4,"90","PAL COR",2],["Cléber","D",8,"90","PAL CAM",2],["César Sampaio","M",8,"90","PAL SAN SAO COR",1],["Müller","A",79,"80","SAO PAL SAN CRU COR",1],["Velloso","G",0,"90","PAL CAM",1],["Marcos","G",0,"90","PAL",1],["Alex","M",78,"90","CFC PAL FLA CRU",1],["Oséas","A",45,"90","PAL CRU CAP",1],["Paulo Nunes","A",50,"90","FLA GRE PAL",1],["Arce","D",31,"90","GRE PAL",1],["Júnior (lateral)","D",7,"90","VIT PAL SAO",1],["Roque Júnior","D",8,"90","PAL",2],["Magrão","M",10,"90","PAL",2],["Jorge Valdivia","M",15,"00","PAL",1],["Kléber Gladiador","A",55,"00","CRU PAL GRE VAS CFC",1],["Marcos Assunção","M",24,"00","SAN FLA PAL GRE",2],["Hernán Barcos","A",38,"10","PAL GRE",1],["Henrique","D",12,"00","CRU PAL",2],["Alan Kardec","A",31,"10","VAS PAL SAO SAN CAM INT",1],["Gabriel Jesus","A",16,"10","PAL",1],["Dudu","A",60,"10","CRU GRE PAL CAM",1],["Moisés","M",16,"10","PAL POR",1],["Zé Rafael","M",23,"10","BAH PAL CFC SAN",1],["Willian Bigode","A",62,"10","CRU PAL FLU SAN",1],["Miguel Borja","A",10,"10","PAL",1],["Deyverson","A",53,"10","PAL CAM",1],["Lucas Lima","M",23,"10","SAN PAL SPO INT",1],["Felipe Melo","M",16,"10","GRE PAL FLU FLA CRU",1],["Gustavo Gómez","D",25,"10","PAL",1],["Weverton","G",0,"10","CAP PAL GRE",1],["Mayke","D",8,"10","CRU PAL SAN",1],["Marcos Rocha","D",12,"10","CAM PAL GRE",1],["Joaquín Piquerez","D",8,"20","PAL",1],["Raphael Veiga","M",60,"10","CFC PAL CAP",1],["Rony","A",45,"10","CAP PAL CAM",1],["Breno Lopes","A",20,"20","PAL CFC CAP",1],["Endrick","A",14,"20","PAL",1],["Estêvão","M",13,"20","PAL",1],["Flaco López","A",38,"20","PAL",1],["Vitor Roque","A",26,"20","CAP PAL",1],["Richard Ríos","M",5,"20","PAL",1],["Aníbal Moreno","M",3,"20","PAL",2],["Murilo","D",9,"20","CRU PAL",1],["Vitor Reis","D",1,"20","PAL",1],["Maurício","M",28,"20","INT PAL CRU",1],["Facundo Torres","A",6,"20","PAL",2],["Felipe Anderson","A",8,"20","SAN PAL",2],["Lucas Barrios","A",10,"10","PAL GRE",1],["Leandro Pereira","A",32,"10","PAL SPO",1],["Jaílson","G",0,"10","PAL",1],["Edu Dracena","D",18,"00","CRU SAN PAL COR",1],["Tchê Tchê","M",14,"10","PAL SAO BOT CAM VAS",1],["Paulinho","A",35,"20","VAS CAM PAL",1],["Pelé","A",101,"70","SAN",1],["Edu","A",13,"70","SAN",2],["Clodoaldo","M",5,"70","SAN",2],["Cejas","G",0,"70","SAN",1],["Juary","A",18,"70","SAN",1],["Pita","M",27,"70","SAN SAO",1],["Nílton Batata","A",20,"70","SAN CAP",2],["João Paulo","A",25,"70","SAN FLA COR PAL NAU",2],["Ailton Lira","M",20,"70","SAN",2],["Serginho Chulapa","A",127,"70","SAO SAN COR",1],["Paulo Isidoro","M",25,"70","CAM GRE SAN",2],["Rodolfo Rodríguez","G",0,"80","SAN",1],["Paulinho McLaren","A",36,"90","SAN POR INT CRU FLU",2],["Guga","A",25,"90","SAN",2],["Giovanni","M",27,"90","SAN",1],["Robert","A",15,"90","SAN",2],["Rodrigo Fabri","M",57,"90","GRE SAO FLA SAN POR CAM",2],["Robinho","A",62,"00","SAN CAM",1],["Elano","M",28,"00","SAN GRE FLA",1],["Léo","D",14,"00","SAN",1],["Renato","M",18,"00","SAN BOT",1],["Ricardo Oliveira","A",93,"00","SAN SAO CAM POR",1],["Kléber Pereira","A",102,"00","CAP SAN VAS",1],["Zé Roberto","M",12,"00","FLA SAN GRE PAL POR",1],["Neymar","A",70,"10","SAN",1],["Arouca","M",9,"00","FLU SAO SAN PAL VIT",1],["Durval","D",18,"00","SAN SPO CAP",1],["Rafael Cabral","G",0,"10","SAN CRU",1],["Walter Montillo","M",28,"10","CRU SAN",1],["David Braz","D",18,"10","SAN FLA FLU GRE VIT",1],["Victor Ferraz","D",8,"10","SAN CFC GRE",1],["Zeca","D",4,"10","SAN INT BAH",1],["Copete","A",18,"10","SAN",1],["Rodrygo","A",9,"10","SAN",1],["Yeferson Soteldo","A",21,"20","SAN GRE FLU",1],["Marinho","A",42,"10","VIT SAN FLA",1],["Kaio Jorge","A",40,"20","SAN CRU",1],["Lucas Veríssimo","D",4,"10","SAN",2],["Marcos Leonardo","A",35,"20","SAN",1],["Jean Lucas","M",5,"20","SAN BAH FLA",1],["Wellington Paulista","A",109,"00","SAN BOT CRU",1],["Everson","G",1,"20","SAN CAM",1],["Borges","A",99,"00","SAO GRE SAN CRU",1],["Pedro Rocha (uruguaio)","M",33,"70","SAO CFC PAL",1],["Muricy","M",15,"70","SAO",2],["Chicão (anos 70)","M",5,"70","SAO CAM SAN",2],["Waldir Peres","G",0,"70","SAO COR",1],["Zé Sérgio","A",20,"70","SAO SAN VAS",2],["Mário Sérgio","M",18,"70","VIT FLU BOT SAO INT GRE PAL",1],["Toninho Cerezo","M",14,"70","CAM SAO",2],["Darío Pereyra","D",10,"80","SAO",2],["Oscar (zagueiro)","D",7,"80","SAO",1],["Careca","A",92,"80","SAO",1],["Silas","M",17,"80","SAO VAS CAP",1],["Raí","M",25,"80","SAO",2],["Zetti","G",0,"90","PAL SAO SAN",1],["Cafu","D",9,"90","SAO PAL",1],["Ronaldão","D",4,"90","SAO FLA SAN",1],["Palhinha","A",30,"90","SAO CRU",2],["Ricardo Rocha","D",3,"90","SAO VAS SAN FLU FLA",1],["Denílson","A",10,"90","SAO FLA PAL",1],["França","A",44,"90","SAO",1],["Rogério Ceni","G",65,"90","SAO",1],["Kaká","M",23,"00","SAO",1],["Luís Fabiano","A",116,"00","SAO VAS",1],["Grafite","A",47,"00","SAO GOI GRE CAP",1],["Amoroso","A",48,"90","FLA SAO COR GRE",1],["Aloísio Chulapa","A",30,"00","CAP SAO GOI FLA",1],["Mineiro","M",15,"00","SAO",1],["Josué","M",7,"00","SAO GOI CAM",1],["Diego Lugano","D",6,"00","SAO",2],["Fabão","D",16,"00","SAO BAH FLA GOI SAN",1],["Miranda","D",6,"00","CFC SAO",1],["André Dias","D",6,"00","SAO",2],["Hernanes","M",32,"00","SAO",1],["Dagoberto","A",72,"00","CAP SAO INT CRU VAS VIT",1],["Jorge Wagner","M",38,"00","SAO INT",1],["Richarlyson","M",9,"00","SAO CAM VIT",1],["Lucas Moura","A",33,"10","SAO",1],["Alexandre Pato","A",35,"00","INT COR SAO",1],["Michel Bastos","M",22,"10","SAO SPO CAP PAL",1],["Jonathan Calleri","A",50,"10","SAO",1],["Christian Cueva","M",10,"10","SAO SAN",1],["Pablo","A",52,"10","CAP SAO FLA SPO",1],["Luciano","A",91,"10","COR FLU SAO GRE",1],["Brenner","A",14,"20","SAO FLU VAS",1],["Igor Gomes","M",15,"20","SAO CAM",1],["Daniel Alves","D",4,"20","BAH SAO",2],["Reinaldo","D",45,"10","SAO GRE",1],["Robert Arboleda","D",6,"10","SAO",2],["Rafael","G",0,"10","CRU CAM SAO",1],["Wellington Rato","M",8,"20","SAO VIT",2],["Alisson","M",26,"10","CRU GRE SAO VAS FLU",2],["James Rodríguez","M",2,"20","SAO",2],["Ferreirinha","A",12,"20","GRE SAO",2],["André Silva","A",8,"20","SAO",2],["Oscar","M",11,"00","SAO INT",1],["Rafael Tolói","D",4,"10","SAO GOI",2],["Lúcio","D",8,"00","INT SAO PAL",1],["Tiago Volpi","G",3,"10","SAO GRE",1],["Tarciso","A",80,"70","GRE",1],["André Catimba","A",20,"70","VIT GRE",2],["Éder Aleixo","A",54,"70","GRE CAM PAL BOT CAP",1],["Baltazar","A",62,"80","GRE PAL FLA BOT GOI",1],["Hugo De León","D",5,"80","GRE COR SAN BOT",2],["Valdo","M",31,"80","GRE CRU SAN CAM BOT",1],["Cuca","M",27,"80","GRE PAL INT SAN POR",1],["Dinho","M",8,"90","GRE SAO SAN SPO",2],["Adílson","D",5,"90","GRE",2],["Danrlei","G",0,"90","GRE",1],["Carlos Miguel","M",18,"90","GRE POR",1],["Tcheco","M",25,"00","GRE CFC",2],["Anderson","M",2,"00","GRE INT",1],["Lucas Leiva","M",4,"00","GRE",1],["Marcelo Moreno","A",34,"00","CRU GRE FLA",1],["Jonas","A",45,"00","SAN GRE",1],["Victor","G",0,"00","GRE CAM",1],["Douglas","M",30,"10","GRE VAS",1],["Luan","M",32,"10","GRE COR",1],["Pedro Rocha","A",20,"10","GRE CRU FLA CAP",1],["Pedro Geromel","D",6,"10","GRE",1],["Walter Kannemann","D",2,"10","GRE",1],["Arthur","M",2,"10","GRE",1],["Marcelo Grohe","G",0,"10","GRE",1],["Mathías Villasanti","M",8,"20","GRE",1],["Franco Cristaldo","M",12,"20","GRE",2],["Luis Suárez","A",17,"20","GRE",1],["Martin Braithwaite","A",15,"20","GRE",2],["Carlos Vinícius","A",25,"20","GRE",1],["Willian José","A",25,"10","SAO GRE BAH",1],["Cristian Pavón","A",5,"20","GRE CAM",2],["Bitello","M",4,"20","GRE",1],["Diego Costa","A",8,"20","CAM GRE BOT",1],["Réver","D",34,"00","GRE CAM INT FLA",1],["Bruno Alves","D",6,"10","SAO GRE",2],["Jemerson","D",5,"10","CAM COR GRE",1],["Juninho Capixaba","D",14,"10","COR GRE BAH",1],["Falcão","M",15,"70","INT SAO",2],["Valdomiro","A",70,"70","INT",1],["Elías Figueroa","D",10,"70","INT",2],["Manga","G",0,"70","INT",1],["Flávio Minuano","A",27,"70","INT",2],["Dario","A",127,"70","CAM INT FLA SPO",1],["Lula","A",20,"70","INT FLU SPO PAL",2],["Batista","M",7,"70","INT GRE PAL",2],["Jair","M",25,"70","INT CRU VIT",2],["Escurinho","A",25,"70","INT PAL CFC",2],["Rubén Paz","M",10,"80","INT",1],["Taffarel","G",0,"80","INT CAM",1],["Nílson","A",44,"80","INT FLA",1],["Christian","A",89,"90","INT GRE",1],["Fernandão","A",60,"00","INT GOI",1],["Iarley","A",53,"00","INT GOI COR",1],["Clemer","G",0,"00","FLA INT POR",1],["Índio","D",23,"00","INT",1],["Bolívar","D",12,"00","INT BOT POR",2],["Tinga","M",19,"00","GRE INT CRU BOT",1],["D'Alessandro","M",41,"00","INT",1],["Pablo Guiñazú","M",4,"00","INT VAS",1],["Leandro Damião","A",51,"10","INT SAN FLA",1],["Taison","M",13,"00","INT",1],["Nico López","A",12,"10","INT",1],["Thiago Galhardo","A",45,"20","INT",1],["Edenílson","M",34,"10","COR INT",1],["Patrick","M",24,"10","INT SAO CAM SPO GOI SAN",1],["Alan Patrick","M",46,"10","SAN INT FLA",1],["Wanderson","M",13,"20","INT CRU",1],["Enner Valencia","A",13,"20","INT",1],["Rafael Borré","A",6,"20","INT",1],["Sergio Rochet","G",0,"20","INT",1],["Vitão","D",2,"20","INT FLA",1],["Bernabei","D",4,"20","INT",2],["Gabriel Mercado","D",3,"20","INT",2],["Danilo Fernandes","G",0,"10","INT BAH",1],["Marcelo Lomba","G",0,"10","FLA BAH INT PAL",1],["Tostão","A",46,"70","CRU VAS",1],["Dirceu Lopes","M",25,"70","CRU",2],["Piazza","M",5,"70","CRU",2],["Nelinho","D",53,"70","CRU GRE CAM",2],["Joãozinho","A",32,"70","CRU",1],["Zé Carlos (Cruzeiro)","M",5,"70","CRU",2],["Roberto César","A",38,"70","CRU POR GRE",1],["Charles","A",39,"80","BAH CRU FLA",2],["Marcelo Ramos","A",60,"90","BAH CRU PAL",1],["Fábio Júnior","A",57,"90","CRU PAL CAM",1],["Juan Pablo Sorín","D",3,"90","CRU",1],["Alex Mineiro","A",71,"90","CRU CAP PAL VIT",1],["Geovanni","A",13,"00","CRU VIT",1],["Aristizábal","A",48,"00","CRU",1],["Wagner","M",25,"00","CRU",1],["Ramires","M",10,"00","CRU PAL",1],["Thiago Ribeiro","A",47,"00","CRU SAN SAO CAM",1],["Leonardo Silva","D",30,"00","CRU CAM",1],["Ricardo Goulart","M",40,"10","CRU SAN BAH GOI",1],["Lucas Silva","M",7,"10","CRU GRE",1],["Egídio","D",6,"10","CRU FLA VIT PAL FLU",1],["Ceará","D",3,"10","CRU INT SAN CFC",2],["Sassá","A",23,"10","CRU BOT CFC",1],["Matheus Pereira","M",28,"20","CRU",1],["Lucas Romero","M",2,"20","CRU",1],["Christian","M",19,"20","CRU CAP",1],["Bruno Rodrigues","A",8,"20","CRU CAP SAO PAL",1],["Serginho","D",33,"90","CRU SAO FLA BAH",1],["Manoel","D",14,"10","CAP CRU FLU COR",2],["Paulo André","D",10,"00","COR CAP CRU",1],["Reinaldo","A",89,"70","CAM",1],["João Leite","G",0,"70","CAM",1],["Luizinho","D",8,"80","CAM CRU",2],["Sérgio Araújo","A",20,"80","CAM FLA FLU VAS GRE",2],["Renaldo","A",37,"90","CAM COR PAL",2],["Marques","A",74,"90","CAM COR SAO FLA VAS",1],["Guilherme","A",83,"90","CAM VAS SAO GRE COR CRU BOT",1],["Gilberto Silva","M",4,"90","CAM GRE",1],["Diego Tardelli","A",65,"00","SAO CAM FLA GRE SAN",1],["Bernard","M",13,"10","CAM",1],["Luan (Atlético-MG)","M",25,"10","CAM",1],["Lucas Pratto","A",25,"10","CAM SAO",1],["Juan Cazares","M",23,"10","CAM",1],["Rómulo Otero","M",17,"10","CAM COR",1],["Yimmi Chará","A",4,"10","CAM",1],["Eduardo Vargas","A",20,"20","CAM",1],["Nacho Fernández","M",9,"20","CAM",1],["Matías Zaracho","M",12,"20","CAM",1],["Hulk","A",66,"20","CAM",1],["Junior Alonso","D",6,"20","CAM",2],["Lyanco","D",1,"20","CAM SAO",1],["Alan Franco","M",4,"20","CAM",1],["Cleiton","G",0,"20","CAM",1],["Sicupira","A",20,"70","CAP COR BOT",2],["Paulo Rink","A",10,"90","CAP SAN",2],["Adriano Gabiru","M",34,"00","CAP CRU INT SPO",1],["Fernandinho","M",3,"00","CAP",2],["Ilan","A",22,"00","CAP",1],["Denis Marques","A",15,"00","CAP FLA",2],["Paulo Baier","M",107,"00","VAS PAL CAP GOI SPO",1],["Éderson","A",28,"10","CAP",1],["Marcelo Cirino","A",30,"10","CAP FLA INT",1],["Nikão","M",30,"10","CAP SAO CRU",1],["Thiago Heleno","D",17,"10","CRU CAP COR PAL",1],["Lucho González","M",4,"10","CAP",1],["Bruno Guimarães","M",4,"10","CAP",2],["Renan Lodi","D",0,"10","CAP CAM",1],["David Terans","M",19,"20","CAP CAM FLU",1],["Bento","G",0,"20","CAP",1],["Santos","G",0,"10","CAP FLA",1],["Kevin Viveros","A",21,"20","CAP",1],["Mastriani","A",12,"20","CAP",1],["Erick","M",11,"20","CAP BAH",1],["Beijoca","A",38,"70","BAH VIT",2],["Bobô","M",29,"80","BAH FLU SAO FLA",2],["Paulo Rodrigues","M",10,"80","BAH",2],["Talisca","M",4,"10","BAH",2],["Maxi Biancucchi","A",23,"10","BAH FLA VIT",1],["Edigar Junio","A",20,"10","BAH",1],["Gilberto","A",70,"10","BAH POR SPO INT",1],["Élber","A",21,"10","BAH CRU CFC SPO",1],["Régis","M",10,"10","BAH",2],["Thaciano","M",18,"20","BAH",1],["Cauly","M",10,"20","BAH",1],["Luciano Juba","M",20,"20","BAH",1],["Everaldo","A",43,"20","BAH VIT",1],["Caio Alexandre","M",9,"20","BAH BOT",1],["Ademir","A",15,"20","BAH",1],["Kanu","D",1,"20","BAH VIT BOT",1],["Santiago Arias","D",0,"20","BAH",1],["Alex Alves","A",55,"90","VIT PAL CRU CAM POR",1],["David Luiz","D",4,"00","VIT FLA",1],["Renato Kayzer","A",21,"20","CAP VIT",1],["Alerrandro","A",31,"20","VIT",1],["Matheuzinho (Vitória)","M",14,"20","VIT",1],["Gustavo Mosquito","A",6,"20","VIT",2],["Lucas Arcanjo","G",0,"20","VIT",1],["Janderson","A",12,"20","VIT COR",2],["Renzo López","A",1,"20","VIT",1],["Felipe","G",0,"00","VIT COR FLA",1],["Lela","A",20,"80","CFC FLU",2],["Índio","A",20,"80","CFC VAS COR",2],["Rafael (Coritiba)","G",0,"80","CFC",1],["Keirrison","A",35,"00","CFC PAL SAN",1],["Marcelinho Paraíba","M",45,"00","SAO GRE FLA CFC SPO",1],["Bill","A",15,"10","CFC COR SAN",1],["Robson","A",15,"10","CFC",2],["Wilson","G",3,"10","CFC",1],["Alef Manga","A",13,"20","CFC",1],["Cleber Santana","M",11,"10","CAP SAN SAO FLA",1],["Apodi","D",8,"10","GOI SPO",2],["Túlio de Melo","A",27,"10","SPO",1],["Artur","A",22,"20","PAL",1],["Helinho","M",24,"20","SAO",1],["Eduardo Sasha","A",71,"10","INT SAN CAM",1],["Luan Cândido","D",18,"20","SPO",1],["Lucas Mugni","M",3,"10","FLA SPO BAH",1],["Negueba","A",4,"10","FLA CFC GRE SAO",1],["Marcelo Rangel","G",0,"20","GOI",1],["Júnior Baiano","D",29,"90","FLA SAO PAL VAS CRU",1],["Fábio Santos","D",27,"00","SAO COR CAM",1],["Gilberto","D",12,"90","FLA VAS GRE SAN CRU SAO",2],["Alex Silva","D",0,"00","SAO FLA",1],["Vitinho","A",35,"10","BOT FLA INT",1],["Fábio Baiano","M",15,"90","FLA PAL",2],["Beto","M",20,"90","FLA BOT GRE SAO FLU VAS",1],["Toró","M",6,"00","FLA FLU CAM BAH GOI",1],["Williams","M",7,"00","FLA INT CRU COR",1],["Morais","M",25,"00","VAS COR",1],["Felipe Bastos","M",7,"10","VAS GOI GRE",1],["Nilton","M",19,"10","VAS CRU INT COR",2],["Martín Silva","G",0,"10","VAS",1],["Riascos","A",5,"10","VAS CRU",1],["Talles Magno","A",8,"20","VAS COR",1],["Yago Pikachu","D",43,"10","VAS",1],["Thalles","A",8,"10","VAS",2],["Andrés Ríos","A",10,"10","VAS",2],["Gabriel Pec","A",9,"20","VAS CRU",1],["Mariano","D",6,"10","FLU CAM CRU",1],["Carlinhos","D",8,"10","FLU SAN CRU SAO INT",2],["Jean","M",25,"10","FLU SAO PAL",1],["Junior Sornoza","M",3,"10","FLU COR",1],["Marcos Paulo","A",6,"20","FLU",2],["Leandro Guerreiro","M",5,"00","BOT CRU INT",2],["Marcelo Mattos","M",17,"10","BOT COR VAS",2],["Jobson","A",17,"10","BOT BAH",2],["Lucas Piton","D",3,"20","COR VAS",1],["Fausto Vera","M",4,"20","COR CAM",1],["Maurício Ramos","D",5,"00","PAL CFC VIT",2],["Pierre","M",3,"00","PAL CAM FLU",1],["Thiago Santos","M",6,"10","PAL GRE FLU CFC",2],["Bruno Henrique (volante)","M",35,"10","PAL POR",1],["Gabriel Menino","M",9,"20","PAL CAM SAN",1],["Jorge","D",3,"10","FLA SAN PAL",2],["Carlos Sánchez","M",21,"10","SAN",1],["Ângelo","A",3,"20","SAN",2],["Rollheiser","M",6,"20","SAN",2],["Paulo Miranda","D",7,"10","SAO BAH GRE PAL NAU",2],["Antony","A",4,"10","SAO",2],["Gabriel Sara","M",9,"20","SAO",1],["Rodrigo Nestor","M",9,"20","SAO BAH",2],["Lucas Beraldo","D",1,"20","SAO",1],["Fernando","M",3,"10","GRE",2],["Rhodolfo","D",6,"10","SAO GRE FLA CAP CFC",1],["Edílson","D",14,"10","GRE CRU BOT CAP COR GOI",2],["Maicon","M",18,"10","GRE SAO FLU",2],["Matheus Henrique","M",7,"20","GRE CRU",2],["Jean Pyerre","M",11,"20","GRE",1],["Charles Aránguiz","M",6,"10","INT",1],["Valdívia","M",16,"10","INT CAM",1],["William Pottker","A",23,"10","INT",1],["Jonathan","D",10,"00","CRU FLU CAP SAN",1],["Julio Baptista","M",12,"10","CRU SAO",1],["Allan","M",2,"20","CAM FLA",2],["Jair (volante)","M",15,"20","CAM SAN SPO VAS INT",2],["Rubens","D",4,"20","CAM",1],["Vitinho (Athletico)","A",10,"20","CAP",2],["Zapelli","M",2,"20","CAP",1],["Kieza","A",42,"10","BAH NAU VIT",1],["Neto Baiano","A",20,"00","VIT",2],["Miguel Trellez","A",14,"10","VIT SAO INT SPO",1],["Wilson Mano","D",6,"80","COR BAH",2],["Ataliba","A",10,"80","COR SAN",2],["Dudu (anos 70)","M",5,"70","PAL",2],["Ancheta","D",7,"70","GRE",1],["Marinho Peres","D",3,"70","INT SAN POR",2],["Perfumo","D",4,"70","CRU",2],["Marcelo Oliveira","M",20,"70","CAM BOT",2],["Elzo","M",8,"80","CAM INT PAL",2],["Carlos Roberto","M",5,"70","BOT",2],["Zanata","M",9,"70","VAS FLA CFC",1],["Tato","A",15,"80","FLU CFC INT VAS SPO SAN GRE",2],["Harlei","G",0,"90","GOI",1],["Tadeu","G",0,"10","GOI",1],["Renan","G",0,"10","GOI",1],["Dill","A",29,"00","GOI",1],["Araújo","A",50,"00","GOI NAU",1],["Dimba","A",68,"00","GOI BOT FLA",2],["Souza (Goiás)","A",66,"00","GOI VAS INT FLA COR BAH",1],["Rodrigo Tabata","M",33,"00","GOI SAN",1],["Alex Dias","A",40,"90","GOI SAO",1],["Walter","A",35,"10","GOI CAP FLU",1],["Hugo","M",40,"00","SAO GRE SPO GOI",1],["Felipe Menezes","M",10,"10","GOI SPO PAL",2],["Thiago Mendes","M",9,"10","GOI SAO VAS",2],["Leandro Barcia","A",8,"20","GOI SPO",1],["Kayke","A",15,"10","GOI FLA SAN BAH FLU",1],["Rafael Vaz","D",11,"10","GOI VAS FLA",1],["Alan Ruschel","D",1,"20","GOI INT CAP",1],["Marlone","M",18,"10","GOI COR VAS CRU FLU SPO CAM",1],["Jadílson","D",5,"00","GOI SPO",2],["Diogo Barbosa","D",5,"10","GOI CFC CRU PAL GRE VAS SPO FLU BOT",1],["Felipe Macedo","D",0,"10","GOI",1],["Rafael Forster","D",0,"10","GOI BOT",1],["Zé Eduardo","A",17,"10","GOI VIT SAN",1],["Valmir Lucas","D",0,"10","GOI",1],["David Duarte","D",6,"10","GOI BAH FLU",1],["Maguinho","D",1,"20","GOI",2],["Bruno Melo","D",7,"20","GOI COR CFC",2],["Everton Morelli","M",3,"20","GOI",1],["Lucas Halter","D",5,"20","GOI BOT CAP",2],["Guilherme (Goiás)","M",8,"20","GOI",1],["Julián Palacios","M",2,"20","GOI",2],["Sander","D",1,"10","GOI SPO",1],["Zé Ricardo","M",1,"20","GOI",2],["João Magno","A",3,"20","GOI",1],["Matheus Peixoto","A",4,"20","GOI",2],["Matheus Babi","A",10,"20","GOI BOT CAP",1],["Raphael Guzzo","M",1,"20","GOI",1],["Luis Oyama","M",1,"20","GOI BOT",2],["Alesson","A",4,"20","GOI BAH",2],["Magrão","G",0,"00","SPO",1],["Agenor","G",0,"10","SPO",1],["Carlinhos Bala","A",29,"00","SPO NAU CRU",2],["Leonardo (Sport)","A",25,"90","SPO COR PAL",2],["Roberto Coração de Leão","A",30,"70","SPO",2],["Robertinho","M",10,"80","SPO FLU FLA PAL INT CAM",2],["Marco Antônio (Sport)","M",10,"80","SPO",2],["Fumagalli","M",33,"00","SPO SAN VAS COR",1],["Luciano Henrique","M",6,"00","SPO",2],["Leandro Machado","A",23,"90","SPO INT FLA SAN",2],["Sandro Goiano","M",3,"00","SPO GRE",2],["Dutra","D",5,"00","SPO SAN CFC",2],["Daniel Paulista","M",3,"00","SPO SAN NAU",2],["Enílton","A",28,"00","SPO CFC CAM VAS VIT PAL",2],["César Lucena","D",3,"00","SPO",2],["Sidny","D",0,"00","SPO NAU",1],["Cicinho","D",18,"00","SAO SPO CAM BOT",1],["Marquinhos Gabriel","M",24,"10","SPO INT COR BAH PAL SAN CRU CAP",1],["Felipe Azevedo","A",33,"10","SPO",1],["Rithely","M",10,"10","SPO INT FLU GOI",1],["Patric","D",20,"10","SPO CAM CFC",2],["Ewerton Páscoa","D",1,"10","SPO SAN",1],["Rodrigo Mancha","M",3,"10","SPO CFC SAN VIT",1],["Joelinton","A",3,"10","SPO",1],["Ronaldo Alves","D",5,"10","SPO NAU",2],["Matheus Ferraz","D",8,"10","SPO FLU GOI SAN",2],["Oswaldo Henríquez","D",1,"10","SPO VAS",1],["Gabriel Xavier","M",4,"10","SPO VIT CRU",1],["Rogério","A",10,"10","SPO",2],["Everton Felipe","M",3,"10","SPO SAO CAP CRU",2],["André","A",70,"10","SAN CAM COR GRE SPO",1],["Reinaldo Lenis","M",2,"10","SPO",2],["Eugenio Mena","D",2,"10","SPO CRU SAN SAO BAH",1],["Osvaldo","A",25,"10","SPO VIT SAO FLU",1],["Derik Lacerda","A",11,"20","SPO",1],["Chrystian Barletta","M",2,"20","SPO",2],["Rafael Thyere","D",4,"20","SPO",2],["Sérgio Oliveira","M",1,"20","SPO",1],["Hyoran","M",6,"20","SPO PAL CAM",2],["Ramon Menezes","D",1,"10","SPO VIT",1],["Bita","A",0,"70","NAU",2],["Lourival","M",15,"80","NAU",2],["Baiano","A",20,"80","NAU",2],["Batata","A",15,"80","NAU",2],["Nildo","A",15,"80","NAU",2],["Netinho (Náutico)","M",10,"90","NAU",2],["Kuki","A",15,"90","NAU",2],["Beto Acosta","A",27,"00","NAU COR",1],["Felipe (Náutico)","A",24,"00","NAU GOI VIT",2],["Geraldo (Náutico)","M",10,"00","NAU",2],["Marcel","M",3,"00","NAU",2],["Hamílton","M",2,"00","NAU",2],["Tales","M",2,"00","NAU",2],["Marcelinho (Náutico)","A",3,"00","NAU",2],["Marcelo Silva","M",2,"00","NAU",2],["Ferreira","A",5,"00","NAU",2],["Onildo","D",1,"00","NAU",2],["Radamés","M",1,"00","NAU",1],["Elicarlos","M",9,"00","NAU CRU",2],["Derley","M",5,"00","NAU",2],["Gilmar (Náutico)","M",15,"00","NAU",2],["Bruno Mineiro","A",31,"00","NAU POR CAP SPO GOI",2],["Anderson Lessa","A",4,"00","NAU",1],["Gladstone","D",3,"00","NAU CRU PAL",2],["Cláudio Luiz","D",1,"00","NAU",2],["Irênio","M",1,"00","NAU",2],["Michel (Náutico)","D",1,"00","NAU",2],["Gideão","G",0,"10","NAU",1],["Rodrigo Carvalho","G",0,"10","NAU",1],["Ricardo Berna","G",0,"00","NAU FLU",1],["Martinez","M",8,"00","NAU CRU PAL INT",2],["Lúcio (Náutico)","M",1,"10","NAU",2],["Kim","A",12,"00","NAU CAM",2],["Rhayner","A",4,"10","NAU BAH FLU VIT",1],["Douglas Santos","D",2,"10","NAU CAM",1],["Márcio Rozário","D",1,"10","NAU BOT FLU",2],["Breitner","M",0,"10","NAU",1],["Glaydson","M",1,"10","NAU INT",2],["Maikon Leite","A",20,"10","NAU SAN PAL",2],["Tiago Real","M",6,"10","NAU VIT PAL BAH GOI CFC",2],["Rodrigo Souto","M",10,"00","NAU SAO SAN",2],["Auremir","D",3,"10","NAU VAS GOI",2],["William Alves","D",1,"10","NAU",2],["Luiz Eduardo","D",1,"10","NAU",2],["Leandro Amaro","D",1,"10","NAU PAL",1],["Bruno Collaço","D",1,"10","NAU GRE GOI",2],["Marcos Vinícius","M",1,"10","NAU",2],["Diego Morales","M",0,"10","NAU",1],["Juan Manuel Olivera","A",2,"10","NAU",1],["Hugo Cabral","A",2,"10","NAU",2],["Jones Carioca","A",4,"10","NAU CRU GOI BAH",2],["Enéas","M",51,"70","POR PAL",2],["Dicá","M",25,"70","POR SAN",2],["Edu Marangon","M",16,"80","POR SAN PAL FLA CFC",1],["Dener","M",7,"90","POR VAS GRE",1],["Capitão","M",10,"90","POR",2],["Alexandre Gallo","M",10,"90","POR SAN VIT SAO CAM",1],["Leandro Amaral","A",60,"90","POR VAS FLU",1],["Glédson","G",0,"10","POR",1],["Lauro","G",2,"00","POR INT",1],["Luis Ricardo","D",8,"10","POR SAO",2],["Marcelo Cañete","M",3,"10","POR SAO",2],["Héverton","M",3,"00","POR",2],["Jean Mota","M",9,"10","POR SAN VIT",1],["Edno","A",15,"00","POR VIT",2],["Diego Augusto","D",1,"10","POR",2],["Valdomiro (Portuguesa)","D",6,"10","POR BAH FLA PAL",2],["Lima","D",1,"10","POR",2],["Moisés Moura","D",4,"10","POR VIT CRU FLA",1],["Ivan","D",1,"10","POR",1],["Magal","D",0,"10","POR FLA",1],["Lacerda","D",0,"10","POR",1],["Bryan","D",1,"10","POR CRU VIT",2],["Bruninho","M",1,"10","POR",2],["Ferdinando","M",1,"10","POR GRE",2],["Corrêa","M",1,"10","POR",2],["Wanderson (Portuguesa)","M",3,"10","POR",1],["Souza (Portuguesa)","M",2,"10","POR",2],["Diogo (Portuguesa)","A",13,"10","POR FLA SAN PAL",1],["Romão","A",1,"10","POR",2],["Bruno Moraes","A",2,"10","POR",2],["Bergson","A",11,"10","POR GRE CAP",1],["Henrique (Portuguesa)","A",3,"10","POR",2],["Neílson","A",1,"10","POR",2],["Diego Viana","A",1,"10","POR",2],["Dirceu Krüger","M",25,"70","CFC",2],["Pachequinho","M",10,"90","CFC",2],["Jéci","D",9,"00","CFC PAL",1],["Marcos Aurélio","A",20,"00","CFC BAH",1],["Lincoln","M",19,"00","CFC CAM PAL BAH",1],["Júnior Urso","M",9,"10","CFC CAM COR",1],["Anderson Aquino","A",15,"10","CFC CAP SPO GOI BOT",2],["Vaná","G",0,"10","CFC",1],["Vanderlei","G",0,"10","CFC SAN",1],["Leandro Almeida","D",10,"10","CFC CAM PAL INT",2],["Kazim","A",4,"10","CFC COR",1],["Luccas Claro","D",9,"10","CFC FLU",1],["João Paulo (Coritiba)","M",2,"10","CFC",2],["Walisson Maia","D",1,"10","CFC VIT",1],["Nery Bareiro","D",1,"10","CFC",1],["Alan Santos","M",3,"10","CFC SAN BOT VIT",1],["Ruy","M",3,"10","CFC VIT",2],["Amaral","M",10,"10","CFC GOI PAL",2],["Yan Sasse","M",6,"10","CFC VAS",2],["Neto Berola","A",3,"10","CFC",2],["Igor Paixão","A",4,"20","CFC",1],["Fabrício Daniel","A",6,"20","CFC",1],["Kuscevic","D",2,"20","CFC",2],["Gabriel Boschilia","M",4,"20","CFC INT SAO",2],["Sebastián Gómez","M",2,"20","CFC",1],["Fernando Miguel","G",0,"10","VIT VAS",1],["Caíque","G",0,"10","VIT",1],["Diego Renan","D",8,"10","VIT CRU",1],["Marcelo Santos","M",3,"10","VIT",1],["Vander","A",5,"10","VIT BAH FLA",1],["José Welison","M",5,"10","VIT CAM BOT",2],["David (Vitória)","A",8,"10","VIT",2],["Leandro Domingues","M",20,"00","VIT CRU",1],["Uillian Correia","M",4,"10","VIT CFC CRU",2],["Yago","M",4,"10","VIT GOI FLU BAH SPO",2],["Neílton","A",20,"10","SAN CRU VIT",1],["Wallace Reis","D",9,"10","VIT FLA GRE COR",1],["Cleiton Xavier","M",21,"00","PAL VIT INT",1],["Dinei","A",35,"10","VIT",1],["Wagner Leonardo","D",3,"20","VIT SAN GRE",2],["Léo Naldi","M",0,"20","VIT",1],["Luiz Adriano","A",25,"10","PAL INT VIT",1],["Camutanga","D",1,"20","VIT",2],["Lucas Esteves","D",1,"20","VIT PAL GRE",2],["Zé Hugo","A",2,"20","VIT CFC GOI",2],["Bruno Uvini","D",3,"10","SAO VIT SAN GRE",2],["Raúl Cáceres","D",1,"20","VIT VAS CRU",2],["Ricardo Ryller","M",2,"20","VIT",2],["Willian Oliveira","M",5,"20","VIT FLU SPO GOI",1],["Rafael Miranda","M",2,"10","BAH CAM CAP",2],["Demerson","D",2,"10","BAH CFC",1],["Titi","D",5,"10","BAH INT NAU VAS",1],["Guilherme Santos","D",4,"10","BAH VAS CAM SAN BOT",2],["Lucas Fonseca","D",1,"10","BAH",1],["Fahel","M",14,"10","BAH",1],["Uelliton","M",2,"10","BAH VIT CFC",2],["Léo Gago","M",10,"10","BAH CFC VAS GRE PAL",2],["Emanuel Biancucchi","M",3,"10","BAH VAS",2],["Henrique Almeida","A",32,"10","BAH",1],["William Barbio","A",3,"10","BAH VAS",1],["Rafael Galhardo","D",5,"10","BAH SAN FLA GRE CAP CRU VAS",1],["Biel","A",12,"20","FLU BAH CAM",1],["Alan Bahia","M",25,"00","CAP",1],["Marcos Guilherme","A",15,"10","CAP SAO INT SAN",1],["Khellven","D",4,"20","CAP PAL",2],["Pedro Henrique","D",13,"20","CAP INT COR",2],["Hugo Moura","M",4,"20","CAP FLA CFC VAS",2],["Esquivel","D",1,"20","CAP",2],["Tomás Cuello","A",9,"20","CAP CAM",1],["Willian Farias","M",3,"10","CFC VIT CRU SAO SPO",2],["Rogério (Portuguesa)","D",1,"10","POR",2],["Lucas Silva (Portuguesa)","D",1,"10","POR",2],["Matheus (Portuguesa)","M",1,"10","POR",2],["Saulo","G",0,"00","SPO",1],["Caíque França","G",0,"20","SPO",1],["Luiz Carlos","G",0,"10","SPO",1],["Flávio (Athletico)","G",0,"00","CAP",1],["Douglas Pires","G",0,"10","BAH",1],["Jean (goleiro)","G",5,"10","BAH SAO",1],["Felipe Garcia","G",0,"10","NAU",1],["Ramón (anos 70)","A",100,"70","VAS INT SPO GOI",2],["Tuta","A",70,"90","FLU CFC POR CAP FLA PAL GRE NAU",1],["Fischer","A",36,"70","BOT",1],["Toninho Catarina","A",32,"70","PAL",1],["Allan Delon","A",40,"00","VIT VAS SPO",1],["Zé Roberto (Coritiba)","A",34,"80","CFC SAO COR",1],["Cláudio Pitbull","A",18,"00","GRE SAN FLU BAH",1],["Alex (Internacional)","M",72,"00","INT COR",1]];
+
+const CLUBS = {
+  CAP:{s:"#c8102e",sf:"#fff",n:"Athletico",bg:"linear-gradient(90deg,#c8102e 0 33%,#111 33% 66%,#c8102e 66%)",fg:"#fff"},
+  CAM:{s:"#111",sf:"#fff",n:"Atlético-MG",bg:"repeating-linear-gradient(90deg,#111 0 6px,#f5f5f5 6px 12px)",fg:"#111",tx:"#fff"},
+  BAH:{s:"#0a4fa3",sf:"#fff",n:"Bahia",bg:"linear-gradient(90deg,#0a4fa3 0 33%,#fff 33% 66%,#d71920 66%)",fg:"#0a2a5a",tx:"#fff"},
+  BOT:{s:"#111",sf:"#fff",n:"Botafogo",bg:"repeating-linear-gradient(90deg,#111 0 6px,#f5f5f5 6px 12px)",fg:"#111",tx:"#fff"},
+  COR:{s:"#fff",sf:"#111",n:"Corinthians",bg:"#f5f5f5",fg:"#111"},
+  CFC:{s:"#00543d",sf:"#fff",n:"Coritiba",bg:"linear-gradient(180deg,#fff 0 40%,#00543d 40%)",fg:"#fff"},
+  CRU:{s:"#1f3f9a",sf:"#fff",n:"Cruzeiro",bg:"#1f3f9a",fg:"#fff"},
+  FLA:{s:"#d1001c",sf:"#111",n:"Flamengo",bg:"repeating-linear-gradient(180deg,#d1001c 0 6px,#111 6px 12px)",fg:"#fff",tx:"#fff"},
+  FLU:{s:"#7a1631",sf:"#fff",n:"Fluminense",bg:"linear-gradient(90deg,#7a1631 0 33%,#fff 33% 40%,#00613c 40% 73%,#fff 73% 80%,#7a1631 80%)",fg:"#fff"},
+  GRE:{s:"#0d80bf",sf:"#fff",n:"Grêmio",bg:"repeating-linear-gradient(90deg,#0d80bf 0 6px,#111 6px 12px)",fg:"#fff",tx:"#fff"},
+  INT:{s:"#d0021b",sf:"#fff",n:"Internacional",bg:"#d0021b",fg:"#fff"},
+  PAL:{s:"#006437",sf:"#fff",n:"Palmeiras",bg:"#006437",fg:"#fff"},
+  SAN:{s:"#fff",sf:"#111",n:"Santos",bg:"#f7f7f7",fg:"#111"},
+  SAO:{s:"#fff",sf:"#d6001c",n:"São Paulo",bg:"linear-gradient(180deg,#fff 0 50%,#d6001c 50% 70%,#111 70%)",fg:"#111"},
+  GOI:{s:"#00693e",sf:"#fff",n:"Goiás",bg:"linear-gradient(90deg,#00693e 0 60%,#fff 60%)",fg:"#fff"},
+  SPO:{s:"#d6001c",sf:"#111",n:"Sport",bg:"repeating-linear-gradient(180deg,#d6001c 0 6px,#111 6px 12px)",fg:"#fff"},
+  POR:{s:"#c8102e",sf:"#fff",n:"Portuguesa",bg:"linear-gradient(90deg,#c8102e 0 50%,#00843d 50%)",fg:"#fff"},
+  NAU:{s:"#c8102e",sf:"#fff",n:"Náutico",bg:"repeating-linear-gradient(90deg,#c8102e 0 6px,#fff 6px 12px)",fg:"#fff"},
+  VAS:{s:"#111",sf:"#fff",n:"Vasco",bg:"linear-gradient(135deg,#111 0 42%,#fff 42% 58%,#111 58%)",fg:"#d6001c",tx:"#fff"},
+  VIT:{s:"#d6001c",sf:"#111",n:"Vitória",bg:"repeating-linear-gradient(180deg,#d6001c 0 6px,#111 6px 12px)",fg:"#fff",tx:"#fff"},
+};
+const POSMAP={G:"GOL",D:"DEF",M:"MEI",A:"ATA"};
+const POSNAME={GOL:"Goleiro",DEF:"Defensor",MEI:"Meio-campo",ATA:"Atacante"};
+const SHAPE={ATA:3,MEI:3,DEF:4,GOL:1};
+const TARGET=433; let ERA="";
+const DEC={"70":"Anos 70","80":"Anos 80","90":"Anos 90","00":"Anos 2000","10":"Anos 2010","20":"Anos 2020"};
+const ERAS={old:["70","80"],mid:["90","00"],new:["10","20"]};
+function inEra(p){if(!ERA)return true;return (ERAS[ERA]||[ERA]).includes(p.dec)}
+
+const PLAYERS = PLAYERS_RAW.map((r,i)=>({id:i,name:r[0],pos:POSMAP[r[1]],goals:r[2],dec:r[3],clubs:r[4].split(" "),ver:r[5]}));
+
+/* ---------- utilidades ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function badge(code){const c=CLUBS[code];return `<span class="badge" style="background:${c.s};color:${c.sf}" title="${esc(c.n)}">${code}</span>`}
+function band(code){return CLUBS[code].bg}
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+
+/* ---------- estado ---------- */
+let S;
+function fresh(){
+  return {target:TARGET,era:ERA,xi:{ATA:[null,null,null],MEI:[null,null,null],DEF:[null,null,null,null],GOL:[null]},
+    offers:[],club:null,rerolls:2,scouts:2,subs:2,subMode:false,revealed:false,phase:"idle",lastSlot:null};
+}
+function placed(){const out=[];for(const p in S.xi)S.xi[p].forEach(x=>x&&out.push(x));return out}
+function total(){return placed().reduce((s,x)=>s+PLAYERS[x.id].goals,0)}
+function openPositions(){return Object.keys(S.xi).filter(p=>S.xi[p].some(v=>!v))}
+function usedIds(){return new Set(placed().map(x=>x.id))}
+
+/* ---------- placar ---------- */
+let shown=0;
+function renderBoard(animate){
+  const t=total(), n=placed().length;
+  const led=$("#led"); led.classList.toggle("over",t>TARGET); led.classList.toggle("exact",t===TARGET&&n>0);
+  $("#meter").classList.toggle("over",t>TARGET);
+  $("#meter-bar").style.width=Math.min(100,t/TARGET*100)+"%";
+  $("#slots-left").textContent=(11-n)+(11-n===1?" vaga":" vagas");
+  const from=shown; shown=t;
+  if(!animate||reduce||from===t){$("#total").textContent=String(t).padStart(3,"0");return}
+  const t0=performance.now(),d=600;
+  (function step(now){const k=Math.min(1,(now-t0)/d);const v=Math.round(from+(t-from)*(1-Math.pow(1-k,3)));
+    $("#total").textContent=String(v).padStart(3,"0"); if(k<1)requestAnimationFrame(step)})(t0);
+}
+function setStatus(msg){$("#status").textContent=msg}
+
+/* ---------- campo ---------- */
+function figHTML(p,club,{reveal=true,compact=false}={}){
+  const pl=PLAYERS[p];
+  const clubs=compact?[club]:pl.clubs;
+  return `<div class="fig"><div class="band" style="background:${band(club)}"></div>
+    <div class="pos">${POSNAME[pl.pos]} · ${DEC[pl.dec]}</div>
+    <div class="nm">${esc(pl.name)}</div>
+    <div class="cl">${clubs.map(badge).join("")}</div>
+    <div class="gl ${reveal?"":"hidden"}"><b>${reveal?pl.goals:"??"}</b><small>gols</small></div></div>`;
+}
+function renderPitch(){
+  document.querySelectorAll(".row").forEach(row=>{
+    const pos=row.dataset.pos;
+    row.innerHTML=S.xi[pos].map((x,i)=>{
+      if(!x)return `<div class="slot"><div class="empty">${pos}</div></div>`;
+      const key=pos+i, just=S.lastSlot===key?" just":"";
+      const rem=S.subMode?" removable":"";
+      return `<button class="slot${rem}${just}" data-pos="${pos}" data-i="${i}" ${S.subMode?"":"tabindex='-1'"} aria-label="${esc(PLAYERS[x.id].name)}, ${PLAYERS[x.id].goals} gols${S.subMode?" — toque para tirar do campo":""}">${figHTML(x.id,x.club,{compact:true})}</button>`;
+    }).join("");
+  });
+  S.lastSlot=null;
+}
+$("#pitch").addEventListener("click",e=>{
+  const b=e.target.closest("button.slot"); if(!b||!S.subMode)return;
+  const pos=b.dataset.pos,i=+b.dataset.i,x=S.xi[pos][i];
+  S.xi[pos][i]=null; S.subs--; S.subMode=false;
+  setStatus(`${PLAYERS[x.id].name} saiu (−${PLAYERS[x.id].goals}). A vaga de ${POSNAME[pos].toLowerCase()} está livre.`);
+  if(S.phase==="pick"){ // recalcula opções só se nenhuma servir mais? mantém as atuais
+  }
+  renderAll(true);
+});
+
+/* ---------- sorteio ---------- */
+function eligibleByClub(){
+  const used=usedIds(), open=new Set(openPositions()), usedNames=new Set(placed().map(x=>PLAYERS[x.id].name+"|"+PLAYERS[x.id].pos));
+  const by={};
+  for(const p of PLAYERS){
+    if(used.has(p.id)||!open.has(p.pos)||!inEra(p)||usedNames.has(p.name+"|"+p.pos))continue;
+    for(const c of p.clubs)(by[c]=by[c]||[]).push(p.id);
+  }
+  return by;
+}
+let spinning=false;
+function roll(){
+  if(spinning)return;
+  const by=eligibleByClub();
+  let pool=Object.keys(by).filter(c=>by[c].length>=3);
+  if(!pool.length)pool=Object.keys(by).filter(c=>by[c].length>=1);
+  if(!pool.length){setStatus("Nenhum jogador disponível para as vagas abertas.");return}
+  const club=rnd(pool);
+  // tenta variar posições quando possível
+  const cand=shuffle(by[club]); const pick=[]; const seenPos=new Set();
+  for(const id of cand){if(pick.length<3&&!seenPos.has(PLAYERS[id].pos)){pick.push(id);seenPos.add(PLAYERS[id].pos)}}
+  for(const id of cand){if(pick.length<3&&!pick.includes(id))pick.push(id)}
+  S.offers=pick; S.club=club; S.revealed=false; S.phase="pick";
+  spinTo(club,()=>{renderAll(false);setStatus(`Saiu ${CLUBS[club].n}. Escolha um jogador.`)});
+}
+function spinTo(club,done){
+  const codes=Object.keys(CLUBS);
+  $("#offers").innerHTML=""; $("#spin").disabled=true;
+  if(reduce){showClub(club);done();return}
+  spinning=true; let i=0,delay=45;
+  (function tick(){
+    showClub(codes[(i++)%codes.length]);
+    delay*=1.12;
+    if(delay<260)setTimeout(tick,delay); else {showClub(club);spinning=false;done()}
+  })();
+}
+function showClub(code){
+  const c=CLUBS[code];
+  const b=$("#reel-badge"); b.style.background=c.bg; b.innerHTML=`<span class="badge" style="background:${c.s};color:${c.sf};font-size:13px;height:24px;padding:0 6px">${code}</span>`;
+  const count=PLAYERS.filter(p=>p.clubs.includes(code)&&inEra(p)).length;
+  $("#reel-name").innerHTML=`${esc(c.n)}<small>${count} jogadores na base</small>`;
+}
+function renderOffers(){
+  const box=$("#offers");
+  if(S.phase!=="pick"){box.innerHTML="";return}
+  box.innerHTML=S.offers.map(id=>`<button class="offer" data-id="${id}" aria-label="Escolher ${esc(PLAYERS[id].name)}">${figHTML(id,S.club,{reveal:S.revealed})}</button>`).join("");
+}
+$("#offers").addEventListener("click",e=>{
+  const b=e.target.closest(".offer"); if(!b||S.phase!=="pick")return;
+  choose(+b.dataset.id);
+});
+function choose(id){
+  const p=PLAYERS[id]; const arr=S.xi[p.pos]; const i=arr.indexOf(null);
+  if(i<0){setStatus(`Não há vaga de ${POSNAME[p.pos].toLowerCase()} livre. Escolha outro ou use uma substituição.`);return}
+  arr[i]={id,club:S.club}; S.lastSlot=p.pos+i; S.offers=[]; S.phase="idle"; S.subMode=false;
+  const t=total();
+  if(placed().length===11){renderAll(true);finish();return}
+  const diff=TARGET-t;
+  setStatus(diff>0?`${p.name} trouxe ${p.goals} gols. Faltam ${diff}.`:diff===0?`${p.name} trouxe ${p.goals} gols. Você já está em 433 com vagas abertas: procure quem tem 0 gols.`:`${p.name} trouxe ${p.goals} gols. Passou ${-diff} do alvo. Uma substituição pode salvar.`);
+  renderAll(true);
+}
+
+/* ---------- coringas ---------- */
+$("#spin").addEventListener("click",()=>{ if(S.phase==="idle")roll(); });
+$("#w-reroll").addEventListener("click",()=>{ if(S.phase!=="pick"||S.rerolls<1)return; S.rerolls--; roll(); renderWild(); });
+$("#w-scout").addEventListener("click",()=>{ if(S.phase!=="pick"||S.scouts<1||S.revealed)return; S.scouts--; S.revealed=true; renderOffers(); renderWild(); setStatus("O olheiro abriu o jogo: gols revelados."); });
+$("#w-sub").addEventListener("click",()=>{ if(S.subs<1||!placed().length||S.phase==="done")return; S.subMode=!S.subMode; renderPitch(); renderWild(); setStatus(S.subMode?"Toque num jogador do campo para tirá-lo.":""); });
+function renderWild(){
+  $("#n-reroll").textContent=S.rerolls; $("#n-scout").textContent=S.scouts; $("#n-sub").textContent=S.subs;
+  $("#w-reroll").disabled=S.phase!=="pick"||S.rerolls<1||spinning;
+  $("#w-scout").disabled=S.phase!=="pick"||S.scouts<1||S.revealed;
+  $("#w-sub").disabled=S.subs<1||!placed().length||S.phase==="done";
+  $("#w-sub").setAttribute("aria-pressed",S.subMode?"true":"false");
+  $("#spin").disabled=S.phase!=="idle"||spinning;
+  $("#spin").textContent=S.phase==="done"?"Fim de jogo":S.phase==="pick"?"Escolha um jogador":"Girar";
+}
+
+/* ---------- final ---------- */
+function chemistry(){
+  const c={}; placed().forEach(x=>c[x.club]=(c[x.club]||0)+1);
+  let bonus=0; const groups=[];
+  for(const k in c){ if(c[k]>=3){bonus+=(c[k]-2)*20; groups.push(`${CLUBS[k].n} ×${c[k]}`)} }
+  return {bonus,groups};
+}
+function finish(){
+  S.phase="done"; S.subMode=false;
+  const t=total(), diff=Math.abs(TARGET-t);
+  const base=Math.max(0,500-diff*5), exact=diff===0?500:0, ch=chemistry();
+  const pts=base+exact+ch.bonus;
+  const best=+store("br433-best-"+TARGET)||0; const isBest=pts>best; if(isBest)store("br433-best-"+TARGET,String(pts));
+  const title=diff===0?`Na mosca! ${TARGET} cravado`:diff<=5?"Na trave":diff<=20?"Bateu na rede pelo lado de fora":diff<=60?"Bom time, mira torta":"Rebaixado";
+  const r=$("#result"); r.hidden=false;
+  r.innerHTML=`<h2>${title}</h2>
+    <div class="pts">${pts} pts</div>
+    <dl>
+      <dt>Gols do XI</dt><dd>${t} (${t-TARGET>0?"+":""}${t-TARGET})</dd>
+      <dt>Precisão</dt><dd>${base}</dd>
+      <dt>Bônus 433 exato</dt><dd>${exact}</dd>
+      <dt>Entrosamento${ch.groups.length?" · "+esc(ch.groups.join(", ")):""}</dt><dd>${ch.bonus}</dd>
+    </dl>
+    <div class="best">${isBest?"Novo recorde neste navegador.":"Recorde neste navegador: "+best+" pts"}</div>
+    <div class="acts"><button id="again">Jogar de novo</button><button class="alt" id="copy">Copiar resultado</button></div>`;
+  $("#again").onclick=newGame;
+  $("#copy").onclick=()=>{
+    const txt=`${TARGET} Gols Brasileirão (4-3-3${ERA?", "+$("#opt-era").selectedOptions[0].text:""}): ${t} gols (${t-TARGET>0?"+":""}${t-TARGET}), ${pts} pts\n`+
+      ["ATA","MEI","DEF","GOL"].map(p=>S.xi[p].map(x=>PLAYERS[x.id].name).join(" · ")).join("\n");
+    const b=$("#copy");
+    try{navigator.clipboard.writeText(txt).then(()=>b.textContent="Copiado",()=>b.textContent="Não deu para copiar")}catch(e){b.textContent="Não deu para copiar"}
+  };
+  setStatus(diff===0?`Exatamente ${TARGET}. Craque.`:`Terminou com ${t} gols.`);
+  renderWild(); renderOffers();
+}
+function applyTarget(){$("#h-target").textContent=TARGET;$("#led-target").textContent=TARGET}
+function newGame(){ERA=$("#opt-era").value;applyTarget();S=fresh();shown=0;$("#result").hidden=true;$("#reel-badge").textContent="?";$("#reel-badge").style.background="";$("#reel-name").innerHTML='Sorteio<small>20 clubes com mais temporadas na Série A</small>';setStatus("Gire para sortear o primeiro clube.");renderAll(false)}
+function renderAll(anim){renderBoard(anim);renderPitch();renderOffers();renderWild()}
+
+/* ---------- abas ---------- */
+function showTab(which){
+  const play=which==="play";
+  $("#tab-play").setAttribute("aria-selected",play); $("#tab-table").setAttribute("aria-selected",!play);
+  $("#view-play").hidden=!play; $("#view-table").hidden=play;
+  if(!play)renderTable();
+}
+$("#tab-play").onclick=()=>showTab("play"); $("#tab-table").onclick=()=>showTab("table");
+
+/* ---------- tabela ---------- */
+let T={club:"",sort:"goals",dir:-1};
+function renderStrip(){
+  const counts={}; PLAYERS.forEach(p=>p.clubs.forEach(c=>counts[c]=(counts[c]||0)+1));
+  $("#clubs-strip").innerHTML=Object.keys(CLUBS).map(c=>`<button data-c="${c}" aria-pressed="${T.club===c}">${badge(c)}${esc(CLUBS[c].n)} <em>${counts[c]||0}</em></button>`).join("");
+}
+$("#clubs-strip").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;T.club=T.club===b.dataset.c?"":b.dataset.c;renderTable()});
+function renderTable(){
+  renderStrip();
+  const q=$("#q").value.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+  const pos=$("#f-pos").value, show=$("#f-show").checked, era=$("#f-era").value;
+  const onlyVer=$("#f-ver").checked;
+  let rows=PLAYERS.filter(p=>(!onlyVer||p.ver)&&(!era||p.dec===era)&&(!T.club||p.clubs.includes(T.club))&&(!pos||p.pos===pos)&&(!q||p.name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").includes(q)));
+  rows.sort((a,b)=>T.sort==="goals"?((a.goals-b.goals)*T.dir||a.name.localeCompare(b.name,"pt")):(a.name.localeCompare(b.name,"pt")*-T.dir));
+  $("#count").textContent=`${rows.length} de ${PLAYERS.length} jogadores`;
+  $("#tbody").innerHTML=rows.map(p=>`<tr><td>${esc(p.name)}</td><td>${p.pos}</td><td>${DEC[p.dec]}</td><td class="g">${show?p.goals:"—"}</td><td><span class="cls">${p.clubs.map(badge).join("")}</span></td><td>${p.ver===1?'<span class="src ok">Verificado</span>':p.ver===2?'<span class="src pq" title="Número da pesquisa no ogol.com.br enviada por você">Pesquisa ogol</span>':'<span class="src est">Estimativa</span>'}</td></tr>`).join("");
+}
+["#q","#f-pos","#f-show","#f-era","#f-ver"].forEach(s=>$(s).addEventListener("input",renderTable));
+$("#s-goals").onclick=()=>{T.dir=T.sort==="goals"?-T.dir:-1;T.sort="goals";$("#s-goals").textContent="Gols Série A "+(T.dir<0?"▾":"▴");renderTable()};
+$("#s-name").onclick=()=>{T.dir=T.sort==="name"?-T.dir:-1;T.sort="name";renderTable()};
+
+/* ---------- início (preserva partida em atualizações da página) ---------- */
+$("#opt-era").addEventListener("change",newGame);
+function start(data){
+  if(data&&data.S&&data.S.xi&&data.S.xi.ATA&&data.S.xi.ATA.length===3){S=data.S;ERA=S.era||"";$("#opt-era").value=ERA}else{S=fresh()}
+  applyTarget(); shown=total();
+  window.claude?.hot?.snapshot?.(()=>({S}));
+  renderAll(false);
+  if(S.club)showClub(S.club);
+  if(S.phase==="done")finish();
+}
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+</script>
