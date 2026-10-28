@@ -245,7 +245,7 @@ td.g2{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
         <div id="result" class="result" hidden></div>
 
         <div class="rules">
-          <b>Como jogar.</b> Cada giro sorteia um clube e mostra 3 jogadores que já defenderam esse time no Brasileirão, de 1971 a 2026. Escolha um: ele entra numa vaga livre da posição dele no 4-3-3 (LE, ZAG, LD · ME, MC, MD · PE, CA, PD). Quem joga em mais de uma posição deixa você escolher a vaga. Os gols dele no Brasileirão (carreira toda) somam no placar. Acertar <b>433 em cheio</b> vale o bônus máximo; a pontuação vai até <b>1000</b>. Cada <b>Olheiro</b> ou <b>Substituição</b> usado tira <b>100 pts</b>; Girar de novo é grátis. Trocar a era começa uma partida nova. Jogadores do mesmo clube sorteado dão <b>bônus de entrosamento</b>.
+          <b>Como jogar.</b> Cada giro sorteia um clube e mostra 3 jogadores que já defenderam esse time no Brasileirão, de 1971 a 2026. Escolha um: ele entra numa vaga livre da posição dele no 4-3-3 (LE, ZAG, LD · ME, MC, MD · PE, CA, PD). Quem joga em mais de uma posição deixa você escolher a vaga. Os gols dele no Brasileirão (carreira toda) somam no placar. Precisão e <b>433 em cheio</b> valem até <b>1000 pts</b>. O <b>entrosamento</b> soma por cima disso: 3 jogadores do mesmo clube sorteado +20, 4 +40, 5 +70, 6 ou mais +100, e cada linha inteira (defesa, meio ou ataque) de um só clube <b>+200</b>. Cada <b>Olheiro</b> ou <b>Substituição</b> usado tira <b>100 pts</b>; Girar de novo é grátis. Trocar a era começa uma partida nova.
         </div>
       </div>
 
@@ -1480,19 +1480,26 @@ function renderWild(){
 }
 
 /* ---------- final ---------- */
+const CLUB_TIER=n=>n>=6?100:n===5?70:n===4?40:n===3?20:0;
+const LINE_BONUS=200, LINE_NAME={DEF:"Defesa",MEI:"Meio-campo",ATA:"Ataque"};
 function chemistry(){
   const c={}; placed().forEach(x=>c[x.club]=(c[x.club]||0)+1);
-  let bonus=0; const groups=[];
-  for(const k in c){ if(c[k]>=3){bonus+=(c[k]-2)*20; groups.push(`${CLUBS[k].n} ×${c[k]}`)} }
-  return {bonus,groups};
+  let bonus=0; const items=[];
+  for(const k in c){const b=CLUB_TIER(c[k]); if(b){bonus+=b; items.push({label:`${CLUBS[k].n} ×${c[k]}`,pts:b})}}
+  for(const r of ["DEF","MEI","ATA"]){
+    const row=S.xi[r]; if(row.some(x=>!x))continue;
+    const cl=new Set(row.map(x=>x.club));
+    if(cl.size===1){const k=row[0].club; bonus+=LINE_BONUS; items.push({label:`${LINE_NAME[r]} 100% ${CLUBS[k].n}`,pts:LINE_BONUS})}
+  }
+  return {bonus,items};
 }
 function finish(){
   S.phase="done"; S.subMode=false;
   const t=total(), diff=Math.abs(TARGET-t);
   const base=Math.max(0,500-diff*5), exact=diff===0?500:0, ch=chemistry();
-  const raw=base+exact+ch.bonus, capped=Math.min(MAXPTS,raw);
+  const core=Math.min(MAXPTS,base+exact);
   const usedScout=2-S.scouts, usedSub=2-S.subs, pen=(usedScout+usedSub)*PENALTY;
-  const pts=Math.max(0,capped-pen);
+  const pts=Math.max(0,core+ch.bonus-pen);
   const best=+store("br433-best-"+TARGET)||0; const isBest=pts>best; if(isBest)store("br433-best-"+TARGET,String(pts));
   const title=diff===0?`Na mosca! ${TARGET} cravado`:diff<=5?"Na trave":diff<=20?"Bateu na rede pelo lado de fora":diff<=60?"Bom time, mira torta":"Rebaixado";
   const r=$("#result"); r.hidden=false;
@@ -1502,8 +1509,7 @@ function finish(){
       <dt>Gols do XI</dt><dd>${t} (${t-TARGET>0?"+":""}${t-TARGET})</dd>
       <dt>Precisão</dt><dd>${base}</dd>
       <dt>Bônus 433 exato</dt><dd>${exact}</dd>
-      <dt>Entrosamento${ch.groups.length?" · "+esc(ch.groups.join(", ")):""}</dt><dd>${ch.bonus}</dd>
-      ${raw>MAXPTS?`<dt>Limite de ${MAXPTS} pts</dt><dd>−${raw-MAXPTS}</dd>`:""}
+      ${ch.items.length?ch.items.map(i=>`<dt>Entrosamento · ${esc(i.label)}</dt><dd>+${i.pts}</dd>`).join(""):`<dt>Entrosamento</dt><dd>0</dd>`}
       <dt>Olheiro usado ${usedScout}× (−${PENALTY} cada)</dt><dd>${usedScout?"−"+usedScout*PENALTY:0}</dd>
       <dt>Substituição usada ${usedSub}× (−${PENALTY} cada)</dt><dd>${usedSub?"−"+usedSub*PENALTY:0}</dd>
     </dl>
