@@ -152,6 +152,19 @@ tr:hover td{background:rgba(255,255,255,.03)}
 .src.ok{background:rgba(79,209,122,.16);color:var(--hit)}
 .src.pq{background:rgba(90,160,255,.16);color:#7fb2ff}
 .src.est{background:rgba(255,255,255,.06);color:var(--muted)}
+.tbl-tools input.num{flex:0 0 104px}
+.lock{max-width:420px;margin:24px auto;padding:24px;border:1px solid var(--line);border-radius:14px;background:var(--panel);text-align:center}
+.lock h3{margin:0 0 6px;font-family:var(--f-display);text-transform:uppercase;letter-spacing:.04em}
+.lock p{margin:0 0 14px;color:var(--muted);font-size:14px}
+.lock form{display:flex;gap:8px}
+.lock input{flex:1;min-width:0;background:var(--bg,#0b1a12);color:var(--chalk);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit}
+.lock .lock-msg{margin:10px 0 0;min-height:1.2em;color:var(--miss,#ff7a7a)}
+.p-stats{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted);margin:0 0 10px}
+.p-stats b{color:var(--chalk);font-variant-numeric:tabular-nums}
+th button[aria-sort]{color:var(--led)}
+#view-players th:first-child,#view-players td:first-child{position:sticky;left:0;background:var(--panel);z-index:1}
+@media (max-width:640px){#view-players .clubs-strip{max-height:128px;overflow-y:auto;padding-right:4px}}
+.src.est{background:rgba(255,255,255,.06);color:var(--muted)}
 .note{font-size:12px;color:var(--muted);margin-top:14px;max-width:80ch}
 .rules{font-size:13px;color:var(--muted);line-height:1.55}
 .rules b{color:var(--chalk)}
@@ -159,13 +172,19 @@ tr:hover td{background:rgba(255,255,255,.03)}
   .pitch{aspect-ratio:auto}
   .rows{position:relative;inset:auto;padding:14px 4px;gap:14px;grid-template-rows:none}
   .slot{width:23%}
-  .slot .fig .nm{font-size:11.5px;overflow-wrap:normal;word-break:normal;hyphens:auto}
+  .slot .fig .nm{font-size:11.5px;overflow-wrap:anywhere;hyphens:auto}
   .slot .fig .pos{font-size:8px;letter-spacing:.06em}
   .slot .fig .gl small{display:none}
   .offers .fig .nm{font-size:16px}
 }
 .fig .nm{hyphens:auto}
 [hidden]{display:none!important}
+.modes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.modes button{min-width:0;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:10px clamp(8px,2.5vw,12px);display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center;text-align:left}
+.modes button b{grid-row:1/3;font-family:var(--f-led);font-weight:900;font-size:clamp(16px,4.5vw,24px);color:var(--led);line-height:1}
+.modes button span{min-width:0;overflow-wrap:normal;font-family:var(--f-display);font-weight:800;font-size:clamp(12px,3.4vw,18px);text-transform:uppercase;line-height:1}
+.modes button small{font-size:11px;color:var(--muted)}
+.modes button[aria-pressed="true"]{border-color:var(--led);background:#2a1f05}
 .send{display:flex;flex-direction:column;gap:6px;border-top:1px dashed rgba(22,32,26,.25);padding-top:10px}
 .send label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4b564d}
 .send-row{display:flex;gap:8px}
@@ -191,6 +210,85 @@ td.g2{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
   .side{display:contents}
   .setup{order:1}.board{order:2}.reel{order:3}#result{order:4}.pitch-wrap{order:5}.wild{order:6}.rules{order:7}
 }
+.home-title{font-family:var(--f-display);font-weight:900;text-transform:uppercase;letter-spacing:.03em;font-size:clamp(22px,4vw,30px);margin:6px 0 14px}
+.home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px}
+.gcard{border:1px solid var(--line);background:var(--panel);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.gcard:hover{border-color:var(--led);transform:translateY(-2px)}
+.gband{height:10px}
+.gbody{padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.gnum{font-family:var(--f-led);font-weight:900;color:var(--led);font-size:clamp(54px,10vw,76px);line-height:1;text-shadow:0 0 18px rgba(255,179,48,.4);display:flex;align-items:baseline;gap:8px}
+.gnum small{font-family:var(--f-display);font-size:18px;color:var(--muted);text-shadow:none;text-transform:uppercase;letter-spacing:.06em}
+.gcard h3{margin:0;font-family:var(--f-display);font-weight:900;font-size:30px;text-transform:uppercase;letter-spacing:.02em;line-height:1}
+.gcard p{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
+.gfacts{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.gfacts li{border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;color:var(--muted)}
+.gfacts b{color:var(--chalk);font-variant-numeric:tabular-nums}
+.gcard .gprog{color:var(--led);font-size:13px;font-weight:600}
+.gact{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:auto;padding-top:6px}
+.gplay{border:0;border-radius:10px;padding:12px 22px;background:var(--led);color:#1d1300;font-family:var(--f-display);font-weight:900;font-size:20px;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 4px 0 #a86e0b}
+.gplay:active{transform:translateY(2px);box-shadow:0 2px 0 #a86e0b}
+.glink{border:0;background:none;color:var(--muted);font-size:13px;text-decoration:underline;margin-left:auto;padding:4px}
+.home-note{margin-top:16px}
+.tabs button{white-space:nowrap}
+@media (max-width:560px){.tabs{max-width:100%;overflow-x:auto}.tabs button{padding:8px 10px}}
+@media (max-width:420px){.tabs button{padding:8px 8px;font-size:11px;letter-spacing:.02em}}
+
+/* ---------- controles (listas suspensas, campos e botões secundários) ---------- */
+:root{
+  --ctl-bg:linear-gradient(180deg,#123529 0%,#0b251b 100%);
+  --ctl-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 1px 2px rgba(0,0,0,.35),0 6px 16px -6px rgba(0,0,0,.55);
+  --ctl-ring:0 0 0 3px rgba(255,179,48,.22);
+  --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1.5 1.5 6 6l4.5-4.5' fill='none' stroke='%23ffb330' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.setup select,.tbl-tools select{
+  -webkit-appearance:none;appearance:none;
+  background:var(--chev) no-repeat right 14px center/12px 8px,var(--ctl-bg);
+  border:1px solid rgba(233,241,230,.14);border-radius:12px;
+  padding:10px 40px 10px 14px;min-height:42px;
+  font-family:var(--f-body);font-weight:600;font-size:14px;letter-spacing:.01em;line-height:1.2;
+  color:var(--chalk);text-transform:none;
+  box-shadow:var(--ctl-shadow);cursor:pointer;
+  transition:border-color .15s ease,box-shadow .15s ease,transform .15s ease;
+}
+.setup select{min-height:38px;padding:8px 38px 8px 12px;font-size:13.5px}
+.setup select:hover,.tbl-tools select:hover{border-color:rgba(255,179,48,.45);transform:translateY(-1px)}
+.setup select:focus-visible,.tbl-tools select:focus-visible{outline:none;border-color:var(--led);box-shadow:var(--ctl-shadow),var(--ctl-ring)}
+select option,select optgroup{background:#0b251b;color:var(--chalk);font-weight:500}
+select optgroup{color:var(--led);font-weight:700}
+.tbl-tools input,.lock input{
+  background:linear-gradient(180deg,#081c14,#0b2219);border:1px solid rgba(233,241,230,.14);border-radius:12px;
+  padding:10px 14px;min-height:42px;font-family:var(--f-body);font-weight:500;font-size:14px;color:var(--chalk);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.35);transition:border-color .15s ease,box-shadow .15s ease;
+}
+.tbl-tools input::placeholder,.lock input::placeholder{color:rgba(147,172,156,.8)}
+.tbl-tools input:focus-visible,.lock input:focus-visible{outline:none;border-color:var(--led);box-shadow:inset 0 2px 4px rgba(0,0,0,.35),var(--ctl-ring)}
+.ghost-btn{
+  background:var(--ctl-bg);border:1px solid rgba(233,241,230,.14);border-radius:12px;
+  padding:10px 16px;min-height:42px;font-family:var(--f-body);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--chalk);box-shadow:var(--ctl-shadow);transition:border-color .15s ease,transform .15s ease,color .15s ease;
+}
+.ghost-btn:hover{border-color:rgba(255,179,48,.55);color:var(--led);transform:translateY(-1px)}
+.ghost-btn:active{transform:translateY(0)}
+.ghost-btn:focus-visible{outline:none;border-color:var(--led);box-shadow:var(--ctl-shadow),var(--ctl-ring)}
+.modes button{background:var(--ctl-bg);box-shadow:var(--ctl-shadow);border-radius:14px;transition:border-color .15s ease,transform .15s ease}
+.modes button:hover{border-color:rgba(255,179,48,.45);transform:translateY(-1px)}
+.modes button[aria-pressed="true"]{background:linear-gradient(180deg,#3a2a08,#241a05);box-shadow:var(--ctl-shadow),var(--ctl-ring)}
+#r-refresh::before{content:"↻";display:inline-block;margin-right:6px;font-size:15px;line-height:1;transform:translateY(1px)}
+.tbl-tools label{font-weight:600}
+.tbl-tools input[type=checkbox]{flex:0 0 auto;min-height:0;width:18px;height:18px;padding:0;margin:0;accent-color:var(--led);box-shadow:none}
+.tbl-box{box-shadow:0 10px 30px -12px rgba(0,0,0,.6);border-radius:14px}
+th{font-family:var(--f-body);font-weight:700}
+@media (max-width:560px){.tbl-tools select{flex:1 1 calc(50% - 10px)}.tbl-tools #r-refresh{flex:1 1 100%}}
+@media (max-width:560px){
+  #view-players .tbl-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  #view-players .tbl-tools #p-mode,#view-players .tbl-tools #q,#view-players .tbl-tools #f-pos{grid-column:1/-1}
+  #view-players .tbl-tools input.num{width:100%}
+  #view-players .tbl-tools label{grid-column:1/-1}
+  #view-players .tbl-tools .ghost-btn{padding:10px 8px;font-size:12px}
+  #view-players .tbl-tools #p-lockbtn{grid-column:1/-1}
+  #view-players .tbl-tools select{padding-right:32px;background-position:right 11px center,0 0;font-size:13.5px}
+  #view-players .tbl-tools label{justify-content:flex-start}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -198,26 +296,64 @@ td.g2{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
 <div class="wrap" lang="pt-BR">
   <header class="top">
     <div class="brand">
-      <h1><span id="h-target">433</span> Gols <span>Brasileirão</span></h1>
-      <p>Gire o caça-níquel, escolha jogadores que passaram pelos 20 clubes com mais temporadas na Série A, de 1971 até hoje, e monte um 4-3-3 que some exatamente 433 gols no Brasileirão.</p>
+      <h1><span id="h-target">433</span> Gols <span id="h-name">Brasileirão</span></h1>
+      <p id="h-desc">Gire o caça-níquel, escolha jogadores que passaram pelos 20 clubes com mais temporadas na Série A, de 1971 até hoje, e monte um 4-3-3 que some exatamente 433 gols no Brasileirão.</p>
     </div>
     <nav class="tabs" role="tablist" aria-label="Seções">
-      <button id="tab-play" role="tab" aria-selected="true" aria-controls="view-play">Jogar</button>
+      <button id="tab-home" role="tab" aria-selected="true" aria-controls="view-home">Início</button>
+      <button id="tab-play" role="tab" aria-selected="false" aria-controls="view-play">Jogar</button>
       <button id="tab-rank" role="tab" aria-selected="false" aria-controls="view-rank">Ranking</button>
+      <button id="tab-players" role="tab" aria-selected="false" aria-controls="view-players">Jogadores <span aria-hidden="true">🔒</span></button>
     </nav>
   </header>
 
-  <section id="view-play" role="tabpanel" aria-labelledby="tab-play">
+  <section id="view-home" role="tabpanel" aria-labelledby="tab-home">
+    <h2 class="home-title">Escolha o seu jogo</h2>
+    <div class="home-grid">
+      <article class="gcard" data-game="br">
+        <div class="gband" style="background:linear-gradient(90deg,#009c3b 0 25%,#ffdf00 25% 50%,#002776 50% 75%,#fff 75%)"></div>
+        <div class="gbody">
+          <div class="gnum">433<small>gols</small></div>
+          <h3>Brasileirão</h3>
+          <p>Jogadores que passaram pelos 20 clubes com mais temporadas na Série A. Cada um vale os gols que fez no Brasileirão.</p>
+          <ul class="gfacts"><li><b>20</b> clubes</li><li><b>953</b> jogadores</li><li><b>1971–2026</b></li></ul>
+          <p class="gprog" hidden></p>
+          <div class="gact">
+            <button class="gplay" data-act="play">Jogar</button>
+            <button class="gnew ghost-btn" data-act="new" hidden>Nova partida</button>
+            <button class="glink" data-act="rank">Ver ranking</button>
+          </div>
+        </div>
+      </article>
+      <article class="gcard" data-game="leg">
+        <div class="gband" style="background:linear-gradient(90deg,#75aadb 0 14%,#fff 14% 28%,#111 28% 42%,#dd0000 42% 57%,#0064aa 57% 71%,#002395 71% 85%,#ff7f00 85%)"></div>
+        <div class="gbody">
+          <div class="gnum">2000<small>gols</small></div>
+          <h3>Legends</h3>
+          <p>Lendas do futebol mundial, 3 de seleções diferentes a cada giro. Cada uma vale os gols oficiais da carreira toda (clubes + seleção).</p>
+          <ul class="gfacts"><li><b>43</b> seleções</li><li><b>1000</b> lendas</li><li><b>1930–2026</b></li></ul>
+          <p class="gprog" hidden></p>
+          <div class="gact">
+            <button class="gplay" data-act="play">Jogar</button>
+            <button class="gnew ghost-btn" data-act="new" hidden>Nova partida</button>
+            <button class="glink" data-act="rank">Ver ranking</button>
+          </div>
+        </div>
+      </article>
+    </div>
+    <p class="note home-note">Monte um 4-3-3 cujos gols somem exatamente a meta. Gire o caça-níquel, escolha 1 de 3 jogadores por vez e use os coringas com cuidado.</p>
+  </section>
+
+  <section id="view-play" role="tabpanel" aria-labelledby="tab-play" hidden>
     <div class="game">
       <div class="side">
+        <div class="modes" role="group" aria-label="Modo de jogo">
+          <button data-mode="br" aria-pressed="true"><b>433</b><span>Brasileirão</span><small>clubes da Série A</small></button>
+          <button data-mode="leg" aria-pressed="false"><b>2000</b><span>Legends</span><small>seleções sorteadas</small></button>
+        </div>
         <div class="setup" role="group" aria-label="Configuração da partida">
           <label for="opt-era">Era</label>
-          <select id="opt-era">
-            <option value="">Todas (1971–2026)</option>
-            <option value="70">Anos 70</option><option value="80">Anos 80</option><option value="90">Anos 90</option>
-            <option value="00">Anos 2000</option><option value="10">Anos 2010</option><option value="20">Anos 2020</option>
-            <option value="old">Clássicos (70–80)</option><option value="mid">1990–2009</option><option value="new">2010–2026</option>
-          </select>
+          <select id="opt-era"></select>
         </div>
         <div class="board">
           <div class="lbl"><span>Gols do seu XI</span><span id="slots-left">11 vagas</span></div>
@@ -229,7 +365,7 @@ td.g2{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
         <div class="reel" id="reel">
           <div class="reel-window" aria-live="polite">
             <div class="bigbadge" id="reel-badge">?</div>
-            <div class="reel-name" id="reel-name">Sorteio<small>20 clubes com mais temporadas na Série A</small></div>
+            <div class="reel-name" id="reel-name">Sorteio<small></small></div>
           </div>
           <div class="offers" id="offers"></div>
           <button class="spin-btn" id="spin">Girar</button>
@@ -243,7 +379,7 @@ td.g2{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
 
         <div id="result" class="result" hidden></div>
 
-        <div class="rules">
+        <div class="rules" id="rules">
           <b>Como jogar.</b> Cada giro sorteia um clube e mostra 3 jogadores que já defenderam esse time no Brasileirão, de 1971 a 2026. Escolha um: ele entra numa vaga livre da posição dele no 4-3-3 (LE, ZAG, LD · ME, MC, MD · PE, CA, PD). Quem joga em mais de uma posição deixa você escolher a vaga. Os gols dele no Brasileirão (carreira toda) somam no placar. Precisão e <b>433 em cheio</b> valem até <b>1000 pts</b>. O <b>entrosamento</b> soma por cima disso: 3 jogadores do mesmo clube sorteado +20, 4 +40, 5 +70, 6 ou mais +100, e cada linha inteira (defesa, meio ou ataque) de um só clube <b>+200</b>. Cada <b>Olheiro</b> ou <b>Substituição</b> usado tira <b>100 pts</b>; Girar de novo é grátis. Trocar a era começa uma partida nova.
         </div>
       </div>
@@ -264,18 +400,64 @@ td.g2{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
     </div>
   </section>
 
+  <section id="view-players" role="tabpanel" aria-labelledby="tab-players" hidden>
+    <div class="lock" id="pl-lock">
+      <h3>Área restrita</h3>
+      <p>A base de jogadores com os gols fica fechada para ninguém consultar durante a partida. Digite a senha do administrador.</p>
+      <form id="pl-form" autocomplete="off">
+        <input type="password" id="pl-pass" placeholder="Senha" aria-label="Senha" autocomplete="current-password">
+        <button class="ghost-btn" type="submit">Entrar</button>
+      </form>
+      <p class="lock-msg" id="pl-msg" role="status"></p>
+    </div>
+    <div id="pl-body" hidden>
+      <div class="tbl-tools">
+        <select id="p-mode" aria-label="Jogo"><option value="br">Brasileirão · 433</option><option value="leg">Legends · 2000</option></select>
+        <input id="q" type="search" placeholder="Buscar jogador" aria-label="Buscar jogador">
+        <select id="f-pos" aria-label="Posição">
+          <option value="">Todas as posições</option>
+          <option value="GOL">Goleiro (GOL)</option>
+          <optgroup label="Defesa"><option value="DEF">Toda a defesa</option><option value="LD">Lateral-direito (LD)</option><option value="ZAG">Zagueiro (ZAG)</option><option value="LE">Lateral-esquerdo (LE)</option></optgroup>
+          <optgroup label="Meio-campo"><option value="MEI">Todo o meio</option><option value="MD">Meia-direita (MD)</option><option value="MC">Meio-campo central (MC)</option><option value="ME">Meia-esquerda (ME)</option></optgroup>
+          <optgroup label="Ataque"><option value="ATA">Todo o ataque</option><option value="PD">Ponta-direita (PD)</option><option value="CA">Centroavante (CA)</option><option value="PE">Ponta-esquerda (PE)</option></optgroup>
+        </select>
+        <select id="f-dec" aria-label="Década"></select>
+        <select id="f-src" aria-label="Fonte dos gols"><option value="">Todas as fontes</option><option value="1">Verificado</option><option value="2">Pesquisa ogol</option><option value="4">Wikipédia</option><option value="3">Pesquisa (planilha)</option><option value="0">Estimativa</option></select>
+        <input id="f-min" class="num" type="number" min="0" inputmode="numeric" placeholder="Gols mín." aria-label="Gols mínimo">
+        <input id="f-max" class="num" type="number" min="0" inputmode="numeric" placeholder="Gols máx." aria-label="Gols máximo">
+        <label><input type="checkbox" id="f-multi"> Só multiposição</label>
+        <button id="p-clear" class="ghost-btn" type="button">Limpar filtros</button>
+        <button id="p-csv" class="ghost-btn" type="button">Baixar CSV</button>
+        <button id="p-lockbtn" class="ghost-btn" type="button">Bloquear</button>
+      </div>
+      <div class="clubs-strip" id="clubs-strip"></div>
+      <div class="p-stats" id="p-stats"></div>
+      <div class="tbl-box">
+        <table>
+          <thead><tr>
+            <th><button data-sort="name">Jogador</button></th>
+            <th>Posições</th>
+            <th><button data-sort="dec">Década</button></th>
+            <th class="g"><button data-sort="goals" id="s-goals">Gols</button></th>
+            <th><button data-sort="club" id="s-club">Clubes</button></th>
+            <th><button data-sort="ver">Fonte</button></th>
+          </tr></thead>
+          <tbody id="p-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
   <section id="view-rank" role="tabpanel" aria-labelledby="tab-rank" hidden>
     <div class="tbl-tools">
       <select id="r-per" aria-label="Período">
         <option value="sempre">Desde sempre</option><option value="mes">Últimos 30 dias</option>
         <option value="semana">Últimos 7 dias</option><option value="hoje">Hoje</option>
       </select>
-      <select id="r-era" aria-label="Modo de jogo">
-        <option value="todas">Todas as eras (1971–2026)</option>
-        <option value="70">Anos 70</option><option value="80">Anos 80</option><option value="90">Anos 90</option>
-        <option value="00">Anos 2000</option><option value="10">Anos 2010</option><option value="20">Anos 2020</option>
-        <option value="old">Clássicos (70–80)</option><option value="mid">1990–2009</option><option value="new">2010–2026</option>
+      <select id="r-mode" aria-label="Jogo">
+        <option value="brasileirao">Brasileirão · 433</option><option value="legends">Legends · 2000</option>
       </select>
+      <select id="r-era" aria-label="Era"></select>
       <button id="r-refresh" class="ghost-btn">Atualizar</button>
       <span class="count" id="r-status"></span>
     </div>
@@ -1245,8 +1427,1010 @@ const PLAYERS_RAW=[
 ["Cláudio Pitbull","A",18,"00","GRE SAN FLU BAH",1,"CA"],
 ["Alex (Internacional)","M",72,"00","INT COR",1,"MC"]
 ];
+const LEGENDS_RAW=[
+["Pelé","A",762,"60","BRA",1,"CA MC"],
+["Ronaldo Fenômeno","A",414,"90","BRA",1,"CA"],
+["Zico","M",501,"80","BRA",1,"MC MD"],
+["Garrincha","A",120,"50","BRA",3,"PD"],
+["Romário","A",756,"90","BRA",1,"CA"],
+["Jairzinho","A",221,"70","BRA",3,"PD CA"],
+["Rivellino","M",197,"70","BRA",3,"ME MC"],
+["Didi","M",156,"50","BRA",3,"MC"],
+["Rivaldo","M",419,"90","BRA",4,"ME MC"],
+["Tostão","A",277,"60","BRA",3,"CA"],
+["Sócrates","M",258,"80","BRA",4,"MC"],
+["Roberto Carlos","D",91,"90","BRA",3,"LE"],
+["Falcão","M",95,"80","BRA",4,"MC"],
+["Gérson","M",111,"60","BRA",3,"MC ME"],
+["Bebeto","A",235,"90","BRA",4,"CA PD"],
+["Ronaldinho","M",299,"00","BRA",4,"MC PE"],
+["Kaká","M",237,"00","BRA",4,"MC"],
+["Neymar","A",461,"10","BRA",4,"PE"],
+["Vinícius Júnior","A",161,"20","BRA",4,"PE"],
+["Careca","A",392,"80","BRA",4,"CA"],
+["Cafu","D",25,"90","BRA",3,"LD"],
+["Djalma Santos","D",21,"50","BRA",3,"LD"],
+["Carlos Alberto Torres","D",48,"70","BRA",3,"LD ZAG"],
+["Nílton Santos","D",18,"50","BRA",3,"LE"],
+["Júnior","D",61,"80","BRA",3,"LE MC"],
+["Marcelo","D",45,"10","BRA",3,"LE"],
+["Lúcio","D",37,"00","BRA",3,"ZAG"],
+["Thiago Silva","D",37,"10","BRA",3,"ZAG"],
+["Aldair","D",26,"90","BRA",3,"ZAG"],
+["Taffarel","G",0,"90","BRA",0,"GOL"],
+["Gilmar","G",0,"60","BRA",3,"GOL"],
+["Alisson","G",1,"10","BRA",3,"GOL"],
+["Raí","M",149,"90","BRA",3,"MC MD"],
+["Hulk","A",463,"10","BRA",4,"PD CA"],
+["Leônidas da Silva","A",166,"30","BRA",3,"CA"],
+["Zizinho","M",333,"50","BRA",4,"MC"],
+["Coutinho","A",262,"60","BRA",3,"CA"],
+["Juninho Pernambucano","M",204,"00","BRA",4,"MC MD"],
+["Diego Maradona","M",345,"80","ARG",1,"MC CA ME"],
+["Alfredo Di Stéfano","A",537,"50","ARG",1,"CA MC"],
+["Gabriel Batistuta","A",355,"90","ARG",4,"CA"],
+["Claudio Caniggia","A",140,"90","ARG",4,"PD CA PE"],
+["Daniel Passarella","D",156,"70","ARG",3,"ZAG"],
+["Mario Kempes","A",367,"70","ARG",4,"CA"],
+["Lionel Messi","A",934,"10","ARG",1,"PD CA MD"],
+["Sergio Agüero","A",426,"10","ARG",4,"CA"],
+["Ángel Di María","A",250,"10","ARG",4,"PD MD ME"],
+["Hernán Crespo","A",307,"00","ARG",4,"CA"],
+["Carlos Tevez","A",321,"00","ARG",4,"CA PE"],
+["Juan Román Riquelme","M",167,"00","ARG",4,"MC ME"],
+["Juan Sebastián Verón","M",87,"00","ARG",4,"MC MD"],
+["Lautaro Martínez","A",250,"20","ARG",4,"CA"],
+["Javier Mascherano","M",8,"10","ARG",4,"MC ZAG"],
+["Diego Simeone","M",112,"90","ARG",4,"MC"],
+["Javier Zanetti","D",26,"00","ARG",3,"LD MC MD"],
+["Juan Pablo Sorín","D",44,"00","ARG",3,"LE ME"],
+["Roberto Ayala","D",48,"00","ARG",3,"ZAG"],
+["Oscar Ruggeri","D",44,"80","ARG",3,"ZAG"],
+["Nicolás Otamendi","D",32,"10","ARG",3,"ZAG"],
+["Ubaldo Fillol","G",0,"70","ARG",0,"GOL"],
+["Emiliano Martínez","G",0,"20","ARG",3,"GOL"],
+["Pablo Zabaleta","D",14,"10","ARG",3,"LD"],
+["Alberto Tarantini","D",21,"70","ARG",3,"LE"],
+["José Manuel Moreno","M",219,"40","ARG",3,"MC CA"],
+["Ermindo Onega","M",116,"60","ARG",3,"MC"],
+["Jorge Burruchaga","M",142,"80","ARG",4,"MC"],
+["Carlos Bianchi","A",434,"70","ARG",4,"CA"],
+["Paulo Dybala","M",202,"10","ARG",4,"MC CA"],
+["Ángel Labruna","A",311,"40","ARG",3,"CA"],
+["Ariel Ortega","M",143,"90","ARG",4,"MD PD"],
+["Cristian Romero","D",26,"20","ARG",3,"ZAG"],
+["Juan Alberto Schiaffino","M",125,"50","URU",3,"MC MD"],
+["José Nasazzi","D",10,"30","URU",3,"LD ZAG"],
+["Enzo Francescoli","M",237,"80","URU",4,"MC ME"],
+["Luis Suárez","A",615,"10","URU",1,"CA"],
+["Edinson Cavani","A",458,"10","URU",4,"CA"],
+["Diego Forlán","A",310,"00","URU",4,"CA PE"],
+["Álvaro Recoba","M",161,"00","URU",4,"ME"],
+["Alcides Ghiggia","A",46,"50","URU",3,"PD"],
+["Obdulio Varela","M",24,"50","URU",3,"MC"],
+["Federico Valverde","M",54,"20","URU",4,"MC MD"],
+["Darwin Núñez","A",136,"20","URU",4,"CA"],
+["Diego Godín","D",48,"10","URU",3,"ZAG"],
+["Diego Lugano","D",42,"00","URU",3,"ZAG"],
+["Paolo Montero","D",15,"90","URU",3,"ZAG"],
+["Maxi Pereira","D",28,"10","URU",3,"LD"],
+["Martín Cáceres","D",26,"10","URU",3,"LE ZAG"],
+["Álvaro Pereira","D",27,"10","URU",3,"LE"],
+["Fernando Muslera","G",0,"10","URU",3,"GOL"],
+["Ladislao Mazurkiewicz","G",0,"60","URU",3,"GOL"],
+["Rubén Sosa","A",173,"90","URU",3,"CA PE"],
+["Antonio Alzamendi","A",98,"80","URU",3,"PD"],
+["Fernando Morena","A",352,"70","URU",3,"CA"],
+["Pedro Rocha","M",202,"70","URU",3,"MC"],
+["Giorgian de Arrascaeta","M",189,"20","URU",4,"MC ME"],
+["Sebastián Abreu","A",241,"00","URU",4,"CA"],
+["Elías Figueroa","D",44,"70","CHI",3,"ZAG"],
+["Claudio Bravo","G",0,"10","CHI",3,"GOL"],
+["Misael Escuti","G",0,"60","CHI",0,"GOL"],
+["Mauricio Isla","D",20,"10","CHI",3,"LD"],
+["Gary Medel","D",22,"10","CHI",3,"ZAG MC"],
+["Javier Margas","D",21,"90","CHI",3,"ZAG"],
+["Jean Beausejour","D",36,"10","CHI",3,"LE ME"],
+["Eugenio Mena","D",13,"10","CHI",3,"LE"],
+["Arturo Vidal","M",163,"10","CHI",4,"MC"],
+["Jorge Toro","M",71,"60","CHI",3,"MC"],
+["Matías Fernández","M",81,"00","CHI",3,"MC MD"],
+["Alexis Sánchez","A",275,"10","CHI",4,"PE PD"],
+["Leonel Sánchez","A",144,"60","CHI",3,"PE"],
+["Carlos Caszely","A",200,"70","CHI",3,"CA"],
+["Iván Zamorano","A",383,"90","CHI",4,"CA"],
+["Marcelo Salas","A",285,"90","CHI",4,"CA"],
+["Eduardo Vargas","A",205,"10","CHI",4,"CA PD"],
+["Jorge Aravena","M",107,"80","CHI",3,"MC"],
+["Carlos Reinoso","M",111,"70","CHI",3,"MC"],
+["José Luis Chilavert","G",56,"90","PAR",3,"GOL"],
+["Justo Villar","G",0,"00","PAR",3,"GOL"],
+["Francisco Arce","D",40,"90","PAR",3,"LD"],
+["Denis Caniza","D",11,"00","PAR",3,"LD"],
+["Carlos Gamarra","D",32,"00","PAR",3,"ZAG"],
+["Celso Ayala","D",26,"90","PAR",3,"ZAG"],
+["Paulo da Silva","D",48,"00","PAR",3,"ZAG"],
+["Aureliano Torres","D",12,"00","PAR",3,"LE"],
+["Júnior Alonso","D",20,"20","PAR",3,"LE ZAG"],
+["Óscar Romero","M",42,"20","PAR",3,"ME MC"],
+["Julio César Romero","M",127,"80","PAR",3,"MC"],
+["Jorge Luis Campos","M",78,"90","PAR",3,"MC"],
+["Miguel Almirón","M",86,"20","PAR",4,"MD PD"],
+["Derlis González","A",109,"10","PAR",4,"PE"],
+["Roque Santa Cruz","A",286,"00","PAR",4,"CA"],
+["Salvador Cabañas","A",172,"00","PAR",3,"CA"],
+["Arsenio Erico","A",324,"30","PAR",4,"CA"],
+["Óscar Cardozo","A",407,"10","PAR",4,"CA"],
+["Roberto Cabañas","A",136,"80","PAR",3,"CA"],
+["Carlos Valderrama","M",97,"90","COL",3,"MC ME"],
+["René Higuita","G",41,"90","COL",3,"GOL"],
+["Óscar Córdoba","G",0,"90","COL",0,"GOL"],
+["Juan Cuadrado","A",69,"10","COL",4,"PD LD"],
+["Santiago Arias","D",5,"10","COL",3,"LD"],
+["Andrés Escobar","D",11,"90","COL",3,"ZAG"],
+["Iván Córdoba","D",23,"00","COL",3,"ZAG"],
+["Mario Yepes","D",27,"00","COL",3,"ZAG"],
+["Pablo Armero","D",12,"10","COL",3,"LE"],
+["Johan Mojica","D",11,"20","COL",3,"LE"],
+["James Rodríguez","M",167,"10","COL",4,"MC ME"],
+["Freddy Rincón","M",115,"90","COL",3,"MC"],
+["Macnelly Torres","M",76,"10","COL",4,"MC MD"],
+["Jhon Arias","M",48,"20","COL",3,"MD PD"],
+["Luis Díaz","A",162,"20","COL",4,"PE"],
+["Faustino Asprilla","A",157,"90","COL",4,"CA PD"],
+["Arnoldo Iguarán","A",193,"80","COL",3,"CA"],
+["Adolfo Valencia","A",99,"90","COL",3,"CA"],
+["Juan Pablo Ángel","A",281,"00","COL",4,"CA"],
+["Radamel Falcao","A",356,"10","COL",4,"CA"],
+["Fredy Guarín","M",97,"10","COL",4,"MC"],
+["Yerry Mina","D",32,"20","COL",3,"ZAG"],
+["Carlos Bacca","A",343,"10","COL",4,"CA"],
+["Leonel Álvarez","M",20,"90","COL",3,"MC"],
+["Teófilo Cubillas","M",340,"70","PER",4,"MC MD CA"],
+["Ramón Quiroga","G",0,"70","PER",0,"GOL"],
+["Óscar Ibáñez","G",0,"00","PER",0,"GOL"],
+["Eleazar Soria","D",5,"70","PER",3,"LD"],
+["Luis Advíncula","D",22,"10","PER",3,"LD"],
+["Héctor Chumpitaz","D",35,"70","PER",3,"ZAG"],
+["Julio Meléndez","D",10,"60","PER",3,"ZAG"],
+["Carlos Zambrano","D",14,"10","PER",3,"ZAG"],
+["Juan Manuel Vargas","D",43,"00","PER",3,"LE ME"],
+["Miguel Trauco","D",5,"10","PER",3,"LE"],
+["Christian Cueva","M",102,"10","PER",4,"MC ME"],
+["José Velásquez","M",54,"70","PER",3,"MC"],
+["Nolberto Solano","M",134,"00","PER",4,"MD"],
+["Hugo Sotil","A",120,"70","PER",3,"CA PE"],
+["Juan Carlos Oblitas","A",86,"70","PER",3,"PE"],
+["Claudio Pizarro","A",337,"00","PER",4,"CA"],
+["Percy Rojas","A",75,"70","PER",3,"PD"],
+["Juan José Muñante","A",49,"70","PER",3,"PD"],
+["Teodoro Fernández","A",180,"30","PER",3,"CA"],
+["José Francisco Cevallos","G",0,"00","EQU",3,"GOL"],
+["Alexander Domínguez","G",0,"10","EQU",3,"GOL"],
+["Ulises de la Cruz","D",21,"00","EQU",3,"LD"],
+["Antonio Valencia","A",57,"10","EQU",4,"PD LD"],
+["Iván Hurtado","D",25,"00","EQU",3,"ZAG"],
+["Giovanny Espinoza","D",12,"00","EQU",3,"ZAG"],
+["Piero Hincapié","D",12,"20","EQU",3,"ZAG LE"],
+["Walter Ayoví","D",40,"10","EQU",3,"LE ME"],
+["Jefferson Montero","A",67,"10","EQU",4,"PE ME"],
+["Álex Aguinaga","M",101,"90","EQU",3,"MC"],
+["Edison Méndez","M",97,"00","EQU",4,"MD MC"],
+["Segundo Castillo","M",29,"00","EQU",3,"MC"],
+["Alberto Spencer","A",309,"60","EQU",3,"CA"],
+["Jaime Iván Kaviedes","A",135,"90","EQU",3,"CA"],
+["Agustín Delgado","A",206,"00","EQU",4,"CA"],
+["Gonzalo Plata","A",45,"20","EQU",4,"PD"],
+["Moisés Caicedo","M",21,"20","EQU",4,"MC"],
+["Christian Noboa","M",107,"10","EQU",4,"MC"],
+["Pervis Estupiñán","D",19,"20","EQU",3,"LE"],
+["Franz Beckenbauer","D",89,"70","ALE",3,"ZAG MC"],
+["Gerd Müller","A",634,"70","ALE",1,"CA"],
+["Lothar Matthäus","M",227,"80","ALE",4,"MC"],
+["Jürgen Klinsmann","A",324,"90","ALE",4,"CA"],
+["Karl-Heinz Rummenigge","A",338,"80","ALE",4,"PD CA"],
+["Günter Netzer","M",104,"70","ALE",3,"MC ME"],
+["Sepp Maier","G",0,"70","ALE",0,"GOL"],
+["Matthias Sammer","D",80,"90","ALE",3,"ZAG MC"],
+["Uwe Seeler","A",552,"60","ALE",1,"CA"],
+["Fritz Walter","M",339,"50","ALE",3,"MC"],
+["Miroslav Klose","A",329,"00","ALE",4,"CA"],
+["Thomas Müller","A",330,"10","ALE",4,"PD MC MD"],
+["Michael Ballack","M",191,"00","ALE",4,"MC MD"],
+["Bastian Schweinsteiger","M",104,"10","ALE",4,"MC"],
+["Toni Kroos","M",84,"10","ALE",4,"MC ME"],
+["Paul Breitner","D",113,"70","ALE",3,"LE MC ME"],
+["Andreas Brehme","D",83,"90","ALE",3,"LE ME"],
+["Philipp Lahm","D",29,"10","ALE",3,"LD LE"],
+["Berti Vogts","D",34,"70","ALE",3,"LD"],
+["Jürgen Kohler","D",33,"90","ALE",3,"ZAG"],
+["Oliver Kahn","G",0,"00","ALE",0,"GOL"],
+["Manuel Neuer","G",0,"10","ALE",0,"GOL"],
+["Pierre Littbarski","A",184,"80","ALE",4,"PE ME"],
+["Lukas Podolski","A",276,"10","ALE",4,"PE CA"],
+["Helmut Haller","M",125,"60","ALE",3,"MC"],
+["Max Morlock","A",311,"50","ALE",3,"CA MC"],
+["Florian Wirtz","M",77,"20","ALE",4,"MC"],
+["Rudi Völler","A",365,"80","ALE",4,"CA"],
+["Joshua Kimmich","D",39,"20","ALE",3,"LD MC"],
+["Andreas Möller","M",199,"90","ALE",4,"MC"],
+["Klaus Fischer","A",363,"70","ALE",4,"CA"],
+["Manfred Kaltz","D",84,"80","ALE",3,"LD"],
+["Mario Gómez","A",336,"10","ALE",4,"CA"],
+["Roberto Baggio","M",318,"90","ITA",4,"MC CA"],
+["Franco Baresi","D",26,"80","ITA",3,"ZAG"],
+["Paolo Maldini","D",36,"90","ITA",3,"LE ZAG"],
+["Giuseppe Meazza","A",347,"30","ITA",4,"CA"],
+["Paolo Rossi","A",154,"80","ITA",4,"CA"],
+["Dino Zoff","G",0,"70","ITA",3,"GOL"],
+["Christian Vieri","A",259,"00","ITA",4,"CA"],
+["Luigi Riva","A",248,"60","ITA",4,"PE CA"],
+["Alessandro Del Piero","A",343,"00","ITA",4,"CA ME"],
+["Giacinto Facchetti","D",71,"60","ITA",3,"LE"],
+["Francesco Totti","M",316,"00","ITA",4,"MC CA"],
+["Filippo Inzaghi","A",313,"00","ITA",4,"CA"],
+["Andrea Pirlo","M",86,"00","ITA",4,"MC"],
+["Gianni Rivera","M",184,"60","ITA",4,"MC MD"],
+["Sandro Mazzola","M",183,"60","ITA",4,"MC PD MD"],
+["Bruno Conti","A",43,"80","ITA",3,"PD MD"],
+["Fabio Cannavaro","D",22,"00","ITA",3,"ZAG"],
+["Alessandro Nesta","D",10,"00","ITA",3,"ZAG"],
+["Gaetano Scirea","D",27,"80","ITA",3,"ZAG"],
+["Gianluca Zambrotta","D",24,"00","ITA",3,"LD LE"],
+["Antonio Cabrini","D",50,"80","ITA",3,"LE"],
+["Gianluigi Buffon","G",0,"00","ITA",3,"GOL"],
+["Tarcisio Burgnich","D",12,"60","ITA",3,"LD ZAG"],
+["Giuseppe Signori","A",272,"90","ITA",4,"CA PE"],
+["Valentino Mazzola","M",118,"40","ITA",3,"MC"],
+["Silvio Piola","A",389,"30","ITA",4,"CA"],
+["Nicolò Barella","M",46,"20","ITA",4,"MC"],
+["Ciro Immobile","A",323,"10","ITA",4,"CA"],
+["Romeo Benetti","M",40,"70","ITA",3,"MC"],
+["Antonio Di Natale","A",311,"10","ITA",4,"CA PE"],
+["Jorginho","M",42,"20","ITA",3,"MC"],
+["Giorgio Chinaglia","A",250,"70","ITA",3,"CA"],
+["Gianluigi Donnarumma","G",0,"20","ITA",3,"GOL"],
+["Bobby Charlton","M",312,"60","ING",4,"MC ME PE"],
+["Bobby Moore","D",29,"60","ING",3,"ZAG"],
+["Stanley Matthews","A",91,"50","ING",4,"PD"],
+["Gordon Banks","G",0,"60","ING",3,"GOL"],
+["Gary Lineker","A",286,"80","ING",3,"CA"],
+["Michael Owen","A",190,"00","ING",3,"CA"],
+["Duncan Edwards","M",26,"50","ING",4,"MC"],
+["David Beckham","M",146,"00","ING",4,"MD"],
+["Tom Finney","A",240,"50","ING",4,"PD"],
+["Kevin Keegan","A",275,"70","ING",4,"CA"],
+["Paul Gascoigne","M",120,"90","ING",4,"MC"],
+["Glenn Hoddle","M",152,"80","ING",4,"MC"],
+["Alan Shearer","A",409,"90","ING",4,"CA"],
+["Dixie Dean","A",443,"30","ING",4,"CA"],
+["Bryan Robson","M",173,"80","ING",4,"MC"],
+["Wayne Rooney","A",366,"10","ING",4,"CA"],
+["Harry Kane","A",523,"10","ING",1,"CA"],
+["Steven Gerrard","M",211,"00","ING",4,"MC MD"],
+["Frank Lampard","M",303,"00","ING",4,"MC"],
+["John Terry","D",62,"00","ING",3,"ZAG"],
+["Rio Ferdinand","D",18,"00","ING",3,"ZAG"],
+["Ashley Cole","D",20,"00","ING",3,"LE"],
+["Stuart Pearce","D",70,"90","ING",3,"LE"],
+["Gary Neville","D",7,"00","ING",3,"LD"],
+["Trent Alexander-Arnold","D",25,"20","ING",3,"LD"],
+["Peter Shilton","G",0,"80","ING",0,"GOL"],
+["John Barnes","A",208,"80","ING",4,"PE ME"],
+["Jimmy Greaves","A",513,"60","ING",4,"CA"],
+["Emlyn Hughes","D",45,"70","ING",3,"ZAG LE"],
+["Alan Ball","M",126,"60","ING",3,"MC"],
+["Johnny Haynes","M",165,"50","ING",4,"MC"],
+["Michel Platini","M",313,"80","FRA",4,"MC ME"],
+["Eric Cantona","A",185,"90","FRA",4,"CA"],
+["Zinedine Zidane","M",156,"00","FRA",4,"MC ME"],
+["Just Fontaine","A",288,"50","FRA",4,"CA"],
+["David Ginola","A",111,"90","FRA",4,"PE"],
+["Raymond Kopa","A",165,"50","FRA",4,"PD MD MC"],
+["Thierry Henry","A",417,"00","FRA",4,"CA PE"],
+["Kylian Mbappé","A",454,"20","FRA",4,"PE CA"],
+["Karim Benzema","A",524,"10","FRA",1,"CA"],
+["Antoine Griezmann","A",357,"10","FRA",4,"CA MC"],
+["Franck Ribéry","A",177,"10","FRA",4,"PE ME"],
+["Alain Giresse","M",194,"80","FRA",4,"MC MD"],
+["Patrick Vieira","M",63,"00","FRA",4,"MC"],
+["Didier Deschamps","M",36,"90","FRA",3,"MC"],
+["Laurent Blanc","D",112,"90","FRA",3,"ZAG"],
+["Marcel Desailly","D",28,"90","FRA",3,"ZAG"],
+["Lilian Thuram","D",14,"90","FRA",3,"LD ZAG"],
+["Raphaël Varane","D",29,"10","FRA",3,"ZAG"],
+["Bixente Lizarazu","D",30,"90","FRA",3,"LE"],
+["Fabien Barthez","G",0,"90","FRA",3,"GOL"],
+["Hugo Lloris","G",0,"10","FRA",3,"GOL"],
+["Manuel Amoros","D",15,"80","FRA",3,"LD LE"],
+["Dominique Rocheteau","A",187,"80","FRA",4,"PD CA"],
+["Roger Piantoni","M",223,"50","FRA",3,"MC CA"],
+["Robert Pirès","M",180,"00","FRA",4,"ME MC"],
+["Marius Trésor","D",30,"70","FRA",3,"ZAG"],
+["Theo Hernández","D",38,"20","FRA",3,"LE"],
+["Dimitri Payet","M",168,"10","FRA",4,"MC ME"],
+["David Trezeguet","A",307,"00","FRA",4,"CA"],
+["Youri Djorkaeff","M",254,"90","FRA",4,"MC CA"],
+["Benjamin Pavard","D",25,"20","FRA",3,"LD ZAG"],
+["Ricardo Zamora","G",0,"30","ESP",0,"GOL"],
+["Francisco Gento","A",190,"50","ESP",4,"PE"],
+["Ladislao Kubala","A",253,"50","ESP",4,"CA PD"],
+["Raúl","A",448,"00","ESP",4,"CA"],
+["David Villa","A",442,"10","ESP",4,"CA PE"],
+["Fernando Torres","A",301,"00","ESP",4,"CA"],
+["Emilio Butragueño","A",266,"80","ESP",4,"CA"],
+["Luis Suárez Miramontes","M",140,"60","ESP",3,"MC"],
+["Xavi","M",98,"00","ESP",3,"MC"],
+["Andrés Iniesta","M",106,"10","ESP",4,"MC ME"],
+["Sergio Busquets","M",23,"10","ESP",4,"MC"],
+["Xabi Alonso","M",60,"00","ESP",4,"MC"],
+["David Silva","M",160,"10","ESP",4,"MC MD"],
+["Míchel","M",192,"80","ESP",4,"MD"],
+["Fernando Hierro","D",163,"90","ESP",3,"ZAG MC"],
+["Carles Puyol","D",22,"00","ESP",3,"ZAG"],
+["Sergio Ramos","D",135,"10","ESP",3,"ZAG LD"],
+["Gerard Piqué","D",48,"10","ESP",3,"ZAG"],
+["Dani Carvajal","D",17,"10","ESP",3,"LD"],
+["Jordi Alba","D",42,"10","ESP",3,"LE"],
+["Iker Casillas","G",0,"00","ESP",3,"GOL"],
+["Rafael Gordillo","D",39,"80","ESP",3,"LE"],
+["Santi Cazorla","M",158,"10","ESP",4,"MC ME"],
+["Amancio","A",234,"60","ESP",4,"PD"],
+["Telmo Zarra","A",383,"50","ESP",4,"CA"],
+["Santillana","A",324,"80","ESP",4,"CA"],
+["Pirri","M",139,"70","ESP",3,"MC"],
+["Aymeric Laporte","D",21,"20","ESP",3,"ZAG"],
+["Quini","A",384,"80","ESP",4,"CA"],
+["José Mari Bakero","M",191,"90","ESP",4,"MC CA"],
+["Marc Cucurella","D",11,"20","ESP",3,"LE"],
+["Eden Hazard","A",201,"10","BEL",4,"PE ME"],
+["Kevin De Bruyne","M",203,"20","BEL",4,"MD MC"],
+["Romelu Lukaku","A",410,"10","BEL",4,"CA"],
+["Paul van Himst","A",339,"60","BEL",4,"CA"],
+["Jan Ceulemans","M",316,"80","BEL",4,"MC CA"],
+["Enzo Scifo","M",168,"90","BEL",4,"MC"],
+["Marc Wilmots","M",183,"90","BEL",4,"MC"],
+["Dries Mertens","A",295,"10","BEL",4,"PD"],
+["Yannick Carrasco","A",150,"10","BEL",4,"PE ME"],
+["Axel Witsel","M",104,"10","BEL",4,"MC"],
+["Vincent Kompany","D",25,"10","BEL",3,"ZAG"],
+["Jan Vertonghen","D",43,"10","BEL",3,"ZAG LE"],
+["Toby Alderweireld","D",29,"10","BEL",3,"ZAG"],
+["Eric Gerets","D",35,"80","BEL",3,"LD"],
+["Thomas Meunier","D",29,"10","BEL",3,"LD"],
+["Jean-Marie Pfaff","G",0,"80","BEL",3,"GOL"],
+["Thibaut Courtois","G",0,"10","BEL",0,"GOL"],
+["Thomas Vermaelen","D",24,"10","BEL",3,"ZAG LE"],
+["François Van der Elst","A",109,"80","BEL",3,"PD"],
+["Rik Coppens","A",282,"50","BEL",3,"CA"],
+["Wilfried Van Moer","M",126,"70","BEL",4,"MC"],
+["Luc Nilis","A",311,"90","BEL",4,"CA"],
+["Daniel Van Buyten","D",52,"00","BEL",3,"ZAG"],
+["Stephan Lichtsteiner","D",33,"10","SUI",3,"LD"],
+["Yann Sommer","G",0,"10","SUI",0,"GOL"],
+["Pascal Zuberbühler","G",0,"00","SUI",0,"GOL"],
+["Silvan Widmer","D",14,"20","SUI",3,"LD"],
+["Patrick Müller","D",18,"00","SUI",3,"ZAG"],
+["Philippe Senderos","D",15,"00","SUI",3,"ZAG"],
+["Johan Djourou","D",12,"10","SUI",3,"ZAG"],
+["Ludovic Magnin","D",13,"00","SUI",3,"LE"],
+["Ricardo Rodríguez","D",44,"10","SUI",3,"LE"],
+["Alain Sutter","M",41,"90","SUI",3,"ME"],
+["Tranquillo Barnetta","M",75,"00","SUI",4,"MD ME"],
+["Granit Xhaka","M",60,"10","SUI",4,"MC"],
+["Köbi Kuhn","M",47,"60","SUI",3,"MC"],
+["Karl Odermatt","M",89,"70","SUI",3,"MC"],
+["Ruben Vargas","A",68,"20","SUI",4,"PE"],
+["Stéphane Chapuisat","A",289,"90","SUI",3,"CA"],
+["Alexander Frei","A",236,"00","SUI",4,"CA"],
+["Kubilay Türkyilmaz","A",172,"90","SUI",3,"CA"],
+["Xherdan Shaqiri","A",165,"10","SUI",4,"PD"],
+["Nemanja Vidić","D",24,"00","SER",3,"ZAG"],
+["Aleksandar Kolarov","D",63,"10","SER",3,"LE"],
+["Vladimir Beara","G",0,"50","SER",0,"GOL"],
+["Vladimir Stojković","G",0,"10","SER",0,"GOL"],
+["Branislav Ivanović","D",47,"10","SER",3,"LD ZAG"],
+["Siniša Mihajlović","D",79,"90","SER",3,"ZAG LE"],
+["Filip Kostić","D",47,"20","SER",3,"LE ME"],
+["Dejan Savićević","M",150,"90","SER",4,"MC"],
+["Dragan Stojković","M",130,"90","SER",3,"MC"],
+["Dejan Stanković","M",129,"00","SER",4,"MC"],
+["Andrija Živković","A",99,"20","SER",4,"PD MD"],
+["Dragan Džajić","A",137,"60","SER",3,"PE"],
+["Dušan Tadić","A",263,"10","SER",4,"PE MC"],
+["Predrag Mijatović","A",203,"90","SER",4,"CA"],
+["Dušan Vlahović","A",141,"20","SER",4,"CA"],
+["Aleksandar Mitrović","A",341,"20","SER",4,"CA"],
+["Zoran Tošić","A",126,"10","SER",4,"PD"],
+["Rajko Mitić","M",190,"50","SER",3,"MC"],
+["Safet Sušić","M",205,"80","SER",4,"MC"],
+["Zlatan Ibrahimović","A",561,"10","SUE",1,"CA"],
+["Henrik Larsson","A",477,"00","SUE",4,"CA"],
+["Ronnie Hellström","G",0,"70","SUE",0,"GOL"],
+["Thomas Ravelli","G",0,"90","SUE",0,"GOL"],
+["Roland Nilsson","D",14,"90","SUE",3,"LD"],
+["Mikael Lustig","D",19,"10","SUE",3,"LD"],
+["Glenn Hysén","D",32,"80","SUE",3,"ZAG"],
+["Patrik Andersson","D",25,"90","SUE",3,"ZAG"],
+["Olof Mellberg","D",39,"00","SUE",3,"ZAG"],
+["Erik Edman","D",11,"00","SUE",3,"LE"],
+["Ludwig Augustinsson","D",13,"20","SUE",3,"LE"],
+["Freddie Ljungberg","M",103,"00","SUE",4,"ME PE"],
+["Emil Forsberg","M",176,"10","SUE",4,"ME MC"],
+["Gunnar Gren","M",185,"50","SUE",3,"MC"],
+["Nils Liedholm","M",108,"50","SUE",3,"MC"],
+["Sebastian Larsson","M",83,"10","SUE",4,"MD"],
+["Gunnar Nordahl","A",507,"40","SUE",4,"CA"],
+["Kurt Hamrin","A",217,"60","SUE",3,"PD"],
+["Dejan Kulusevski","A",50,"20","SUE",4,"PD"],
+["Viktor Gyökeres","A",221,"20","SUE",4,"CA"],
+["Ralf Edström","A",120,"70","SUE",3,"CA"],
+["Kim Källström","M",116,"00","SUE",4,"MC"],
+["Jonas Thern","M",41,"90","SUE",3,"MC"],
+["Alexander Isak","A",168,"20","SUE",4,"CA"],
+["Johan Cruyff","A",402,"70","HOL",1,"CA MC"],
+["Marco van Basten","A",307,"80","HOL",4,"CA"],
+["Ruud Gullit","M",236,"80","HOL",4,"MC CA"],
+["Dennis Bergkamp","A",301,"90","HOL",4,"CA MC"],
+["Frank Rijkaard","M",108,"80","HOL",4,"MC ZAG"],
+["Johan Neeskens","M",113,"70","HOL",3,"MC MD"],
+["Edgar Davids","M",42,"90","HOL",3,"MC"],
+["Abe Lenstra","A",624,"50","HOL",1,"CA"],
+["Ruud van Nistelrooy","A",384,"00","HOL",4,"CA"],
+["Robin van Persie","A",322,"10","HOL",4,"CA"],
+["Arjen Robben","A",246,"10","HOL",4,"PD MD"],
+["Wesley Sneijder","M",187,"10","HOL",4,"MC ME"],
+["Rob Rensenbrink","A",265,"70","HOL",4,"PE ME"],
+["Marc Overmars","A",123,"90","HOL",4,"PE ME"],
+["Ronald Koeman","D",207,"80","HOL",3,"ZAG"],
+["Virgil van Dijk","D",54,"10","HOL",3,"ZAG"],
+["Jaap Stam","D",21,"90","HOL",3,"ZAG"],
+["Ruud Krol","D",36,"70","HOL",3,"LE ZAG"],
+["Giovanni van Bronckhorst","D",39,"00","HOL",3,"LE"],
+["Wim Suurbier","D",18,"70","HOL",3,"LD"],
+["Edwin van der Sar","G",0,"00","HOL",3,"GOL"],
+["Jan Jongbloed","G",0,"70","HOL",3,"GOL"],
+["Berry van Aerle","D",5,"80","HOL",3,"LD"],
+["Johnny Rep","A",199,"70","HOL",4,"PD"],
+["Rafael van der Vaart","M",196,"10","HOL",4,"MC"],
+["Clarence Seedorf","M",146,"00","HOL",4,"MC"],
+["Lev Yashin","G",0,"60","RUS",3,"GOL"],
+["Oleg Blokhin","A",325,"70","RUS",4,"PE"],
+["Rinat Dasayev","G",0,"80","RUS",0,"GOL"],
+["Vladimir Bessonov","D",30,"80","RUS",3,"LD MC"],
+["Mário Fernandes","D",20,"10","RUS",3,"LD"],
+["Albert Shesternev","D",5,"60","RUS",3,"ZAG"],
+["Murtaz Khurtsilava","D",21,"70","RUS",3,"ZAG"],
+["Viktor Onopko","D",41,"90","RUS",3,"ZAG"],
+["Anatoliy Demyanenko","D",39,"80","RUS",3,"LE"],
+["Yuri Zhirkov","D",34,"00","RUS",3,"LE ME"],
+["Andrei Arshavin","A",158,"00","RUS",4,"PE ME"],
+["Aleksandr Mostovoi","M",163,"90","RUS",4,"MC"],
+["Valentin Ivanov","A",141,"60","RUS",3,"CA MC"],
+["Fyodor Cherenkov","M",107,"80","RUS",3,"MC MD"],
+["Valeri Karpin","M",151,"90","RUS",4,"MD"],
+["Igor Belanov","A",140,"80","RUS",4,"CA"],
+["Oleg Protasov","A",244,"80","RUS",4,"CA"],
+["Aleksandr Kokorin","A",139,"10","RUS",4,"PD"],
+["Aleksandr Golovin","M",48,"20","RUS",3,"MC"],
+["Pavel Nedvěd","M",165,"00","TCH",4,"MC ME"],
+["Petr Čech","G",0,"00","TCH",0,"GOL"],
+["František Plánička","G",0,"30","TCH",3,"GOL"],
+["Zdeněk Grygera","D",17,"00","TCH",3,"LD"],
+["Vladimír Coufal","D",11,"20","TCH",3,"LD"],
+["Ján Popluhár","D",11,"60","TCH",3,"ZAG"],
+["Anton Ondruš","D",40,"70","TCH",3,"ZAG"],
+["Tomáš Ujfaluši","D",17,"00","TCH",3,"ZAG"],
+["Ladislav Novák","D",11,"60","TCH",3,"LE"],
+["Marek Jankulovski","D",41,"00","TCH",3,"LE"],
+["Patrik Berger","M",101,"90","TCH",4,"ME"],
+["Tomáš Rosický","M",89,"00","TCH",4,"MC"],
+["Josef Masopust","M",109,"60","TCH",4,"MC"],
+["Karel Poborský","M",76,"90","TCH",3,"MD PD"],
+["Antonín Puč","A",188,"30","TCH",3,"PE"],
+["Ladislav Vízek","A",115,"80","TCH",3,"PE PD"],
+["Milan Baroš","A",218,"00","TCH",4,"CA"],
+["Jan Koller","A",300,"00","TCH",4,"CA"],
+["Oldřich Nejedlý","A",190,"30","TCH",3,"CA"],
+["Eusébio","A",578,"60","POR",1,"CA"],
+["Paulo Futre","A",109,"80","POR",4,"PE ME"],
+["Cristiano Ronaldo","A",980,"10","POR",1,"PE CA"],
+["Fernando Peyroteo","A",553,"40","POR",1,"CA"],
+["Luís Figo","A",169,"00","POR",4,"PD MD"],
+["Rui Costa","M",123,"90","POR",4,"MC ME"],
+["Deco","M",101,"00","POR",4,"MC"],
+["Mário Coluna","M",113,"60","POR",3,"MC"],
+["Bruno Fernandes","M",224,"20","POR",4,"MC"],
+["Bernardo Silva","M",126,"20","POR",4,"MD MC"],
+["Pauleta","A",326,"00","POR",4,"CA"],
+["Ricardo Quaresma","A",123,"10","POR",4,"PD"],
+["Pepe","D",40,"10","POR",3,"ZAG"],
+["Ricardo Carvalho","D",30,"00","POR",3,"ZAG"],
+["Rúben Dias","D",18,"20","POR",3,"ZAG"],
+["João Cancelo","D",42,"20","POR",3,"LD LE"],
+["Paulo Ferreira","D",5,"00","POR",3,"LD"],
+["Nuno Mendes","D",12,"20","POR",3,"LE"],
+["Vítor Baía","G",0,"90","POR",0,"GOL"],
+["Rui Patrício","G",0,"10","POR",0,"GOL"],
+["José Águas","A",392,"50","POR",4,"CA"],
+["João Pinto","M",128,"90","POR",3,"MC"],
+["Fernando Gomes","A",328,"80","POR",3,"CA"],
+["Fernando Couto","D",26,"90","POR",3,"ZAG"],
+["João Moutinho","M",72,"10","POR",4,"MC"],
+["Rui Jordão","A",227,"80","POR",3,"CA"],
+["Kenny Dalglish","A",375,"80","ESC",4,"CA"],
+["Jim Baxter","M",35,"60","ESC",3,"MC"],
+["Alan Hansen","D",23,"80","ESC",3,"ZAG"],
+["Andy Robertson","D",24,"20","ESC",3,"LE"],
+["Jim Leighton","G",0,"80","ESC",3,"GOL"],
+["Andy Goram","G",0,"90","ESC",3,"GOL"],
+["Danny McGrain","D",10,"70","ESC",3,"LD"],
+["Steve Nicol","D",39,"80","ESC",3,"LD"],
+["Billy McNeill","D",38,"60","ESC",3,"ZAG"],
+["Willie Miller","D",26,"80","ESC",3,"ZAG"],
+["Tommy Gemmell","D",43,"60","ESC",3,"LE"],
+["John Collins","M",65,"90","ESC",3,"ME MC"],
+["John McGinn","M",86,"20","ESC",4,"MC ME"],
+["Gordon Strachan","M",191,"80","ESC",4,"MD"],
+["Bobby Lennox","A",276,"60","ESC",3,"PE"],
+["Denis Law","A",333,"60","ESC",4,"CA"],
+["Ally McCoist","A",424,"90","ESC",4,"CA"],
+["Jimmy Johnstone","A",102,"60","ESC",3,"PD"],
+["Jimmy McGrory","A",545,"30","ESC",4,"CA"],
+["Zbigniew Boniek","M",137,"80","POL",4,"MC CA"],
+["Robert Lewandowski","A",707,"10","POL",1,"CA"],
+["Jan Tomaszewski","G",0,"70","POL",3,"GOL"],
+["Wojciech Szczęsny","G",0,"10","POL",0,"GOL"],
+["Łukasz Piszczek","D",28,"10","POL",3,"LD"],
+["Antoni Szymanowski","D",11,"70","POL",3,"LD"],
+["Władysław Żmuda","D",12,"70","POL",3,"ZAG"],
+["Jerzy Gorgoń","D",26,"70","POL",3,"ZAG"],
+["Jacek Bąk","D",23,"00","POL",3,"ZAG"],
+["Michał Żewłakow","D",13,"00","POL",3,"LE"],
+["Bartosz Bereszyński","D",5,"20","POL",3,"LD LE"],
+["Kamil Grosicki","A",151,"10","POL",4,"PE ME"],
+["Kazimierz Deyna","M",244,"70","POL",4,"MC"],
+["Henryk Kasperczak","M",43,"70","POL",3,"MC MD"],
+["Włodzimierz Smolarek","A",161,"80","POL",4,"PE"],
+["Włodzimierz Lubański","A",415,"70","POL",4,"CA"],
+["Grzegorz Lato","A",210,"70","POL",4,"PD"],
+["Jakub Błaszczykowski","A",88,"10","POL",4,"PD"],
+["Piotr Zieliński","M",85,"20","POL",4,"MC"],
+["Ferenc Puskás","A",725,"50","HUN",1,"CA"],
+["Sándor Kocsis","A",448,"50","HUN",4,"CA"],
+["György Sárosi","A",530,"30","HUN",1,"CA MC"],
+["Nándor Hidegkuti","M",276,"50","HUN",3,"MC"],
+["Gyula Grosics","G",0,"50","HUN",3,"GOL"],
+["Péter Gulácsi","G",0,"20","HUN",0,"GOL"],
+["Jenő Buzánszky","D",5,"50","HUN",3,"LD"],
+["Attila Fiola","D",12,"10","HUN",3,"LD"],
+["Kálmán Mészöly","D",24,"60","HUN",3,"ZAG"],
+["Gyula Lóránt","D",10,"50","HUN",3,"ZAG"],
+["Willi Orbán","D",28,"20","HUN",3,"ZAG"],
+["Mihály Lantos","D",37,"50","HUN",3,"LE"],
+["Milos Kerkez","D",6,"20","HUN",3,"LE"],
+["Lajos Détári","M",165,"80","HUN",3,"MC ME"],
+["Balázs Dzsudzsák","A",180,"10","HUN",4,"PE ME"],
+["Zoltán Gera","M",147,"00","HUN",4,"MD MC"],
+["Dominik Szoboszlai","M",111,"20","HUN",4,"MC MD"],
+["Zoltán Czibor","A",127,"50","HUN",3,"PE"],
+["Ferenc Bene","A",339,"60","HUN",4,"CA PD"],
+["Roland Sallai","A",64,"20","HUN",4,"PD"],
+["Josef Bican","A",722,"30","AUT TCH",1,"CA"],
+["David Alaba","D",57,"10","AUT",3,"LE ZAG"],
+["Walter Zeman","G",0,"50","AUT",0,"GOL"],
+["Friedl Koncilia","G",0,"70","AUT",3,"GOL"],
+["Stefan Lainer","D",12,"20","AUT",3,"LD"],
+["Gerhard Hanappi","M",127,"50","AUT",3,"MC ZAG"],
+["Ernst Happel","D",29,"50","AUT",3,"ZAG"],
+["Martin Hinteregger","D",29,"20","AUT",3,"ZAG LE"],
+["Christoph Baumgartner","M",82,"20","AUT",4,"ME MC"],
+["Herbert Prohaska","M",82,"80","AUT",3,"MC"],
+["Kurt Jara","M",124,"70","AUT",4,"MD PD"],
+["Marcel Sabitzer","M",142,"20","AUT",4,"MC MD"],
+["Marko Arnautović","A",200,"10","AUT",4,"PE CA"],
+["Hans Krankl","A",314,"70","AUT",3,"CA"],
+["Toni Polster","A",426,"90","AUT",4,"CA"],
+["Matthias Sindelar","A",220,"30","AUT",3,"CA MC"],
+["Bruno Pezzey","D",51,"80","AUT",3,"ZAG"],
+["Ivica Vastić","M",305,"90","AUT",4,"MC CA"],
+["Erich Probst","A",166,"50","AUT",3,"CA"],
+["Gheorghe Hagi","M",316,"90","ROM",4,"MC ME"],
+["Helmuth Duckadam","G",0,"80","ROM",3,"GOL"],
+["Bogdan Stelea","G",0,"90","ROM",3,"GOL"],
+["Dan Petrescu","D",60,"90","ROM",3,"LD MD"],
+["Cosmin Contra","D",33,"00","ROM",3,"LD"],
+["Gheorghe Popescu","D",54,"90","ROM",3,"ZAG MC"],
+["Cornel Dinu","D",33,"70","ROM",3,"ZAG"],
+["Miodrag Belodedici","D",20,"90","ROM",3,"ZAG"],
+["Cristian Chivu","D",28,"00","ROM",3,"ZAG LE"],
+["Răzvan Raț","D",27,"00","ROM",3,"LE"],
+["Dorinel Munteanu","M",110,"90","ROM",4,"ME MC"],
+["Ilie Dumitrescu","A",107,"90","ROM",3,"PE MC"],
+["Dudu Georgescu","A",318,"70","ROM",4,"CA"],
+["Rodion Cămătaru","A",219,"80","ROM",3,"CA"],
+["Florin Răducioiu","A",119,"90","ROM",3,"CA"],
+["Ilie Balaci","A",79,"80","ROM",3,"PD MC"],
+["Nicolae Stanciu","M",67,"20","ROM",3,"MC"],
+["Marcel Răducanu","M",115,"80","ROM",3,"MC"],
+["Ianis Hagi","M",61,"20","ROM",4,"ME MC"],
+["Hristo Stoichkov","A",238,"90","BUL",3,"PE CA"],
+["Borislav Mihaylov","G",0,"90","BUL",3,"GOL"],
+["Dimitar Ivankov","G",40,"00","BUL",3,"GOL"],
+["Emil Kremenliev","D",10,"90","BUL",3,"LD"],
+["Radostin Kishishev","D",16,"00","BUL",3,"LD MD"],
+["Dimitar Penev","D",12,"60","BUL",3,"ZAG"],
+["Trifon Ivanov","D",38,"90","BUL",3,"ZAG"],
+["Petar Hubchev","D",10,"90","BUL",3,"ZAG"],
+["Tsanko Tsvetanov","D",15,"90","BUL",3,"LE"],
+["Martin Petrov","A",98,"00","BUL",3,"PE ME"],
+["Ivelin Popov","M",140,"10","BUL",4,"ME MC"],
+["Krasimir Balakov","M",121,"90","BUL",3,"MC"],
+["Hristo Bonev","M",213,"70","BUL",3,"MC"],
+["Dimitar Berbatov","A",329,"00","BUL",4,"CA"],
+["Georgi Asparuhov","A",143,"60","BUL",3,"CA"],
+["Emil Kostadinov","A",120,"90","BUL",3,"PD CA"],
+["Petar Zhekov","A",287,"70","BUL",4,"CA"],
+["Stiliyan Petrov","M",87,"00","BUL",4,"MC"],
+["Nasko Sirakov","A",219,"80","BUL",3,"CA PE"],
+["Davor Šuker","A",285,"90","CRO",4,"CA"],
+["Luka Modrić","M",136,"10","CRO",4,"MC MD"],
+["Zvonimir Boban","M",93,"90","CRO",4,"MC"],
+["Robert Prosinečki","M",123,"90","CRO",4,"MC ME"],
+["Ivan Rakitić","M",141,"10","CRO",4,"MC MD"],
+["Ivan Perišić","A",209,"10","CRO",4,"PE ME"],
+["Mario Mandžukić","A",261,"10","CRO",4,"CA"],
+["Ivica Olić","A",264,"00","CRO",4,"CA PD"],
+["Alen Bokšić","A",143,"90","CRO",4,"CA"],
+["Andrej Kramarić","A",299,"20","CRO",4,"CA"],
+["Marcelo Brozović","M",66,"10","CRO",4,"MC"],
+["Darijo Srna","D",71,"10","CRO",3,"LD"],
+["Robert Jarni","D",33,"90","CRO",3,"LE"],
+["Joško Gvardiol","D",33,"20","CRO",3,"ZAG LE"],
+["Dejan Lovren","D",28,"10","CRO",3,"ZAG"],
+["Igor Štimac","D",27,"90","CRO",3,"ZAG"],
+["Josip Šimunić","D",23,"00","CRO",3,"ZAG"],
+["Danijel Subašić","G",0,"10","CRO",3,"GOL"],
+["Dominik Livaković","G",0,"20","CRO",3,"GOL"],
+["Šime Vrsaljko","D",10,"10","CRO",3,"LD"],
+["Ante Rebić","A",81,"10","CRO",4,"PE"],
+["Mario Stanić","M",121,"90","CRO",4,"MD PD"],
+["Niko Kovač","M",82,"00","CRO",4,"MC"],
+["Peter Schmeichel","G",12,"90","DIN",3,"GOL"],
+["Michael Laudrup","M",202,"90","DIN",4,"MC MD"],
+["Preben Elkjær","A",199,"80","DIN",3,"CA"],
+["Thomas Sørensen","G",0,"00","DIN",0,"GOL"],
+["Morten Olsen","D",36,"80","DIN",3,"ZAG LD"],
+["John Sivebæk","D",14,"80","DIN",3,"LD"],
+["Søren Busk","D",12,"80","DIN",3,"ZAG"],
+["Lars Olsen","D",13,"90","DIN",3,"ZAG"],
+["Jan Heintze","D",16,"90","DIN",3,"LE"],
+["Joakim Mæhle","D",28,"20","DIN",3,"LD LE"],
+["Martin Jørgensen","M",84,"00","DIN",4,"ME PE"],
+["Søren Lerby","M",85,"80","DIN",3,"MC"],
+["Frank Arnesen","M",95,"80","DIN",3,"MC"],
+["Christian Eriksen","M",167,"10","DIN",4,"MC MD"],
+["Jesper Olsen","A",48,"80","DIN",3,"PE"],
+["Allan Simonsen","A",343,"70","DIN",4,"PD CA"],
+["Flemming Povlsen","A",95,"90","DIN",3,"CA"],
+["Brian Laudrup","A",121,"90","DIN",4,"PD PE"],
+["Jon Dahl Tomasson","A",288,"00","DIN",4,"CA"],
+["Pierre-Emile Højbjerg","M",49,"20","DIN",4,"MC"],
+["Ebbe Sand","A",211,"00","DIN",4,"CA"],
+["Simon Kjær","D",28,"10","DIN",3,"ZAG"],
+["Nicklas Bendtner","A",145,"10","DIN",4,"CA"],
+["Kim Vilfort","M",96,"90","DIN",3,"MC"],
+["Hugo Sánchez","A",506,"80","MEX",1,"CA"],
+["Rafael Márquez","D",43,"00","MEX",3,"ZAG MC"],
+["Antonio Carbajal","G",0,"50","MEX",3,"GOL"],
+["Jorge Campos","G",34,"90","MEX",3,"GOL"],
+["Ricardo Osorio","D",11,"00","MEX",3,"LD ZAG"],
+["Paul Aguilar","D",30,"10","MEX",3,"LD"],
+["Claudio Suárez","D",24,"90","MEX",3,"ZAG"],
+["Ramón Ramírez","D",38,"90","MEX",3,"LE ME"],
+["Carlos Salcido","D",29,"00","MEX",3,"LE"],
+["Andrés Guardado","M",72,"10","MEX",4,"ME MC"],
+["Tomás Boy","M",109,"80","MEX",4,"MC"],
+["Carlos Vela","A",209,"10","MEX",4,"PD MD"],
+["Giovani dos Santos","A",97,"10","MEX",4,"PE"],
+["Hirving Lozano","A",154,"20","MEX",4,"PE"],
+["Enrique Borja","A",189,"70","MEX",3,"CA"],
+["Luis García","A",167,"90","MEX",3,"CA"],
+["Cuauhtémoc Blanco","M",225,"00","MEX",4,"MC CA"],
+["Edson Álvarez","M",27,"20","MEX",4,"MC ZAG"],
+["Alberto García Aspe","M",93,"90","MEX",3,"MC"],
+["Jared Borgetti","A",346,"00","MEX",4,"CA"],
+["Héctor Herrera","M",60,"10","MEX",4,"MC"],
+["Carlos Hermosillo","A",342,"90","MEX",3,"CA"],
+["Jesús Gallardo","D",15,"20","MEX",3,"LE"],
+["Pável Pardo","M",61,"00","MEX",4,"MC"],
+["Tim Howard","G",1,"10","EUA",3,"GOL"],
+["Kasey Keller","G",0,"90","EUA",3,"GOL"],
+["Steve Cherundolo","D",17,"00","EUA",3,"LD"],
+["Sergiño Dest","D",12,"20","EUA",3,"LD"],
+["Alexi Lalas","D",31,"90","EUA",3,"ZAG"],
+["Marcelo Balboa","D",23,"90","EUA",3,"ZAG"],
+["Carlos Bocanegra","D",39,"00","EUA",3,"ZAG LE"],
+["DaMarcus Beasley","A",82,"00","EUA",4,"PE LE"],
+["Clint Dempsey","A",212,"10","EUA",4,"CA ME"],
+["Gio Reyna","M",32,"20","EUA",4,"MD ME"],
+["Tab Ramos","M",31,"90","EUA",3,"MC"],
+["Claudio Reyna","M",38,"00","EUA",3,"MC"],
+["Michael Bradley","M",58,"10","EUA",3,"MC"],
+["Cobi Jones","A",45,"90","EUA",3,"PD MD"],
+["Christian Pulisic","A",122,"20","EUA",4,"PE"],
+["Landon Donovan","A",257,"00","EUA",4,"PD CA"],
+["Eric Wynalda","A",117,"90","EUA",3,"CA"],
+["Weston McKennie","M",45,"20","EUA",4,"MC"],
+["Jozy Altidore","A",201,"10","EUA",4,"CA"],
+["Luis Gabelo Conejo","G",0,"90","CRC",0,"GOL"],
+["Keylor Navas","G",0,"10","CRC",3,"GOL"],
+["Harold Wallace","D",8,"90","CRC",3,"LD"],
+["Cristian Gamboa","D",8,"10","CRC",3,"LD"],
+["Gilberto Martínez","D",10,"00","CRC",3,"ZAG"],
+["Luis Marín","D",12,"00","CRC",3,"LE ZAG"],
+["Giancarlo González","D",12,"10","CRC",3,"ZAG"],
+["Júnior Díaz","D",11,"10","CRC",3,"LE"],
+["Juan Cayasso","M",47,"90","CRC",3,"ME"],
+["Rolando Fonseca","A",199,"00","CRC",3,"CA MC"],
+["Walter Centeno","M",62,"00","CRC",3,"MC"],
+["Mauricio Solís","M",31,"00","CRC",3,"MC"],
+["Christian Bolaños","A",134,"10","CRC",4,"PD MD"],
+["Michael Barrantes","M",113,"10","CRC",4,"MD MC"],
+["Bryan Ruiz","M",186,"10","CRC",4,"MC PE"],
+["Johan Venegas","A",85,"10","CRC",3,"PE"],
+["Hernán Medford","A",100,"90","CRC",3,"CA"],
+["Paulo Wanchope","A",136,"00","CRC",4,"CA"],
+["Joel Campbell","A",81,"10","CRC",3,"PD CA"],
+["Son Heung-min","A",303,"10","COR",4,"PE"],
+["Kim Byung-ji","G",0,"90","COR",3,"GOL"],
+["Lee Woon-jae","G",0,"00","COR",3,"GOL"],
+["Song Chong-gug","D",13,"00","COR",3,"LD"],
+["Lee Yong","D",5,"10","COR",3,"LD"],
+["Kim Min-jae","D",14,"20","COR",3,"ZAG"],
+["Hong Myung-bo","D",34,"90","COR",3,"ZAG"],
+["Kim Young-gwon","D",17,"10","COR",3,"ZAG"],
+["Lee Young-pyo","D",20,"00","COR",3,"LE"],
+["Kim Jin-su","D",12,"10","COR",3,"LE"],
+["Park Ji-sung","M",71,"00","COR",4,"ME PD"],
+["Kim Joo-sung","M",68,"80","COR",3,"ME"],
+["Huh Jung-moo","M",47,"80","COR",4,"MC"],
+["Yoo Sang-chul","M",105,"00","COR",4,"MC"],
+["Ki Sung-yueng","M",54,"10","COR",4,"MC"],
+["Lee Chun-soo","M",81,"00","COR",4,"MD PE"],
+["Lee Kang-in","M",43,"20","COR",4,"MC MD"],
+["Cha Bum-kun","A",179,"80","COR",4,"CA"],
+["Hwang Sun-hong","A",145,"90","COR",4,"CA"],
+["Ahn Jung-hwan","A",148,"00","COR",4,"CA"],
+["Seol Ki-hyeon","A",100,"00","COR",4,"PD"],
+["Yoshikatsu Kawaguchi","G",0,"00","JAP",0,"GOL"],
+["Eiji Kawashima","G",0,"10","JAP",3,"GOL"],
+["Atsuto Uchida","D",12,"10","JAP",3,"LD"],
+["Hiroki Sakai","D",11,"10","JAP",3,"LD"],
+["Masami Ihara","D",15,"90","JAP",3,"ZAG"],
+["Tsuneyasu Miyamoto","D",13,"00","JAP",3,"ZAG"],
+["Maya Yoshida","D",38,"10","JAP",3,"ZAG"],
+["Yuto Nagatomo","D",26,"10","JAP",3,"LE"],
+["Shunsuke Nakamura","M",161,"00","JAP",4,"MC ME"],
+["Shinji Kagawa","M",171,"10","JAP",4,"MC ME"],
+["Hidetoshi Nakata","M",64,"00","JAP",4,"MC"],
+["Junya Itō","A",92,"20","JAP",4,"PD MD"],
+["Takumi Minamino","A",144,"20","JAP",4,"PE MC"],
+["Kaoru Mitoma","A",76,"20","JAP",4,"PE"],
+["Kunishige Kamamoto","A",277,"60","JAP",3,"CA"],
+["Kazuyoshi Miura","A",286,"90","JAP",4,"CA"],
+["Shinji Okazaki","A",177,"10","JAP",4,"CA"],
+["Takefusa Kubo","A",53,"20","JAP",4,"PD"],
+["Yasuhito Endō","M",156,"00","JAP",4,"MC"],
+["Mark Schwarzer","G",0,"00","AUS",0,"GOL"],
+["Mat Ryan","G",0,"10","AUS",0,"GOL"],
+["Brett Emerton","M",74,"00","AUS",4,"MD LD"],
+["Lucas Neill","D",16,"00","AUS",3,"ZAG LD"],
+["Ned Zelić","D",18,"90","AUS",3,"ZAG MC"],
+["Craig Moore","D",23,"00","AUS",3,"ZAG"],
+["Scott Chipperfield","D",64,"00","AUS",3,"LE ME"],
+["Aziz Behich","D",12,"10","AUS",3,"LE"],
+["Harry Kewell","A",141,"00","AUS",4,"PE ME"],
+["Mark Bresciano","M",72,"00","AUS",4,"MC"],
+["Vince Grella","M",15,"00","AUS",3,"MC"],
+["Frank Farina","A",121,"90","AUS",3,"CA"],
+["Mark Viduka","A",266,"00","AUS",4,"CA"],
+["John Aloisi","A",170,"00","AUS",4,"CA"],
+["Archie Thompson","A",203,"00","AUS",4,"CA PD"],
+["Mathew Leckie","A",100,"10","AUS",4,"PD"],
+["Tim Cahill","M",221,"10","AUS",4,"MC CA"],
+["Jackson Irvine","M",58,"20","AUS",4,"MC"],
+["Harry Souttar","D",21,"20","AUS",3,"ZAG"],
+["Ahmad Reza Abedzadeh","G",0,"90","IRA",3,"GOL"],
+["Alireza Beiranvand","G",0,"20","IRA",3,"GOL"],
+["Ramin Rezaeian","D",50,"10","IRA",3,"LD"],
+["Rahman Rezaei","D",13,"00","IRA",3,"ZAG"],
+["Jalal Hosseini","D",28,"10","IRA",3,"ZAG"],
+["Morteza Pouraliganji","D",13,"10","IRA",3,"ZAG"],
+["Ehsan Hajsafi","D",24,"10","IRA",3,"LE"],
+["Milad Mohammadi","D",6,"10","IRA",3,"LE"],
+["Ali Karimi","M",188,"00","IRA",4,"MC ME"],
+["Masoud Shojaei","M",69,"10","IRA",4,"ME MD"],
+["Ali Parvin","M",73,"70","IRA",3,"MC"],
+["Karim Bagheri","M",100,"90","IRA",3,"MC"],
+["Mehdi Mahdavikia","M",93,"00","IRA",4,"MD PD"],
+["Ali Gholizadeh","A",52,"20","IRA",4,"PE"],
+["Karim Ansarifard","A",191,"10","IRA",4,"CA PE"],
+["Ali Daei","A",398,"90","IRA",3,"CA"],
+["Mehdi Taremi","A",283,"20","IRA",4,"CA"],
+["Alireza Jahanbakhsh","A",109,"10","IRA",4,"PD"],
+["Khodadad Azizi","A",82,"90","IRA",3,"CA"],
+["Mohamed Al-Deayea","G",0,"90","ARS",0,"GOL"],
+["Mohammed Al-Owais","G",0,"20","ARS",0,"GOL"],
+["Saud Abdulhamid","D",6,"20","ARS",3,"LD"],
+["Mohammed Al-Breik","D",11,"20","ARS",3,"LD"],
+["Mohammed Al-Khilaiwi","D",13,"90","ARS",3,"ZAG"],
+["Osama Hawsawi","D",22,"10","ARS",3,"ZAG"],
+["Ali Al-Bulaihi","D",7,"20","ARS",3,"ZAG"],
+["Hussein Abdulghani","D",30,"00","ARS",3,"LE"],
+["Yasser Al-Shahrani","D",7,"10","ARS",3,"LE"],
+["Nawaf Al-Temyat","M",48,"00","ARS",3,"ME MC"],
+["Saeed Al-Owairan","M",89,"90","ARS",3,"MC PE"],
+["Fuad Anwar","M",42,"90","ARS",3,"MC"],
+["Hattan Bahebri","M",24,"20","ARS",3,"MD PD"],
+["Salem Al-Dawsari","A",169,"20","ARS",4,"PE"],
+["Sami Al-Jaber","A",189,"90","ARS",3,"CA"],
+["Majed Abdullah","A",331,"80","ARS",4,"CA"],
+["Yasser Al-Qahtani","A",214,"00","ARS",4,"CA"],
+["Fahad Al-Muwallad","A",100,"10","ARS",4,"PD"],
+["Mohammad Noor","M",80,"00","ARS",3,"MC"],
+["Roger Milla","A",481,"80","CMR",4,"CA"],
+["Samuel Eto'o","A",427,"00","CMR",4,"CA"],
+["Thomas N'Kono","G",0,"80","CMR",0,"GOL"],
+["Joseph-Antoine Bell","G",0,"80","CMR",3,"GOL"],
+["Stephen Tataw","D",8,"90","CMR",3,"LD"],
+["Geremi","M",47,"00","CMR",4,"MD LD"],
+["Rigobert Song","D",15,"00","CMR",3,"ZAG"],
+["Emmanuel Kundé","D",40,"80","CMR",3,"ZAG"],
+["Joël Matip","D",22,"10","CMR",3,"ZAG"],
+["Pierre Wome","D",20,"00","CMR",3,"LE"],
+["Benoît Assou-Ekotto","D",5,"10","CMR",3,"LE"],
+["Théophile Abega","M",59,"80","CMR",3,"MC ME"],
+["Marc-Vivien Foé","M",34,"00","CMR",4,"MC"],
+["Jean Makoun","M",44,"00","CMR",4,"MC"],
+["Lauren","D",27,"00","CMR",3,"LD MD"],
+["Eric Maxim Choupo-Moting","A",151,"10","CMR",4,"CA PE"],
+["Karl Toko Ekambi","A",174,"20","CMR",4,"PE"],
+["Bryan Mbeumo","A",120,"20","CMR",4,"PD"],
+["François Omam-Biyik","A",132,"90","CMR",3,"CA"],
+["Achraf Hakimi","D",65,"20","MAR",3,"LD"],
+["Yassine Bounou","G",0,"20","MAR",0,"GOL"],
+["Badou Zaki","G",0,"80","MAR",3,"GOL"],
+["Noussair Mazraoui","D",19,"20","MAR",3,"LD LE"],
+["Noureddine Naybet","D",29,"90","MAR",3,"ZAG"],
+["Romain Saïss","D",31,"20","MAR",3,"ZAG"],
+["Nayef Aguerd","D",12,"20","MAR",3,"ZAG"],
+["Adam Masina","D",7,"20","MAR",3,"LE"],
+["Aziz Bouderbala","M",69,"80","MAR",3,"ME MC"],
+["Mustapha Hadji","M",79,"90","MAR",3,"ME MC"],
+["Mohamed Timoumi","M",75,"80","MAR",3,"MC"],
+["Hakim Ziyech","A",168,"10","MAR",4,"PD MD"],
+["Mbark Boussoufa","M",118,"10","MAR",4,"ME PE"],
+["Sofiane Boufal","A",64,"20","MAR",4,"PE"],
+["Ahmed Faras","A",157,"70","MAR",3,"CA"],
+["Salaheddine Bassir","A",105,"90","MAR",3,"CA"],
+["Marouane Chamakh","A",116,"00","MAR",4,"CA"],
+["Brahim Díaz","M",57,"20","MAR",4,"MC PD"],
+["Younès Belhanda","M",92,"10","MAR",4,"MC"],
+["Attouga Sadok","G",0,"70","TUN",3,"GOL"],
+["Chokri El Ouaer","G",0,"90","TUN",3,"GOL"],
+["Hatem Trabelsi","D",11,"00","TUN",3,"LD"],
+["Mohamed Dräger","D",13,"20","TUN",3,"LD MD"],
+["Khaled Badra","D",30,"90","TUN",3,"LE ZAG"],
+["Radhi Jaïdi","D",32,"00","TUN",3,"ZAG"],
+["Karim Haggui","D",21,"00","TUN",3,"ZAG"],
+["Ali Maâloul","D",33,"10","TUN",3,"LE"],
+["Mokhtar Dhouieb","M",39,"70","TUN",3,"MC ME"],
+["Youssef Msakni","A",236,"10","TUN",4,"PE ME"],
+["Tarak Dhiab","M",104,"70","TUN",3,"MC"],
+["Zoubeir Baya","M",82,"90","TUN",3,"MC"],
+["Naïm Sliti","A",100,"10","TUN",4,"PD MD"],
+["Wahbi Khazri","M",130,"10","TUN",4,"MC PE"],
+["Adel Sellimi","A",102,"90","TUN",3,"CA"],
+["Francileudo Santos","A",134,"00","TUN",3,"CA"],
+["Ziad Jaziri","A",77,"00","TUN",3,"CA"],
+["Fakhreddine Ben Youssef","A",39,"10","TUN",3,"PD"],
+["Ellyes Skhiri","M",41,"20","TUN",4,"MC"],
+["Peter Rufai","G",0,"90","NGA",0,"GOL"],
+["Vincent Enyeama","G",0,"10","NGA",0,"GOL"],
+["Augustine Eguavoen","D",6,"90","NGA",3,"LD"],
+["Ola Aina","D",5,"20","NGA",3,"LD LE"],
+["Taribo West","D",15,"90","NGA",3,"ZAG"],
+["Uche Okechukwu","D",28,"90","NGA",3,"ZAG"],
+["Joseph Yobo","D",27,"00","NGA",3,"ZAG"],
+["Celestine Babayaro","D",15,"00","NGA",3,"LE"],
+["Emmanuel Amunike","A",66,"90","NGA",3,"PE ME"],
+["Jay-Jay Okocha","M",115,"90","NGA",4,"MC"],
+["Sunday Oliseh","M",26,"90","NGA",4,"MC"],
+["John Obi Mikel","M",31,"10","NGA",3,"MC"],
+["Finidi George","A",89,"90","NGA",4,"PD MD"],
+["Victor Ikpeba","A",75,"90","NGA",3,"CA PE"],
+["Nwankwo Kanu","A",136,"90","NGA",4,"CA"],
+["Victor Osimhen","A",217,"20","NGA",4,"CA"],
+["Segun Odegbami","A",97,"80","NGA",3,"PD"],
+["Wilfred Ndidi","M",29,"20","NGA",4,"MC"],
+["Yakubu Aiyegbeni","A",228,"00","NGA",4,"CA"],
+["Richard Kingson","G",0,"00","GAN",0,"GOL"],
+["Lawrence Ati-Zigi","G",0,"20","GAN",3,"GOL"],
+["John Pantsil","D",5,"00","GAN",3,"LD"],
+["Harrison Afful","D",5,"10","GAN",3,"LD"],
+["Samuel Kuffour","D",33,"00","GAN",3,"ZAG"],
+["John Mensah","D",13,"00","GAN",3,"ZAG"],
+["Daniel Amartey","D",5,"20","GAN",3,"ZAG"],
+["Hans Sarpei","D",6,"00","GAN",3,"LE"],
+["Kwadwo Asamoah","D",36,"10","GAN",3,"LE MC"],
+["Sulley Muntari","M",61,"00","GAN",4,"MC ME"],
+["André Ayew","A",186,"10","GAN",4,"PE ME"],
+["Abedi Pelé","M",169,"90","GAN",4,"MC"],
+["Christian Atsu","A",40,"10","GAN",3,"PD MD"],
+["Jordan Ayew","A",131,"10","GAN",4,"CA PE"],
+["Asamoah Gyan","A",272,"10","GAN",4,"CA"],
+["Tony Yeboah","A",296,"90","GAN",4,"CA"],
+["Mohammed Kudus","M",76,"20","GAN",4,"MC PD"],
+["Thomas Partey","M",50,"20","GAN",4,"MC"],
+["Iñaki Williams","A",146,"20","GAN",4,"CA PD"],
+["Mehdi Cerbah","G",0,"80","ALG",0,"GOL"],
+["Raïs M'Bolhi","G",0,"10","ALG",0,"GOL"],
+["Youcef Atal","D",17,"20","ALG",3,"LD"],
+["Aïssa Mandi","D",20,"20","ALG",3,"ZAG LD"],
+["Antar Yahia","D",25,"00","ALG",3,"ZAG"],
+["Madjid Bougherra","D",22,"10","ALG",3,"ZAG"],
+["Nadir Belhadj","D",29,"10","ALG",3,"LE"],
+["Ramy Bensebaini","D",31,"20","ALG",3,"LE"],
+["Yacine Brahimi","A",159,"10","ALG",4,"PE ME"],
+["Rachid Mekhloufi","M",237,"60","ALG",4,"MC CA"],
+["Mustapha Dahleb","M",91,"70","ALG",3,"MC"],
+["Lakhdar Belloumi","M",130,"80","ALG",3,"MC"],
+["Sofiane Feghouli","A",93,"10","ALG",4,"PD MD"],
+["Rabah Madjer","A",167,"80","ALG",4,"PE"],
+["Islam Slimani","A",227,"10","ALG",4,"CA"],
+["Hilal Soudani","A",108,"10","ALG",3,"CA"],
+["Riyad Mahrez","A",239,"10","ALG",4,"PD"],
+["Ismaël Bennacer","M",16,"20","ALG",4,"MC"],
+["Baghdad Bounedjah","A",354,"20","ALG",4,"CA"],
+["George Best","A",260,"60","MUN",4,"PD PE"],
+["John Charles","A",299,"50","MUN",4,"CA ZAG"],
+["Ian Rush","A",411,"80","MUN",4,"CA"],
+["George Weah","A",211,"90","MUN",4,"CA"],
+["Andriy Shevchenko","A",391,"00","MUN",4,"CA"],
+["Pat Jennings","G",2,"70","MUN",3,"GOL"],
+["Neville Southall","G",0,"80","MUN",0,"GOL"],
+["Ryan Giggs","A",115,"00","MUN",3,"PE ME"],
+["Mohamed Salah","A",412,"20","MUN",4,"PD"],
+["Didier Drogba","A",368,"00","MUN",4,"CA"],
+["Erling Haaland","A",395,"20","MUN",4,"CA"],
+["Gareth Bale","A",226,"10","MUN",4,"PD MD"],
+["Sami Hyypiä","D",36,"00","MUN",3,"ZAG"],
+["Jan Oblak","G",0,"20","MUN",3,"GOL"],
+["Denis Irwin","D",30,"90","MUN",3,"LD LE"],
+["Kalidou Koulibaly","D",20,"10","MUN",3,"ZAG"],
+["Alphonso Davies","D",34,"20","MUN",3,"LE"],
+["Arda Turan","M",107,"10","MUN",4,"ME"],
+["Yaya Touré","M",125,"10","MUN",4,"MC"],
+["Jari Litmanen","M",259,"90","MUN",4,"MC"],
+["Martin Ødegaard","M",87,"20","MUN",4,"MC"],
+["Marek Hamšík","M",172,"10","MUN",4,"MC"],
+["Paul McGrath","D",27,"80","MUN",3,"ZAG"],
+["Roy Keane","M",96,"90","MUN",4,"MC"],
+["John Arne Riise","D",56,"00","MUN",3,"LE"],
+["Aaron Ramsey","M",101,"10","MUN",4,"MC"],
+["Martin Škrtel","D",28,"10","MUN",3,"ZAG"],
+["Hakan Şükür","A",383,"00","MUN",4,"CA"],
+["Georgios Karagounis","M",79,"00","MUN",4,"MC"],
+["Robbie Keane","A",393,"00","MUN",4,"CA"],
+["Theodoros Zagorakis","M",38,"00","MUN",4,"MC"],
+["Mark Hughes","A",240,"90","MUN",4,"CA"],
+["Sadio Mané","A",314,"10","MUN",4,"PE"],
+["Shay Given","G",0,"00","MUN",0,"GOL"],
+["Dwight Yorke","A",217,"90","MUN",4,"CA"]
+];
 
-const CLUBS = {
+const CLUBS_BR = {
   CAP:{s:"#c8102e",sf:"#fff",n:"Athletico",bg:"linear-gradient(90deg,#c8102e 0 33%,#111 33% 66%,#c8102e 66%)",fg:"#fff"},
   CAM:{s:"#111",sf:"#fff",n:"Atlético-MG",bg:"repeating-linear-gradient(90deg,#111 0 6px,#f5f5f5 6px 12px)",fg:"#111",tx:"#fff"},
   BAH:{s:"#0a4fa3",sf:"#fff",n:"Bahia",bg:"linear-gradient(90deg,#0a4fa3 0 33%,#fff 33% 66%,#d71920 66%)",fg:"#0a2a5a",tx:"#fff"},
@@ -1274,12 +2458,80 @@ const SLOTNAME={GOL:"Goleiro",LD:"Lateral-direito",ZAG:"Zagueiro",LE:"Lateral-es
 const ROWCODES={ATA:["PE","CA","PD"],MEI:["ME","MC","MD"],DEF:["LE","ZAG","ZAG","LD"],GOL:["GOL"]};
 const PENALTY=100, MAXPTS=1000;
 const SHAPE={ATA:3,MEI:3,DEF:4,GOL:1};
-const TARGET=433; let ERA="";
-const DEC={"70":"Anos 70","80":"Anos 80","90":"Anos 90","00":"Anos 2000","10":"Anos 2010","20":"Anos 2020"};
-const ERAS={old:["70","80"],mid:["90","00"],new:["10","20"]};
+const TEAMS_LEG = {
+  BRA:{s:"#ffdf00",sf:"#00843d",n:"Brasil",bg:"linear-gradient(90deg,#009c3b 0 50%,#ffdf00 50%)"},
+  ARG:{s:"#75aadb",sf:"#fff",n:"Argentina",bg:"repeating-linear-gradient(90deg,#75aadb 0 6px,#fff 6px 12px)"},
+  URU:{s:"#5cbfeb",sf:"#0b2545",n:"Uruguai",bg:"#5cbfeb"},
+  ALE:{s:"#111",sf:"#ffce00",n:"Alemanha",bg:"linear-gradient(180deg,#111 0 33%,#dd0000 33% 66%,#ffce00 66%)"},
+  ITA:{s:"#0064aa",sf:"#fff",n:"Itália",bg:"#0064aa"},
+  FRA:{s:"#002395",sf:"#fff",n:"França",bg:"linear-gradient(90deg,#002395 0 33%,#fff 33% 66%,#ed2939 66%)"},
+  ING:{s:"#fff",sf:"#cf081f",n:"Inglaterra",bg:"linear-gradient(90deg,#f5f5f5 0 44%,#cf081f 44% 56%,#f5f5f5 56%)"},
+  ESP:{s:"#c60b1e",sf:"#ffc400",n:"Espanha",bg:"linear-gradient(180deg,#c60b1e 0 25%,#ffc400 25% 75%,#c60b1e 75%)"},
+  HOL:{s:"#ff7f00",sf:"#fff",n:"Holanda",bg:"#ff7f00"},
+  POR:{s:"#da291c",sf:"#ffd100",n:"Portugal",bg:"linear-gradient(90deg,#006600 0 40%,#da291c 40%)"},
+  BEL:{s:"#e30613",sf:"#ffd90c",n:"Bélgica",bg:"linear-gradient(90deg,#111 0 33%,#fdda24 33% 66%,#ef3340 66%)"},
+  CRO:{s:"#fff",sf:"#d0021b",n:"Croácia",bg:"repeating-conic-gradient(#d0021b 0 25%,#fff 0 50%) 0 0/12px 12px"},
+  DIN:{s:"#c8102e",sf:"#fff",n:"Dinamarca",bg:"linear-gradient(90deg,#c8102e 0 30%,#fff 30% 42%,#c8102e 42%)"},
+  CHI:{s:"#d52b1e",sf:"#fff",n:"Chile",bg:"linear-gradient(180deg,#fff 0 50%,#d52b1e 50%)"},
+  PAR:{s:"#d52b1e",sf:"#fff",n:"Paraguai",bg:"linear-gradient(180deg,#d52b1e 0 33%,#fff 33% 66%,#0038a8 66%)"},
+  PER:{s:"#d91023",sf:"#fff",n:"Peru",bg:"linear-gradient(90deg,#d91023 0 33%,#fff 33% 66%,#d91023 66%)"},
+  EQU:{s:"#ffd100",sf:"#034ea2",n:"Equador",bg:"linear-gradient(180deg,#ffd100 0 50%,#034ea2 50% 75%,#ef3340 75%)"},
+  COL:{s:"#fcd116",sf:"#003893",n:"Colômbia",bg:"linear-gradient(180deg,#fcd116 0 50%,#003893 50% 75%,#ce1126 75%)"},
+  SUI:{s:"#d52b1e",sf:"#fff",n:"Suíça",bg:"#d52b1e"},
+  SER:{s:"#c6363c",sf:"#fff",n:"Sérvia/Iugoslávia",bg:"linear-gradient(180deg,#c6363c 0 33%,#0c4076 33% 66%,#fff 66%)"},
+  SUE:{s:"#fecc00",sf:"#006aa7",n:"Suécia",bg:"linear-gradient(90deg,#006aa7 0 35%,#fecc00 35% 48%,#006aa7 48%)"},
+  RUS:{s:"#d52b1e",sf:"#fff",n:"Rússia/URSS",bg:"linear-gradient(180deg,#fff 0 33%,#0039a6 33% 66%,#d52b1e 66%)"},
+  TCH:{s:"#d7141a",sf:"#fff",n:"Tchéquia/Tchecoslováquia",bg:"linear-gradient(180deg,#fff 0 50%,#d7141a 50%)"},
+  ESC:{s:"#0065bd",sf:"#fff",n:"Escócia",bg:"#0065bd"},
+  POL:{s:"#fff",sf:"#dc143c",n:"Polônia",bg:"linear-gradient(180deg,#fff 0 50%,#dc143c 50%)"},
+  HUN:{s:"#ce2939",sf:"#fff",n:"Hungria",bg:"linear-gradient(180deg,#ce2939 0 33%,#fff 33% 66%,#477050 66%)"},
+  AUT:{s:"#ed2939",sf:"#fff",n:"Áustria",bg:"linear-gradient(180deg,#ed2939 0 33%,#fff 33% 66%,#ed2939 66%)"},
+  ROM:{s:"#fcd116",sf:"#002b7f",n:"Romênia",bg:"linear-gradient(90deg,#002b7f 0 33%,#fcd116 33% 66%,#ce1126 66%)"},
+  BUL:{s:"#00966e",sf:"#fff",n:"Bulgária",bg:"linear-gradient(180deg,#fff 0 33%,#00966e 33% 66%,#d62612 66%)"},
+  MEX:{s:"#006847",sf:"#fff",n:"México",bg:"linear-gradient(90deg,#006847 0 33%,#fff 33% 66%,#ce1126 66%)"},
+  EUA:{s:"#0a3161",sf:"#fff",n:"Estados Unidos",bg:"repeating-linear-gradient(180deg,#b31942 0 6px,#fff 6px 12px)"},
+  CRC:{s:"#002b7f",sf:"#fff",n:"Costa Rica",bg:"linear-gradient(180deg,#002b7f 0 17%,#fff 17% 33%,#ce1126 33% 67%,#fff 67% 83%,#002b7f 83%)"},
+  COR:{s:"#cd2e3a",sf:"#fff",n:"Coreia do Sul",bg:"linear-gradient(90deg,#fff 0 35%,#cd2e3a 35% 50%,#0047a0 50% 65%,#fff 65%)"},
+  JAP:{s:"#fff",sf:"#bc002d",n:"Japão",bg:"radial-gradient(circle,#bc002d 0 35%,#fff 36%)"},
+  AUS:{s:"#ffcd00",sf:"#00843d",n:"Austrália",bg:"linear-gradient(90deg,#00843d 0 50%,#ffcd00 50%)"},
+  IRA:{s:"#239f40",sf:"#fff",n:"Irã",bg:"linear-gradient(180deg,#239f40 0 33%,#fff 33% 66%,#da0000 66%)"},
+  ARS:{s:"#006c35",sf:"#fff",n:"Arábia Saudita",bg:"#006c35"},
+  CMR:{s:"#007a5e",sf:"#fcd116",n:"Camarões",bg:"linear-gradient(90deg,#007a5e 0 33%,#ce1126 33% 66%,#fcd116 66%)"},
+  MAR:{s:"#c1272d",sf:"#fff",n:"Marrocos",bg:"radial-gradient(circle,#006233 0 18%,#c1272d 19%)"},
+  TUN:{s:"#e70013",sf:"#fff",n:"Tunísia",bg:"radial-gradient(circle,#fff 0 25%,#e70013 26%)"},
+  NGA:{s:"#008751",sf:"#fff",n:"Nigéria",bg:"linear-gradient(90deg,#008751 0 33%,#fff 33% 66%,#008751 66%)"},
+  GAN:{s:"#fcd116",sf:"#111",n:"Gana",bg:"linear-gradient(180deg,#ce1126 0 33%,#fcd116 33% 66%,#006b3f 66%)"},
+  ALG:{s:"#006233",sf:"#fff",n:"Argélia",bg:"linear-gradient(90deg,#006233 0 50%,#fff 50%)"},
+  MUN:{s:"#5b2a86",sf:"#fff",n:"Resto do Mundo",bg:"linear-gradient(135deg,#5b2a86,#1f6feb)"},
+};
+let TARGET=433, ERA="", MODE="br", CLUBS=CLUBS_BR, PLAYERS=[];
+const DEC={"30":"Anos 30","40":"Anos 40","50":"Anos 50","60":"Anos 60","70":"Anos 70","80":"Anos 80","90":"Anos 90","00":"Anos 2000","10":"Anos 2010","20":"Anos 2020"};
+const ERAS={old:["70","80"],mid:["90","00"],new:["10","20"],L1:["30","40","50","60","70"],L2:["80","90"],L3:["00","10","20"]};
 function inEra(p){if(!ERA)return true;return (ERAS[ERA]||[ERA]).includes(p.dec)}
-
-const PLAYERS = PLAYERS_RAW.map((r,i)=>({id:i,name:r[0],pos:POSMAP[r[1]],goals:r[2],dec:r[3],clubs:r[4].split(" "),ver:r[5],slots:(r[6]||"").split(" ")}));
+const mkPlayers=raw=>raw.map((r,i)=>({id:i,name:r[0],pos:POSMAP[r[1]],goals:r[2],dec:r[3],clubs:r[4].split(" "),ver:r[5],slots:(r[6]||"").split(" ")}));
+const MODES={
+  br:{key:"brasileirao",target:433,perGoal:5,thr:[5,20,60],name:"Brasileirão",teams:CLUBS_BR,players:mkPlayers(PLAYERS_RAW),rpc:"registrar_partida",
+      label:"20 clubes com mais temporadas na Série A",unit:"clube",
+      eras:[["","Todas (1971–2026)"],["70","Anos 70"],["80","Anos 80"],["90","Anos 90"],["00","Anos 2000"],["10","Anos 2010"],["20","Anos 2020"],["old","Clássicos (70–80)"],["mid","1990–2009"],["new","2010–2026"]],
+      desc:"Gire o caça-níquel, escolha jogadores que passaram pelos 20 clubes com mais temporadas na Série A, de 1971 até hoje, e monte um 4-3-3 que some exatamente 433 gols no Brasileirão.",
+      rules:'<b>Como jogar.</b> Cada giro sorteia um clube e mostra 3 jogadores que já defenderam esse time no Brasileirão, de 1971 a 2026. Escolha um: ele entra numa vaga livre da posição dele no 4-3-3 (LE, ZAG, LD · ME, MC, MD · PE, CA, PD). Quem joga em mais de uma posição deixa você escolher a vaga. Os gols dele no Brasileirão (carreira toda) somam no placar. Precisão e <b>433 em cheio</b> valem até <b>1000 pts</b> (−5 pts por gol de diferença). O <b>entrosamento</b> soma por cima disso: 3 jogadores do mesmo clube sorteado +20, 4 +40, 5 +70, 6 ou mais +100, e cada linha inteira (defesa, meio ou ataque) de um só clube <b>+200</b>. Cada <b>Olheiro</b> ou <b>Substituição</b> usado tira <b>100 pts</b>; Girar de novo é grátis. Trocar a era começa uma partida nova.'},
+  leg:{key:"legends",target:2000,perGoal:1,thr:[10,50,150],name:"Legends",teams:TEAMS_LEG,players:mkPlayers(LEGENDS_RAW),rpc:"registrar_partida_lendas",
+      label:"43 seleções + Resto do Mundo",unit:"seleção",
+      eras:[["","Todas as épocas"],["L1","Clássicos (até 1979)"],["L2","1980–1999"],["L3","2000–2026"]],
+      desc:"Gire o caça-níquel, escolha entre 3 lendas de seleções diferentes e monte um 4-3-3 que some exatamente 2.000 gols na carreira (clubes + seleção).",
+      rules:'<b>Como jogar.</b> Cada giro mostra <b>3 lendas de 3 seleções diferentes</b>, sorteadas ao acaso entre as <b>43 seleções</b> que mais disputaram Copas (as 40 primeiras, com empate na 40ª) e o Resto do Mundo. Base: <b>1000 jogadores</b>, incluindo os 100 maiores da revista <i>World Soccer</i>. Cada jogador vale os gols oficiais da <b>carreira toda</b> (clubes + seleção). Escolha um: ele entra numa vaga livre da posição dele no 4-3-3. Precisão e <b>2.000 em cheio</b> valem até <b>1000 pts</b> (−1 pt por gol de diferença). <b>Entrosamento</b> extra: 3 da mesma seleção +20, 4 +40, 5 +70, 6 ou mais +100, e cada linha inteira de uma só seleção <b>+200</b>. Cada <b>Olheiro</b> ou <b>Substituição</b> tira <b>100 pts</b>; Girar de novo é grátis.'},
+};
+function M(){return MODES[MODE]}
+function applyMode(m){
+  MODE=MODES[m]?m:"br"; const md=M();
+  TARGET=md.target; CLUBS=md.teams; PLAYERS=md.players;
+  document.querySelectorAll(".modes button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===MODE));
+  $("#opt-era").innerHTML=md.eras.map(([v,l])=>`<option value="${v}">${l}</option>`).join("");
+  $("#h-name").textContent=md.name; $("#h-desc").textContent=md.desc; $("#rules").innerHTML=md.rules;
+  document.title=`${TARGET} Gols ${md.name}`;
+  store("br433-mode",MODE);
+}
+function setMode(m){ if(m===MODE&&S)return; applyMode(m); ERA=""; newGame(); }
 
 /* ---------- utilidades ---------- */
 const $=s=>document.querySelector(s);
@@ -1295,7 +2547,7 @@ function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localSto
 let S;
 function fresh(){
   return {target:TARGET,era:ERA,xi:{ATA:[null,null,null],MEI:[null,null,null],DEF:[null,null,null,null],GOL:[null]},
-    offers:[],club:null,rerolls:2,scouts:2,subs:2,subMode:false,revealed:false,phase:"idle",lastSlot:null,pending:null,v:2};
+    offers:[],club:null,rerolls:2,scouts:2,subs:2,subMode:false,revealed:false,phase:"idle",lastSlot:null,pending:null,v:3,mode:MODE};
 }
 function placed(){const out=[];for(const p in S.xi)S.xi[p].forEach(x=>x&&out.push(x));return out}
 function total(){return placed().reduce((s,x)=>s+PLAYERS[x.id].goals,0)}
@@ -1369,23 +2621,43 @@ function roll(){
   let pool=Object.keys(by).filter(c=>by[c].length>=3);
   if(!pool.length)pool=Object.keys(by).filter(c=>by[c].length>=1);
   if(!pool.length){setStatus("Nenhum jogador disponível para as vagas abertas.");return}
+  if(MODE==="leg"){ // Legends: 3 lendas de 3 seleções diferentes, sorteadas ao acaso
+    const any=Object.keys(by).filter(c=>by[c].length>=1);
+    const clubs=shuffle(any).slice(0,3), pick=[], pc=[];
+    for(const c of clubs){const id=shuffle(by[c]).find(i=>!pick.includes(i)); if(id!=null){pick.push(id);pc.push(c)}}
+    while(pick.length<3){ // menos de 3 seleções com opção: completa com outras lendas delas
+      const c=rnd(any), id=shuffle(by[c]).find(i=>!pick.includes(i)); if(id==null)break; pick.push(id); pc.push(c);
+    }
+    S.offers=pick; S.offerClubs=pc; S.club=null; S.revealed=false; S.phase="pick"; S.pending=null;
+    spinTo(null,()=>{renderAll(false);setStatus(`Saíram ${listNames(pc)}. Escolha um jogador.`)});
+    return;
+  }
   const club=rnd(pool);
   // tenta variar posições quando possível
   const cand=shuffle(by[club]); const pick=[]; const seenPos=new Set();
   for(const id of cand){if(pick.length<3&&!seenPos.has(PLAYERS[id].pos)){pick.push(id);seenPos.add(PLAYERS[id].pos)}}
   for(const id of cand){if(pick.length<3&&!pick.includes(id))pick.push(id)}
-  S.offers=pick; S.club=club; S.revealed=false; S.phase="pick"; S.pending=null;
+  S.offers=pick; S.offerClubs=pick.map(()=>club); S.club=club; S.revealed=false; S.phase="pick"; S.pending=null;
   spinTo(club,()=>{renderAll(false);setStatus(`Saiu ${CLUBS[club].n}. Escolha um jogador.`)});
 }
+function listNames(cs){const n=[...new Set(cs)].map(c=>CLUBS[c].n);return n.length>1?n.slice(0,-1).join(", ")+" e "+n[n.length-1]:n[0]}
+function showMix(cs){
+  const u=[...new Set(cs)], b=$("#reel-badge");
+  b.style.background=`linear-gradient(90deg,${u.map((c,i)=>`${CLUBS[c].s} ${i*100/u.length}% ${(i+1)*100/u.length}%`).join(",")})`;
+  b.innerHTML=`<span class="badge" style="background:#111;color:#fff;font-size:13px;height:24px;padding:0 6px">${u.length}×</span>`;
+  $("#reel-name").innerHTML=`${u.length} seleções<small>${u.map(c=>CLUBS[c].n).join(" · ")}</small>`;
+}
+function showReel(){ if(S.club)showClub(S.club); else if(S.offerClubs&&S.offerClubs.length)showMix(S.offerClubs); }
 function spinTo(club,done){
   const codes=Object.keys(CLUBS);
+  const land=()=>club?showClub(club):showMix(S.offerClubs);
   $("#offers").innerHTML=""; $("#spin").disabled=true;
-  if(reduce){showClub(club);done();return}
+  if(reduce){land();done();return}
   spinning=true; let i=0,delay=45;
   (function tick(){
     showClub(codes[(i++)%codes.length]);
     delay*=1.12;
-    if(delay<260)setTimeout(tick,delay); else {showClub(club);spinning=false;done()}
+    if(delay<260)setTimeout(tick,delay); else {land();spinning=false;done()}
   })();
 }
 function showClub(code){
@@ -1402,7 +2674,7 @@ function renderOffers(){
     box.innerHTML=`<div class="pospick"><div class="pp-q">Em qual posição <b>${esc(p.name)}</b> vai jogar?</div><div class="pp-opts">${validSlots(p).map(s=>`<button data-code="${s.code}"><b>${s.code}</b><span>${SLOTNAME[s.code]}</span></button>`).join("")}</div><button class="pp-back" data-back="1">Voltar às opções</button></div>`;
     return;
   }
-  box.innerHTML=S.offers.map(id=>`<button class="offer" data-id="${id}" aria-label="Escolher ${esc(PLAYERS[id].name)}">${figHTML(id,S.club,{reveal:S.revealed})}</button>`).join("");
+  box.innerHTML=S.offers.map((id,i)=>`<button class="offer" data-id="${id}" aria-label="Escolher ${esc(PLAYERS[id].name)}">${figHTML(id,offerClub(i),{reveal:S.revealed})}</button>`).join("");
 }
 $("#offers").addEventListener("click",e=>{
   if(S.phase!=="pick")return;
@@ -1417,13 +2689,15 @@ function choose(id){
   if(opts.length===1){place(id,opts[0].code);return}
   S.pending=id; renderOffers(); renderPitch(); setStatus(`${p.name} joga em mais de uma posição. Escolha a vaga.`);
 }
+function offerClub(i){return (S.offerClubs&&S.offerClubs[i])||S.club}
 function place(id,code){
   const p=PLAYERS[id]; const s=validSlots(p).find(v=>v.code===code); if(!s)return;
-  S.xi[s.row][s.i]={id,club:S.club,as:code}; S.lastSlot=s.row+s.i; S.offers=[]; S.phase="idle"; S.subMode=false; S.pending=null;
+  const club=offerClub(S.offers.indexOf(id));
+  S.xi[s.row][s.i]={id,club,as:code}; S.offerClubs=[]; S.lastSlot=s.row+s.i; S.offers=[]; S.phase="idle"; S.subMode=false; S.pending=null;
   const t=total();
   if(placed().length===11){renderAll(true);finish();return}
   const diff=TARGET-t;
-  setStatus(diff>0?`${p.name} trouxe ${p.goals} gols. Faltam ${diff}.`:diff===0?`${p.name} trouxe ${p.goals} gols. Você já está em 433 com vagas abertas: procure quem tem 0 gols.`:`${p.name} trouxe ${p.goals} gols. Passou ${-diff} do alvo. Uma substituição pode salvar.`);
+  setStatus(diff>0?`${p.name} trouxe ${p.goals} gols. Faltam ${diff}.`:diff===0?`${p.name} trouxe ${p.goals} gols. Você já está em ${TARGET} com vagas abertas: procure quem tem 0 gols.`:`${p.name} trouxe ${p.goals} gols. Passou ${-diff} do alvo. Uma substituição pode salvar.`);
   renderAll(true);
 }
 
@@ -1459,19 +2733,19 @@ function chemistry(){
 function finish(){
   S.phase="done"; S.subMode=false;
   const t=total(), diff=Math.abs(TARGET-t);
-  const base=Math.max(0,500-diff*5), exact=diff===0?500:0, ch=chemistry();
+  const md=M(), base=Math.max(0,500-diff*md.perGoal), exact=diff===0?500:0, ch=chemistry();
   const core=Math.min(MAXPTS,base+exact);
   const usedScout=2-S.scouts, usedSub=2-S.subs, pen=(usedScout+usedSub)*PENALTY;
   const pts=Math.max(0,core+ch.bonus-pen);
   const best=+store("br433-best-"+TARGET)||0; const isBest=pts>best; if(isBest)store("br433-best-"+TARGET,String(pts));
-  const title=diff===0?`Na mosca! ${TARGET} cravado`:diff<=5?"Na trave":diff<=20?"Bateu na rede pelo lado de fora":diff<=60?"Bom time, mira torta":"Rebaixado";
+  const title=diff===0?`Na mosca! ${TARGET} cravado`:diff<=md.thr[0]?"Na trave":diff<=md.thr[1]?"Bateu na rede pelo lado de fora":diff<=md.thr[2]?"Bom time, mira torta":"Rebaixado";
   const r=$("#result"); r.hidden=false;
   r.innerHTML=`<h2>${title}</h2>
     <div class="pts">${pts} pts</div>
     <dl>
       <dt>Gols do XI</dt><dd>${t} (${t-TARGET>0?"+":""}${t-TARGET})</dd>
       <dt>Precisão</dt><dd>${base}</dd>
-      <dt>Bônus 433 exato</dt><dd>${exact}</dd>
+      <dt>Bônus ${TARGET} exato</dt><dd>${exact}</dd>
       ${ch.items.length?ch.items.map(i=>`<dt>Entrosamento · ${esc(i.label)}</dt><dd>+${i.pts}</dd>`).join(""):`<dt>Entrosamento</dt><dd>0</dd>`}
       <dt>Olheiro usado ${usedScout}× (−${PENALTY} cada)</dt><dd>${usedScout?"−"+usedScout*PENALTY:0}</dd>
       <dt>Substituição usada ${usedSub}× (−${PENALTY} cada)</dt><dd>${usedSub?"−"+usedSub*PENALTY:0}</dd>
@@ -1482,9 +2756,9 @@ function finish(){
       <div class="send-msg" id="send-msg"></div></div>`:""}
     <div class="acts"><button id="again">Jogar de novo</button><button class="alt" id="copy">Copiar resultado</button>${RANK_ON?'<button class="alt" id="see-rank">Ver ranking</button>':""}</div>`;
   $("#again").onclick=newGame;
-  if(RANK_ON){$("#send-btn").onclick=sendScore;$("#nick").addEventListener("keydown",e=>{if(e.key==="Enter")sendScore()});$("#see-rank").onclick=()=>{$("#r-era").value=S.era||"todas";showTab("rank")}}
+  if(RANK_ON){$("#send-btn").onclick=sendScore;$("#nick").addEventListener("keydown",e=>{if(e.key==="Enter")sendScore()});$("#see-rank").onclick=()=>{$("#r-mode").value=md.key;fillRankEras();$("#r-era").value=S.era||"todas";showTab("rank")}}
   $("#copy").onclick=()=>{
-    const txt=`${TARGET} Gols Brasileirão (4-3-3${ERA?", "+$("#opt-era").selectedOptions[0].text:""}): ${t} gols (${t-TARGET>0?"+":""}${t-TARGET}), ${pts} pts\n`+
+    const txt=`${TARGET} Gols ${md.name} (4-3-3${ERA?", "+$("#opt-era").selectedOptions[0].text:""}): ${t} gols (${t-TARGET>0?"+":""}${t-TARGET}), ${pts} pts\n`+
       ["ATA","MEI","DEF","GOL"].map(p=>S.xi[p].map(x=>`${x.as} ${PLAYERS[x.id].name}`).join(" · ")).join("\n");
     const b=$("#copy");
     try{navigator.clipboard.writeText(txt).then(()=>b.textContent="Copiado",()=>b.textContent="Não deu para copiar")}catch(e){b.textContent="Não deu para copiar"}
@@ -1493,15 +2767,121 @@ function finish(){
   renderWild(); renderOffers();
 }
 function applyTarget(){$("#h-target").textContent=TARGET;$("#led-target").textContent=TARGET}
-function newGame(){ERA=$("#opt-era").value;applyTarget();S=fresh();shown=0;$("#result").hidden=true;$("#reel-badge").textContent="?";$("#reel-badge").style.background="";$("#reel-name").innerHTML='Sorteio<small>20 clubes com mais temporadas na Série A</small>';setStatus("Gire para sortear o primeiro clube.");renderAll(false)}
+function newGame(){ERA=$("#opt-era").value;applyTarget();S=fresh();shown=0;$("#result").hidden=true;$("#reel-badge").textContent="?";$("#reel-badge").style.background="";$("#reel-name").innerHTML=`Sorteio<small>${M().label}</small>`;setStatus(MODE==="leg"?"Gire para sortear as 3 primeiras lendas.":"Gire para sortear o primeiro clube.");renderAll(false)}
 function renderAll(anim){renderBoard(anim);renderPitch();renderOffers();renderWild()}
 
 /* ---------- abas ---------- */
 function showTab(which){
-  for(const k of ["play","rank"]){$("#tab-"+k).setAttribute("aria-selected",k===which);$("#view-"+k).hidden=k!==which}
+  for(const k of ["home","play","rank","players"]){$("#tab-"+k).setAttribute("aria-selected",k===which);$("#view-"+k).hidden=k!==which}
+  if(which==="home"){renderHome();$("#h-target").textContent="433";$("#h-name").textContent="Brasileirão & Legends";$("#h-desc").textContent="Monte um 4-3-3 que crave a meta de gols. Escolha o jogo: os clubes do Brasileirão ou as lendas das seleções.";document.title="433 Gols"}
+  else{applyTarget();$("#h-name").textContent=M().name;$("#h-desc").textContent=M().desc;document.title=`${TARGET} Gols ${M().name}`}
   if(which==="rank")renderRanking();
+  if(which==="players")openPlayers();
 }
-$("#tab-play").onclick=()=>showTab("play"); $("#tab-rank").onclick=()=>showTab("rank");
+$("#tab-home").onclick=()=>showTab("home"); $("#tab-play").onclick=()=>showTab("play"); $("#tab-rank").onclick=()=>showTab("rank"); $("#tab-players").onclick=()=>showTab("players");
+
+/* ---------- tela inicial ---------- */
+function inProgress(m){return S&&S.mode===m&&S.phase!=="done"&&placed().length>0}
+function renderHome(){
+  document.querySelectorAll(".gcard").forEach(c=>{
+    const m=c.dataset.game, prog=inProgress(m), n=prog?placed().length:0, done=S&&S.mode===m&&S.phase==="done";
+    c.querySelector(".gplay").textContent=prog?"Continuar":"Jogar";
+    c.querySelector(".gnew").hidden=!(prog||done);
+    const pg=c.querySelector(".gprog"); pg.hidden=!(prog||done);
+    pg.textContent=prog?`Partida em andamento: ${n}/11 jogadores, ${total()} gols`:done?"Última partida terminada. Jogar começa outra.":"";
+  });
+}
+document.querySelectorAll(".gcard").forEach(c=>c.addEventListener("click",e=>{
+  const b=e.target.closest("button[data-act]"); const m=c.dataset.game; const act=b?b.dataset.act:"play";
+  if(act==="rank"){$("#r-mode").value=MODES[m].key;fillRankEras();showTab("rank");return}
+  if(m!==MODE){applyMode(m);ERA="";newGame()}
+  else if(act==="new"||(S&&S.phase==="done")){newGame()}
+  showTab("play");
+}));
+
+/* ---------- aba Jogadores (protegida por senha) ---------- */
+// Hash SHA-256 de "433gols:" + senha. Para trocar a senha, gere um novo hash e substitua aqui.
+const ADMIN_HASH="cd504fead8db33ef8cc67b5bb3dd4fc858c6a8f714308f1484d976a4b3df9e1f";
+function sha256(str){
+  const K=[],H=[];let n=2,c=0;const isP=x=>{for(let i=2;i*i<=x;i++)if(x%i===0)return false;return true};
+  const frac=x=>((x-Math.floor(x))*4294967296)|0;
+  while(c<64){if(isP(n)){if(c<8)H[c]=frac(Math.pow(n,1/2));K[c]=frac(Math.pow(n,1/3));c++}n++}
+  const bytes=new TextEncoder().encode(str),l=bytes.length,pad=new Uint8Array(((l+9+63)>>6)<<6);pad.set(bytes);pad[l]=0x80;
+  const dv=new DataView(pad.buffer);dv.setUint32(pad.length-4,(l*8)>>>0);dv.setUint32(pad.length-8,Math.floor(l*8/4294967296));
+  const W=new Int32Array(64);
+  for(let o=0;o<pad.length;o+=64){
+    for(let i=0;i<16;i++)W[i]=dv.getInt32(o+i*4);
+    for(let i=16;i<64;i++){const x=W[i-15],y=W[i-2];W[i]=(W[i-16]+((x>>>7|x<<25)^(x>>>18|x<<14)^(x>>>3))+W[i-7]+((y>>>17|y<<15)^(y>>>19|y<<13)^(y>>>10)))|0}
+    let [a,b,cc,d,e,f,g,h]=H;
+    for(let i=0;i<64;i++){
+      const t1=(h+((e>>>6|e<<26)^(e>>>11|e<<21)^(e>>>25|e<<7))+((e&f)^(~e&g))+K[i]+W[i])|0;
+      const t2=(((a>>>2|a<<30)^(a>>>13|a<<19)^(a>>>22|a<<10))+((a&b)^(a&cc)^(b&cc)))|0;
+      h=g;g=f;f=e;e=(d+t1)|0;d=cc;cc=b;b=a;a=(t1+t2)|0;
+    }
+    [a,b,cc,d,e,f,g,h].forEach((v,i)=>H[i]=(H[i]+v)|0);
+  }
+  return H.map(x=>(x>>>0).toString(16).padStart(8,"0")).join("");
+}
+const ADM_KEY="br433-adm";
+function isAdmin(){return store(ADM_KEY)===ADMIN_HASH}
+let P={mode:null,club:"",sort:"goals",dir:-1};
+function openPlayers(){
+  const ok=isAdmin(); $("#pl-lock").hidden=ok; $("#pl-body").hidden=!ok;
+  if(!ok){$("#pl-pass").value="";setTimeout(()=>$("#pl-pass").focus(),0);return}
+  if(!P.mode){P.mode=MODE;$("#p-mode").value=MODE;fillDec()}
+  renderPlayers();
+}
+$("#pl-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  if(sha256("433gols:"+$("#pl-pass").value)===ADMIN_HASH){store(ADM_KEY,ADMIN_HASH);$("#pl-msg").textContent="";openPlayers()}
+  else{$("#pl-msg").textContent="Senha incorreta.";$("#pl-pass").select()}
+});
+$("#p-lockbtn").onclick=()=>{try{localStorage.removeItem(ADM_KEY)}catch(e){} P.mode=null;openPlayers()};
+function pTeams(){return MODES[P.mode].teams} function pList(){return MODES[P.mode].players}
+function pBadge(code){const c=pTeams()[code];return c?`<span class="badge" style="background:${c.s};color:${c.sf}" title="${esc(c.n)}">${code}</span>`:code}
+function fillDec(){
+  const decs=[...new Set(pList().map(p=>p.dec))].sort((a,b)=>Object.keys(DEC).indexOf(a)-Object.keys(DEC).indexOf(b));
+  $("#f-dec").innerHTML=`<option value="">Todas as décadas</option>`+decs.map(d=>`<option value="${d}">${DEC[d]}</option>`).join("");
+  $("#s-club").textContent=P.mode==="leg"?"Seleção":"Clubes";
+  $("#s-goals").textContent=P.mode==="leg"?"Gols carreira":"Gols Série A";
+}
+$("#p-mode").addEventListener("change",()=>{P.mode=$("#p-mode").value;P.club="";fillDec();renderPlayers()});
+$("#clubs-strip").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;P.club=P.club===b.dataset.c?"":b.dataset.c;renderPlayers()});
+document.querySelectorAll("#view-players th button").forEach(b=>b.addEventListener("click",()=>{
+  const k=b.dataset.sort; P.dir=P.sort===k?-P.dir:(k==="goals"?-1:1); P.sort=k; renderPlayers();
+}));
+const norm=t=>t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+function filteredPlayers(){
+  const q=norm($("#q").value.trim()), pos=$("#f-pos").value, dec=$("#f-dec").value, src=$("#f-src").value;
+  const mn=$("#f-min").value===""?-1:+$("#f-min").value, mx=$("#f-max").value===""?1e9:+$("#f-max").value, multi=$("#f-multi").checked;
+  const grp=ROWCODES[pos];
+  let rows=pList().filter(p=>(!P.club||p.clubs.includes(P.club))&&(!dec||p.dec===dec)&&(src===""||p.ver===+src)
+    &&(!pos||(grp?p.slots.some(s=>grp.includes(s)):p.slots.includes(pos)))&&p.goals>=mn&&p.goals<=mx&&(!multi||p.slots.length>1)
+    &&(!q||norm(p.name).includes(q)));
+  const dk=Object.keys(DEC), cmp={name:(a,b)=>a.name.localeCompare(b.name,"pt"),goals:(a,b)=>a.goals-b.goals,dec:(a,b)=>dk.indexOf(a.dec)-dk.indexOf(b.dec),
+    club:(a,b)=>a.clubs[0].localeCompare(b.clubs[0]),ver:(a,b)=>a.ver-b.ver}[P.sort];
+  rows.sort((a,b)=>cmp(a,b)*P.dir||b.goals-a.goals||a.name.localeCompare(b.name,"pt"));
+  return rows;
+}
+function renderPlayers(){
+  const list=pList(), teams=pTeams(), counts={};
+  list.forEach(p=>p.clubs.forEach(c=>counts[c]=(counts[c]||0)+1));
+  $("#clubs-strip").innerHTML=Object.keys(teams).map(c=>`<button data-c="${c}" aria-pressed="${P.club===c}">${pBadge(c)}${esc(teams[c].n)} <em>${counts[c]||0}</em></button>`).join("");
+  const rows=filteredPlayers(), sum=rows.reduce((s,p)=>s+p.goals,0);
+  $("#p-stats").innerHTML=`<span><b>${rows.length}</b> de ${list.length} jogadores</span><span>Soma <b>${sum.toLocaleString("pt-BR")}</b> gols</span><span>Média <b>${rows.length?Math.round(sum/rows.length):0}</b></span>`+
+    (rows.length?`<span>Maior <b>${Math.max(...rows.map(p=>p.goals))}</b></span>`:"");
+  document.querySelectorAll("#view-players th button").forEach(b=>{const on=b.dataset.sort===P.sort;b.toggleAttribute("aria-sort",on);if(on)b.setAttribute("aria-sort",P.dir<0?"descending":"ascending");
+    b.dataset.lbl=b.dataset.lbl||b.textContent; b.textContent=b.textContent.replace(/ [▾▴]$/,"")+(on?(P.dir<0?" ▾":" ▴"):"")});
+  const VER=['<span class="src est">Estimativa</span>','<span class="src ok">Verificado</span>','<span class="src pq">Pesquisa ogol</span>','<span class="src pq">Pesquisa</span>','<span class="src ok">Wikipédia</span>'];
+  $("#p-body").innerHTML=rows.map(p=>`<tr><td>${esc(p.name)}</td><td title="${esc(p.slots.map(c=>SLOTNAME[c]).join(", "))}">${p.slots.join(" · ")}</td><td>${DEC[p.dec]}</td><td class="g">${p.goals}</td><td><span class="cls">${p.clubs.map(pBadge).join("")}</span></td><td>${VER[p.ver]||VER[0]}</td></tr>`).join("");
+}
+["#q","#f-pos","#f-dec","#f-src","#f-min","#f-max","#f-multi"].forEach(sel=>$(sel).addEventListener("input",renderPlayers));
+$("#p-clear").onclick=()=>{["#q","#f-pos","#f-dec","#f-src","#f-min","#f-max"].forEach(sel=>$(sel).value="");$("#f-multi").checked=false;P.club="";renderPlayers()};
+$("#p-csv").onclick=()=>{
+  const q=v=>`"${String(v).replace(/"/g,'""')}"`, names=["","Verificado","Pesquisa ogol","Pesquisa (planilha)","Wikipédia"];
+  const csv="\ufeffJogador;Posições;Década;Gols;"+(P.mode==="leg"?"Seleção":"Clubes")+";Fonte\n"+filteredPlayers().map(p=>[p.name,p.slots.join(" "),DEC[p.dec],p.goals,p.clubs.map(c=>pTeams()[c]?.n||c).join(", "),names[p.ver]||"Estimativa"].map(q).join(";")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`jogadores_${MODES[P.mode].key}.csv`;document.body.appendChild(a);a.click();a.remove();
+};
 
 /* ---------- ranking (Supabase) ---------- */
 // Preencha com os dados do seu projeto: Supabase → Project Settings → API (ou Data API / API Keys).
@@ -1516,14 +2896,15 @@ async function rpc(fn,body){
   if(!r.ok)throw new Error((j&&(j.message||j.hint))||("erro "+r.status));
   return j;
 }
-function eraName(v){const o=[...$("#r-era").options].find(o=>o.value===(v||"todas"));return o?o.text:v}
+function fillRankEras(){const md=Object.values(MODES).find(x=>x.key===$("#r-mode").value)||MODES.br;$("#r-era").innerHTML=md.eras.map(([v,l])=>`<option value="${v||"todas"}">${l}</option>`).join("")}
+function eraName(v){const e=M().eras.find(([x])=>(x||"todas")===(v||"todas"));return e?e[1]:v}
 async function sendScore(){
   const nick=$("#nick").value.trim(), msg=$("#send-msg"), btn=$("#send-btn");
   if(!NICK_RE.test(nick)){msg.textContent="Use de 2 a 20 letras, números, espaço, ponto, hífen ou _.";return}
   store("br433-nick",nick); btn.disabled=true; msg.textContent="Enviando…";
   try{
     const lineup=[];for(const r in S.xi)S.xi[r].forEach(x=>lineup.push({id:x.id,vaga:x.as,clube:x.club}));
-    const res=await rpc("registrar_partida",{p_apelido:nick,p_era:S.era||"",p_escalacao:lineup,p_olheiro:2-S.scouts,p_subs:2-S.subs});
+    const res=await rpc(M().rpc,{p_apelido:nick,p_era:S.era||"",p_escalacao:lineup,p_olheiro:2-S.scouts,p_subs:2-S.subs});
     S.sent=true; btn.textContent="Enviado ✓";
     msg.innerHTML=`${res.pontos} pts registrados. Sua melhor marca está em <b>${res.posicao}º</b> no ranking (${esc(eraName(S.era))}).`;
   }catch(e){msg.textContent="Não deu para enviar: "+e.message; btn.disabled=false}
@@ -1533,23 +2914,30 @@ async function renderRanking(){
   if(!RANK_ON){body.innerHTML=`<tr><td colspan="5">O ranking online funciona no site publicado (christianbranco.github.io/433GolsBR).</td></tr>`;st.textContent="";return}
   st.textContent="Carregando…";
   try{
-    const rows=await rpc("top_ranking",{p_periodo:$("#r-per").value,p_era:$("#r-era").value,p_limite:50});
+    const rows=await rpc("top_ranking",{p_periodo:$("#r-per").value,p_era:$("#r-era").value,p_limite:50,p_modo:$("#r-mode").value});
     const me=(store("br433-nick")||"").toLowerCase();
     body.innerHTML=rows.length?rows.map(r=>`<tr class="${r.apelido.toLowerCase()===me?"me":""}"><td>${r.posicao}º</td><td>${esc(r.apelido)}</td><td class="g">${r.pontos}</td><td class="g2">${r.gols}</td><td>${new Date(r.criado_em).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"2-digit"})}</td></tr>`).join(""):`<tr><td colspan="5">Ninguém no ranking ainda neste filtro. Seja o primeiro!</td></tr>`;
     st.textContent=rows.length?`Top ${rows.length}`:"";
   }catch(e){body.innerHTML=`<tr><td colspan="5">Não deu para carregar o ranking: ${esc(e.message)}</td></tr>`;st.textContent=""}
 }
 ["#r-per","#r-era"].forEach(s=>$(s).addEventListener("input",renderRanking));
+$("#r-mode").addEventListener("input",()=>{fillRankEras();renderRanking()});
 $("#r-refresh").onclick=renderRanking;
 
 /* ---------- início (preserva partida em atualizações da página) ---------- */
 $("#opt-era").addEventListener("change",newGame);
+document.querySelectorAll(".modes button").forEach(b=>b.addEventListener("click",()=>setMode(b.dataset.mode)));
 function start(data){
-  if(data&&data.S&&data.S.v===2&&data.S.xi&&data.S.xi.ATA&&data.S.xi.ATA.length===3){S=data.S;ERA=S.era||"";$("#opt-era").value=ERA}else{S=fresh()}
+  const saved=data&&data.S&&data.S.v===3&&data.S.mode&&data.S.xi&&data.S.xi.ATA&&data.S.xi.ATA.length===3?data.S:null;
+  applyMode(saved?saved.mode:(store("br433-mode")||"br"));
+  $("#r-mode").value=M().key; fillRankEras();
+  if(saved){S=saved;ERA=S.era||"";$("#opt-era").value=ERA}else{S=fresh();setStatus(MODE==="leg"?"Gire para sortear as 3 primeiras lendas.":"Gire para sortear o primeiro clube.")}
+  $("#reel-name").innerHTML=`Sorteio<small>${M().label}</small>`;
   applyTarget(); shown=total();
   renderAll(false);
-  if(S.club)showClub(S.club);
+  showReel();
   if(S.phase==="done")finish();
+  showTab("home");
 }
 start({});
 </script>
