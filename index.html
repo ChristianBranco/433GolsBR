@@ -2801,7 +2801,7 @@ document.querySelectorAll(".gcard").forEach(c=>c.addEventListener("click",e=>{
 
 /* ---------- aba Jogadores (protegida por senha) ---------- */
 // Hash SHA-256 de "433gols:" + senha. Para trocar a senha, gere um novo hash e substitua aqui.
-const ADMIN_HASH="cd504fead8db33ef8cc67b5bb3dd4fc858c6a8f714308f1484d976a4b3df9e1f";
+const ADMIN_HASH="a34bf81190d73c46e7def9e031bc963c5064ddc936f632611608b8ea70a2c036";
 function sha256(str){
   const K=[],H=[];let n=2,c=0;const isP=x=>{for(let i=2;i*i<=x;i++)if(x%i===0)return false;return true};
   const frac=x=>((x-Math.floor(x))*4294967296)|0;
