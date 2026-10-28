@@ -203,7 +203,6 @@ td.g2{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
     </div>
     <nav class="tabs" role="tablist" aria-label="Seções">
       <button id="tab-play" role="tab" aria-selected="true" aria-controls="view-play">Jogar</button>
-      <button id="tab-table" role="tab" aria-selected="false" aria-controls="view-table">Jogadores</button>
       <button id="tab-rank" role="tab" aria-selected="false" aria-controls="view-rank">Ranking</button>
     </nav>
   </header>
@@ -263,42 +262,6 @@ td.g2{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
         </div>
       </div>
     </div>
-  </section>
-
-  <section id="view-table" role="tabpanel" aria-labelledby="tab-table" hidden>
-    <div class="clubs-strip" id="clubs-strip"></div>
-    <div class="tbl-tools">
-      <input id="q" type="search" placeholder="Buscar jogador" aria-label="Buscar jogador">
-      <select id="f-pos" aria-label="Posição">
-        <option value="">Todas as posições</option>
-        <option value="GOL">Goleiro (GOL)</option>
-        <optgroup label="Defesa"><option value="LD">Lateral-direito (LD)</option><option value="ZAG">Zagueiro (ZAG)</option><option value="LE">Lateral-esquerdo (LE)</option></optgroup>
-        <optgroup label="Meio-campo"><option value="MD">Meia-direita (MD)</option><option value="MC">Meio-campo central (MC)</option><option value="ME">Meia-esquerda (ME)</option></optgroup>
-        <optgroup label="Ataque"><option value="PD">Ponta-direita (PD)</option><option value="CA">Centroavante (CA)</option><option value="PE">Ponta-esquerda (PE)</option></optgroup>
-      </select>
-      <select id="f-era" aria-label="Década">
-        <option value="">Todas as décadas</option>
-        <option value="70">Anos 70</option><option value="80">Anos 80</option><option value="90">Anos 90</option>
-        <option value="00">Anos 2000</option><option value="10">Anos 2010</option><option value="20">Anos 2020</option>
-      </select>
-      <label><input type="checkbox" id="f-show" checked> Mostrar gols</label>
-      <label><input type="checkbox" id="f-ver"> Só verificados</label>
-      <span class="count" id="count"></span>
-    </div>
-    <div class="tbl-box">
-      <table>
-        <thead><tr>
-          <th><button id="s-name">Jogador</button></th>
-          <th>Posições</th>
-          <th>Década</th>
-          <th class="g"><button id="s-goals">Gols Série A ▾</button></th>
-          <th>Clubes</th>
-          <th>Fonte</th>
-        </tr></thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-    <p class="note">Base curada com pelo menos 50 jogadores de cada um dos 20 clubes com mais temporadas na Série A, dos anos 70 até hoje. Os gols são o total do jogador no Campeonato Brasileiro, somando todos os clubes brasileiros por onde passou. "Verificado" indica número tirado de fonte: ranking histórico da CBF, ranking dos 25 maiores artilheiros, artilheiros de cada clube desde 2003, top 50 da década 2011–2020, estrangeiros com mais gols e estatísticas por temporada da Wikipédia; números de jogadores em atividade incluem gols de 2026 até onde foi possível apurar. "Pesquisa ogol" indica número levantado no ogol.com.br em pesquisa externa (gols na Série A de 1971 em diante).</p>
   </section>
 
   <section id="view-rank" role="tabpanel" aria-labelledby="tab-rank" hidden>
@@ -1535,11 +1498,10 @@ function renderAll(anim){renderBoard(anim);renderPitch();renderOffers();renderWi
 
 /* ---------- abas ---------- */
 function showTab(which){
-  for(const k of ["play","table","rank"]){$("#tab-"+k).setAttribute("aria-selected",k===which);$("#view-"+k).hidden=k!==which}
-  if(which==="table")renderTable();
+  for(const k of ["play","rank"]){$("#tab-"+k).setAttribute("aria-selected",k===which);$("#view-"+k).hidden=k!==which}
   if(which==="rank")renderRanking();
 }
-$("#tab-play").onclick=()=>showTab("play"); $("#tab-table").onclick=()=>showTab("table"); $("#tab-rank").onclick=()=>showTab("rank");
+$("#tab-play").onclick=()=>showTab("play"); $("#tab-rank").onclick=()=>showTab("rank");
 
 /* ---------- ranking (Supabase) ---------- */
 // Preencha com os dados do seu projeto: Supabase → Project Settings → API (ou Data API / API Keys).
@@ -1579,27 +1541,6 @@ async function renderRanking(){
 }
 ["#r-per","#r-era"].forEach(s=>$(s).addEventListener("input",renderRanking));
 $("#r-refresh").onclick=renderRanking;
-
-/* ---------- tabela ---------- */
-let T={club:"",sort:"goals",dir:-1};
-function renderStrip(){
-  const counts={}; PLAYERS.forEach(p=>p.clubs.forEach(c=>counts[c]=(counts[c]||0)+1));
-  $("#clubs-strip").innerHTML=Object.keys(CLUBS).map(c=>`<button data-c="${c}" aria-pressed="${T.club===c}">${badge(c)}${esc(CLUBS[c].n)} <em>${counts[c]||0}</em></button>`).join("");
-}
-$("#clubs-strip").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;T.club=T.club===b.dataset.c?"":b.dataset.c;renderTable()});
-function renderTable(){
-  renderStrip();
-  const q=$("#q").value.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
-  const pos=$("#f-pos").value, show=$("#f-show").checked, era=$("#f-era").value;
-  const onlyVer=$("#f-ver").checked;
-  let rows=PLAYERS.filter(p=>(!onlyVer||p.ver)&&(!era||p.dec===era)&&(!T.club||p.clubs.includes(T.club))&&(!pos||p.slots.includes(pos))&&(!q||p.name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").includes(q)));
-  rows.sort((a,b)=>T.sort==="goals"?((a.goals-b.goals)*T.dir||a.name.localeCompare(b.name,"pt")):(a.name.localeCompare(b.name,"pt")*-T.dir));
-  $("#count").textContent=`${rows.length} de ${PLAYERS.length} jogadores`;
-  $("#tbody").innerHTML=rows.map(p=>`<tr><td>${esc(p.name)}</td><td title="${esc(p.slots.map(c=>SLOTNAME[c]).join(", "))}">${p.slots.join(" · ")}</td><td>${DEC[p.dec]}</td><td class="g">${show?p.goals:"—"}</td><td><span class="cls">${p.clubs.map(badge).join("")}</span></td><td>${p.ver===1?'<span class="src ok">Verificado</span>':p.ver===2?'<span class="src pq" title="Número levantado no ogol.com.br, em revisão">Pesquisa ogol</span>':'<span class="src est">Estimativa</span>'}</td></tr>`).join("");
-}
-["#q","#f-pos","#f-show","#f-era","#f-ver"].forEach(s=>$(s).addEventListener("input",renderTable));
-$("#s-goals").onclick=()=>{T.dir=T.sort==="goals"?-T.dir:-1;T.sort="goals";$("#s-goals").textContent="Gols Série A "+(T.dir<0?"▾":"▴");renderTable()};
-$("#s-name").onclick=()=>{T.dir=T.sort==="name"?-T.dir:-1;T.sort="name";renderTable()};
 
 /* ---------- início (preserva partida em atualizações da página) ---------- */
 $("#opt-era").addEventListener("change",newGame);
