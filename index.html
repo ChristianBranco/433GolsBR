@@ -289,6 +289,131 @@ th{font-family:var(--f-body);font-weight:700}
   #view-players .tbl-tools select{padding-right:32px;background-position:right 11px center,0 0;font-size:13.5px}
   #view-players .tbl-tools label{justify-content:flex-start}
 }
+.capline{margin-top:8px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.capline b{color:var(--chalk)} .capline small{font-size:12px;opacity:.85}
+.cbadge{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--led);color:#1d1300;font-family:var(--f-display);font-weight:900;font-size:13px;box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 12px rgba(255,179,48,.55);flex:0 0 auto}
+.cbadge.off{background:transparent;color:var(--led);box-shadow:inset 0 0 0 2px var(--led)}
+.fig{position:relative}
+.fig .cbadge{position:absolute;top:10px;right:6px;width:20px;height:20px;font-size:12px;z-index:2}
+.fig.capt{box-shadow:0 0 0 3px var(--led),0 0 18px rgba(255,179,48,.6),0 8px 18px rgba(0,0,0,.25)}
+.fig.capt .gl b{color:#a86e0b}
+.fig.capt .pos{padding-right:30px}
+.slot.capable{cursor:pointer}
+.slot.capable:hover .fig{transform:translateY(-2px)}
+#spin.endgame{background:linear-gradient(180deg,#2fd06b,#1a9a4c);color:#03210f;box-shadow:0 5px 0 #0d6a32}
+
+/* ================= camada de acabamento: profundidade, brilho e movimento ================= */
+:root{--sh-1:0 1px 0 rgba(255,255,255,.05) inset,0 2px 6px rgba(0,0,0,.28),0 14px 34px -14px rgba(0,0,0,.7);
+      --sh-2:0 1px 0 rgba(255,255,255,.06) inset,0 4px 10px rgba(0,0,0,.3),0 24px 48px -18px rgba(0,0,0,.75);
+      --glow-led:0 0 22px rgba(255,179,48,.35)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(120% 80% at 50% -10%,rgba(255,255,255,.07),transparent 55%),radial-gradient(140% 120% at 50% 120%,rgba(0,0,0,.45),transparent 60%)}
+.wrap{position:relative;z-index:1}
+/* topo */
+.brand h1{text-shadow:0 2px 0 rgba(0,0,0,.35),0 10px 30px rgba(0,0,0,.45)}
+.brand h1 span{text-shadow:0 0 24px rgba(255,179,48,.45),0 2px 0 rgba(0,0,0,.35);animation:neon 4.5s ease-in-out infinite}
+@keyframes neon{0%,100%{text-shadow:0 0 18px rgba(255,179,48,.35),0 2px 0 rgba(0,0,0,.35)}50%{text-shadow:0 0 34px rgba(255,179,48,.7),0 2px 0 rgba(0,0,0,.35)}}
+.tabs{box-shadow:var(--sh-1);backdrop-filter:blur(6px)}
+.tabs button{transition:background .2s,color .2s,box-shadow .2s,transform .15s}
+.tabs button:hover:not([aria-selected="true"]){color:var(--chalk);background:rgba(255,255,255,.06)}
+.tabs button[aria-selected="true"]{box-shadow:0 2px 10px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.4) inset}
+/* placar */
+.board{position:relative;overflow:hidden;box-shadow:inset 0 0 50px rgba(0,0,0,.75),var(--sh-2)}
+.board::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+.led #total{display:inline-block;transition:color .3s}
+.led.bump #total{animation:bump .5s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes bump{0%{transform:scale(1)}35%{transform:scale(1.08);filter:brightness(1.35)}100%{transform:scale(1)}}
+.led.exact{animation:exactGlow 1.6s ease-in-out infinite}
+@keyframes exactGlow{0%,100%{text-shadow:0 0 16px rgba(79,209,122,.45)}50%{text-shadow:0 0 38px rgba(79,209,122,.95),0 0 70px rgba(79,209,122,.35)}}
+.led.shake{animation:shake .45s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+.meter{overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
+.meter i{position:relative;background:linear-gradient(90deg,#c97f0c,var(--led) 70%,#ffd27a);box-shadow:0 0 12px rgba(255,179,48,.55);transition:width .6s cubic-bezier(.2,.9,.3,1)}
+.meter i::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 0 35%,rgba(255,255,255,.55) 50%,transparent 65% 100%);background-size:220% 100%;animation:shine 2.4s linear infinite}
+@keyframes shine{from{background-position:120% 0}to{background-position:-120% 0}}
+.meter.over i{background:linear-gradient(90deg,#b8392c,var(--miss));box-shadow:0 0 12px rgba(255,107,90,.55)}
+/* caça-níquel */
+.reel{box-shadow:var(--sh-2);background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 40%),var(--panel)}
+.reel-window{box-shadow:inset 0 6px 16px rgba(0,0,0,.65),inset 0 -6px 16px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.reel-window::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.45),transparent 30% 70%,rgba(0,0,0,.45))}
+.bigbadge{box-shadow:0 6px 14px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .2s}
+.reel.rolling .bigbadge{animation:roll .09s linear infinite;filter:blur(.6px)}
+.reel.rolling .reel-name{opacity:.75;filter:blur(.4px)}
+@keyframes roll{0%{transform:translateY(-3px)}50%{transform:translateY(3px)}100%{transform:translateY(-3px)}}
+.reel.landed .bigbadge{animation:landBadge .5s cubic-bezier(.2,.9,.3,1.5)}
+@keyframes landBadge{0%{transform:scale(.7) rotate(-10deg)}100%{transform:scale(1) rotate(0)}}
+.spin-btn{position:relative;overflow:hidden;background:linear-gradient(180deg,#ffc659,var(--led) 55%,#e89a17);box-shadow:0 5px 0 #a86e0b,0 12px 24px -6px rgba(255,179,48,.45);transition:transform .12s,box-shadow .12s,filter .2s;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.spin-btn::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);transition:left .6s ease}
+.spin-btn:hover:not(:disabled)::after{left:120%}
+.spin-btn:hover:not(:disabled){filter:brightness(1.05);transform:translateY(-1px);box-shadow:0 6px 0 #a86e0b,0 16px 30px -6px rgba(255,179,48,.55)}
+.spin-btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 2px 0 #a86e0b,0 6px 12px -6px rgba(255,179,48,.4)}
+.spin-btn:not(:disabled):not(.endgame){animation:breathe 2.6s ease-in-out infinite}
+@keyframes breathe{0%,100%{box-shadow:0 5px 0 #a86e0b,0 12px 24px -6px rgba(255,179,48,.4)}50%{box-shadow:0 5px 0 #a86e0b,0 14px 34px -4px rgba(255,179,48,.75)}}
+#spin.endgame{animation:breatheG 1.8s ease-in-out infinite}
+@keyframes breatheG{0%,100%{box-shadow:0 5px 0 #0d6a32,0 12px 24px -6px rgba(47,208,107,.35)}50%{box-shadow:0 5px 0 #0d6a32,0 14px 36px -4px rgba(47,208,107,.8)}}
+/* cartas */
+.offers{perspective:900px}
+.offer{animation:deal .5s cubic-bezier(.2,.9,.3,1.25) both}
+.offer:nth-child(2){animation-delay:.08s}.offer:nth-child(3){animation-delay:.16s}
+@keyframes deal{from{opacity:0;transform:translateY(-26px) rotateX(35deg) rotate(-6deg) scale(.85)}to{opacity:1;transform:none}}
+.fig{box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 3px 0 rgba(0,0,0,.25),0 10px 22px -6px rgba(0,0,0,.55);transition:transform .2s cubic-bezier(.2,.9,.3,1.3),box-shadow .2s}
+.fig::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(125deg,rgba(255,255,255,.35) 0%,transparent 28%,transparent 72%,rgba(0,0,0,.06))}
+.offer:hover .fig,.offer:focus-visible .fig{transform:translateY(-6px) rotate(-1.5deg) scale(1.03);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 6px 0 rgba(0,0,0,.2),0 22px 34px -10px rgba(0,0,0,.65),0 0 0 2px rgba(255,179,48,.6)}
+.offer:active .fig{transform:translateY(-2px) scale(.98)}
+.fig .gl b{display:inline-block}
+.fig .gl:not(.hidden) b{animation:reveal .45s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes reveal{0%{transform:rotateX(90deg);opacity:0}100%{transform:none;opacity:1}}
+/* campo */
+.pitch{box-shadow:0 30px 60px -20px rgba(0,0,0,.6),0 0 0 6px rgba(0,0,0,.18),inset 0 0 80px rgba(0,0,0,.35)}
+.pitch::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(60% 40% at 20% 0%,rgba(255,255,255,.12),transparent 70%),radial-gradient(60% 40% at 80% 0%,rgba(255,255,255,.1),transparent 70%),radial-gradient(90% 70% at 50% 110%,rgba(0,0,0,.3),transparent 70%)}
+.slot .fig{box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 3px 0 rgba(0,0,0,.25),0 14px 22px -8px rgba(0,0,0,.6)}
+.slot.just .fig{animation:drop .6s cubic-bezier(.2,.9,.3,1.35)}
+@keyframes drop{0%{transform:translateY(-40px) scale(1.25) rotate(-6deg);opacity:0;box-shadow:0 40px 40px -10px rgba(0,0,0,.3)}60%{transform:translateY(4px) scale(.97);opacity:1}100%{transform:none}}
+.slot.just::after{content:"";position:absolute;left:50%;top:55%;width:120%;aspect-ratio:2/1;border-radius:50%;transform:translate(-50%,-50%) scale(.3);border:3px solid rgba(255,179,48,.8);opacity:0;animation:ripple .7s ease-out .15s;pointer-events:none}
+.slot{position:relative}
+@keyframes ripple{0%{opacity:.9;transform:translate(-50%,-50%) scale(.3)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4)}}
+.slot .empty{transition:border-color .2s,background .2s;animation:breatheSlot 3.2s ease-in-out infinite}
+@keyframes breatheSlot{0%,100%{background:rgba(255,255,255,.03)}50%{background:rgba(255,255,255,.08)}}
+.slot.capable:hover .fig{box-shadow:0 0 0 2px rgba(255,179,48,.7),0 14px 22px -8px rgba(0,0,0,.6)}
+.fig .cbadge{animation:capIn .5s cubic-bezier(.2,.9,.3,1.6)}
+@keyframes capIn{0%{transform:scale(0) rotate(-90deg)}100%{transform:scale(1) rotate(0)}}
+.fig.capt{animation:capGlow 2s ease-in-out infinite}
+@keyframes capGlow{0%,100%{box-shadow:0 0 0 3px var(--led),0 0 14px rgba(255,179,48,.45),0 10px 18px rgba(0,0,0,.3)}50%{box-shadow:0 0 0 3px var(--led),0 0 28px rgba(255,179,48,.85),0 10px 18px rgba(0,0,0,.3)}}
+/* coringas */
+.wild button{box-shadow:var(--sh-1);background:linear-gradient(180deg,rgba(255,255,255,.04),transparent 60%),var(--panel);transition:transform .15s,border-color .2s,box-shadow .2s}
+.wild button:hover:not(:disabled){transform:translateY(-2px);border-color:rgba(255,179,48,.5);box-shadow:var(--sh-2)}
+.wild button[aria-pressed="true"]{box-shadow:0 0 0 2px rgba(255,179,48,.5),0 0 22px rgba(255,179,48,.3)}
+/* resultado */
+.result:not([hidden]){animation:riseIn .6s cubic-bezier(.2,.9,.3,1.2);box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 20px 50px -14px rgba(0,0,0,.7)}
+@keyframes riseIn{from{opacity:0;transform:translateY(30px) scale(.96)}to{opacity:1;transform:none}}
+.result .pts{animation:ptsPop .6s cubic-bezier(.2,.9,.3,1.5) .25s both}
+@keyframes ptsPop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.result.exact{background:linear-gradient(160deg,#fff7df,#f6e4a8);box-shadow:0 0 0 3px var(--led),0 0 40px rgba(255,179,48,.55),0 20px 50px -14px rgba(0,0,0,.7)}
+.result.exact h2{animation:stamp .7s cubic-bezier(.2,.9,.3,1.6) .1s both;color:#7a4b00}
+@keyframes stamp{0%{transform:scale(2.4) rotate(-12deg);opacity:0}100%{transform:none;opacity:1}}
+.result.near{box-shadow:0 0 0 2px rgba(79,209,122,.8),0 0 30px rgba(79,209,122,.35),0 20px 50px -14px rgba(0,0,0,.7)}
+.result .acts button{transition:transform .12s,box-shadow .2s;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.result .acts button:hover{transform:translateY(-1px)}
+/* tela inicial */
+.gcard{box-shadow:var(--sh-2);position:relative}
+.gcard::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(80% 60% at 0% 0%,rgba(255,255,255,.06),transparent 60%)}
+.gcard:hover{box-shadow:0 0 0 1px rgba(255,179,48,.5),0 0 40px -6px rgba(255,179,48,.35),0 30px 50px -20px rgba(0,0,0,.8);transform:translateY(-4px)}
+.gband{background-size:200% 100%!important;animation:bandMove 8s linear infinite}
+@keyframes bandMove{from{background-position:0 0}to{background-position:200% 0}}
+.gcard:hover .gnum{text-shadow:0 0 30px rgba(255,179,48,.75)}
+.gplay{transition:transform .12s,box-shadow .12s,filter .2s}
+.gplay:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.home-grid .gcard{animation:riseIn .6s cubic-bezier(.2,.9,.3,1.2) both}.home-grid .gcard:nth-child(2){animation-delay:.1s}
+/* ranking */
+#r-body tr{transition:background .15s}
+#r-body tr:hover{background:rgba(255,255,255,.04)}
+#r-body tr:nth-child(1) td:first-child{color:#ffcf4a;text-shadow:0 0 12px rgba(255,207,74,.6);font-weight:800}
+#r-body tr:nth-child(2) td:first-child{color:#d9e1e6;text-shadow:0 0 10px rgba(217,225,230,.45);font-weight:800}
+#r-body tr:nth-child(3) td:first-child{color:#e0a46b;text-shadow:0 0 10px rgba(224,164,107,.45);font-weight:800}
+/* confete */
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -360,6 +485,7 @@ th{font-family:var(--f-body);font-weight:700}
           <div class="led" id="led"><span id="total">000</span><small>/ <span id="led-target">433</span></small></div>
           <div class="meter" id="meter"><i id="meter-bar" style="width:0%"></i></div>
           <div class="status" id="status">Gire para sortear o primeiro clube.</div>
+          <div class="capline" id="capline" hidden></div>
         </div>
 
         <div class="reel" id="reel">
@@ -2379,7 +2505,7 @@ const MODES={
       label:"33 seleções + Resto do Mundo",unit:"seleção",
       eras:[["","Todas as épocas"],["L1","Clássicos (até 1979)"],["L2","1980–1999"],["L3","2000–2026"]],
       desc:"Gire o caça-níquel, escolha entre 3 lendas de seleções diferentes e monte um 4-3-3 que some exatamente 2.000 gols na carreira (clubes + seleção).",
-      rules:'<b>Como jogar.</b> Cada giro mostra <b>3 lendas de 3 seleções diferentes</b>, sorteadas ao acaso entre <b>33 seleções</b> tradicionais em Copas e o <b>Resto do Mundo</b> (que reúne também os maiores ídolos de Gana, Tunísia, Romênia, Bulgária, Áustria, Irã, Arábia Saudita, Austrália, Costa Rica e Argélia). Base: <b>870 lendas</b>, incluindo os 100 maiores da revista <i>World Soccer</i>. Cada jogador vale os gols oficiais da <b>carreira toda</b> (clubes + seleção). Escolha um: ele entra numa vaga livre da posição dele no 4-3-3. Precisão e <b>2.000 em cheio</b> valem até <b>1000 pts</b> (−1 pt por gol de diferença). <b>Entrosamento</b> extra: 3 da mesma seleção +20, 4 +40, 5 +70, 6 ou mais +100, e cada linha inteira de uma só seleção <b>+200</b>. Cada <b>Olheiro</b> ou <b>Substituição</b> tira <b>100 pts</b>; Girar de novo é grátis.'},
+      rules:'<b>Como jogar.</b> Cada giro mostra <b>3 lendas de 3 seleções diferentes</b>, sorteadas ao acaso entre <b>33 seleções</b> tradicionais em Copas e o <b>Resto do Mundo</b> (que reúne também os maiores ídolos de Gana, Tunísia, Romênia, Bulgária, Áustria, Irã, Arábia Saudita, Austrália, Costa Rica e Argélia). Base: <b>870 lendas</b>, incluindo os 100 maiores da revista <i>World Soccer</i>. Cada jogador vale os gols oficiais da <b>carreira toda</b> (clubes + seleção). Escolha um: ele entra numa vaga livre da posição dele no 4-3-3. Precisão e <b>2.000 em cheio</b> valem até <b>1000 pts</b> (−1 pt por gol de diferença). <b>Capitão:</b> toque num jogador em campo para que os gols dele contem <b>em dobro</b>; dá para trocar a qualquer momento, e com o time completo o jogo espera você clicar em <b>Encerrar partida</b>. <b>Entrosamento</b> extra: 3 da mesma seleção +20, 4 +40, 5 +70, 6 ou mais +100, e cada linha inteira de uma só seleção <b>+200</b>. Cada <b>Olheiro</b> ou <b>Substituição</b> tira <b>100 pts</b>; Girar de novo é grátis.'},
 };
 function M(){return MODES[MODE]}
 function applyMode(m){
@@ -2407,10 +2533,13 @@ function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localSto
 let S;
 function fresh(){
   return {target:TARGET,era:ERA,xi:{ATA:[null,null,null],MEI:[null,null,null],DEF:[null,null,null,null],GOL:[null]},
-    offers:[],club:null,rerolls:2,scouts:2,subs:2,subMode:false,revealed:false,phase:"idle",lastSlot:null,pending:null,v:3,mode:MODE};
+    offers:[],club:null,rerolls:2,scouts:2,subs:2,subMode:false,revealed:false,phase:"idle",lastSlot:null,pending:null,cap:null,v:3,mode:MODE};
 }
 function placed(){const out=[];for(const p in S.xi)S.xi[p].forEach(x=>x&&out.push(x));return out}
-function total(){return placed().reduce((s,x)=>s+PLAYERS[x.id].goals,0)}
+function capOn(){return MODE==="leg"}
+function capId(){return capOn()&&S.cap!=null&&placed().some(x=>x.id===S.cap)?S.cap:null}
+function capBonus(){const c=capId();return c==null?0:PLAYERS[c].goals}
+function total(){return placed().reduce((s,x)=>s+PLAYERS[x.id].goals,0)+capBonus()}
 function openCodes(){const s=new Set();for(const r in S.xi)S.xi[r].forEach((v,i)=>{if(!v)s.add(ROWCODES[r][i])});return s}
 function validSlots(p){const out=[],seen=new Set();for(const r in S.xi)S.xi[r].forEach((v,i)=>{const c=ROWCODES[r][i];if(!v&&p.slots.includes(c)&&!seen.has(c)){seen.add(c);out.push({row:r,i,code:c})}});return out}
 function usedIds(){return new Set(placed().map(x=>x.id))}
@@ -2423,7 +2552,12 @@ function renderBoard(animate){
   $("#meter").classList.toggle("over",t>TARGET);
   $("#meter-bar").style.width=Math.min(100,t/TARGET*100)+"%";
   $("#slots-left").textContent=(11-n)+(11-n===1?" vaga":" vagas");
+  const cl=$("#capline"); cl.hidden=!capOn();
+  if(capOn()){const c=capId();
+    cl.innerHTML=c!=null?`<span class="cbadge">C</span> Capitão: <b>${esc(PLAYERS[c].name)}</b> · +${PLAYERS[c].goals} gols (×2)`+(S.phase!=="done"?` <small>Toque em outro jogador para trocar.</small>`:"")
+      :n?`<span class="cbadge off">C</span> Toque num jogador em campo para escolher o <b>capitão</b>: os gols dele contam em dobro.`:`<span class="cbadge off">C</span> No Legends você escolhe um <b>capitão</b> (gols ×2) quando quiser.`;}
   const from=shown; shown=t;
+  if(animate&&!reduce&&from!==t){led.classList.remove("bump","shake");void led.offsetWidth;led.classList.add(t>TARGET&&from<=TARGET?"shake":"bump")}
   if(!animate||reduce||from===t){$("#total").textContent=String(t).padStart(3,"0");return}
   const t0=performance.now(),d=600;
   (function step(now){const k=Math.min(1,(now-t0)/d);const v=Math.round(from+(t-from)*(1-Math.pow(1-k,3)));
@@ -2432,15 +2566,15 @@ function renderBoard(animate){
 function setStatus(msg){$("#status").textContent=msg}
 
 /* ---------- campo ---------- */
-function figHTML(p,club,{reveal=true,compact=false,as=null}={}){
+function figHTML(p,club,{reveal=true,compact=false,as=null,cap=false}={}){
   const pl=PLAYERS[p];
   const clubs=compact?[club]:pl.clubs;
   const posTxt=as?`${as} · ${DEC[pl.dec]}`:`${pl.slots.join(" · ")} · ${DEC[pl.dec]}`;
-  return `<div class="fig"><div class="band" style="background:${band(club)}"></div>
+  return `<div class="fig${cap?" capt":""}">${cap?'<span class="cbadge" title="Capitão: gols ×2">C</span>':""}<div class="band" style="background:${band(club)}"></div>
     <div class="pos" title="${esc((as?[as]:pl.slots).map(c=>SLOTNAME[c]).join(", "))}">${posTxt}</div>
     <div class="nm">${esc(pl.name)}</div>
     <div class="cl">${clubs.map(badge).join("")}</div>
-    <div class="gl ${reveal?"":"hidden"}"><b>${reveal?pl.goals:"??"}</b><small>gols</small></div></div>`;
+    <div class="gl ${reveal?"":"hidden"}"><b>${reveal?(cap?pl.goals*2:pl.goals):"??"}</b><small>${cap?"gols ×2":"gols"}</small></div></div>`;
 }
 function renderPitch(){
   document.querySelectorAll(".row").forEach(row=>{
@@ -2448,16 +2582,25 @@ function renderPitch(){
     row.innerHTML=S.xi[pos].map((x,i)=>{
       if(!x){const c=ROWCODES[pos][i];const cand=S.pending!=null&&PLAYERS[S.pending].slots.includes(c)?" cand":"";return `<div class="slot"><div class="empty${cand}" title="${SLOTNAME[c]}">${c}</div></div>`;}
       const key=pos+i, just=S.lastSlot===key?" just":"";
-      const rem=S.subMode?" removable":"";
-      return `<button class="slot${rem}${just}" data-pos="${pos}" data-i="${i}" ${S.subMode?"":"tabindex='-1'"} aria-label="${esc(PLAYERS[x.id].name)}, ${PLAYERS[x.id].goals} gols${S.subMode?" — toque para tirar do campo":""}">${figHTML(x.id,x.club,{compact:true,as:x.as})}</button>`;
+      const rem=S.subMode?" removable":"", isCap=capId()===x.id, canCap=capOn()&&!S.subMode&&S.phase!=="done";
+      const hint=S.subMode?" — toque para tirar do campo":canCap?(isCap?" — capitão; toque para tirar a braçadeira":" — toque para fazer capitão (gols ×2)"):"";
+      return `<button class="slot${rem}${just}${canCap?" capable":""}" data-pos="${pos}" data-i="${i}" ${S.subMode||canCap?"":"tabindex='-1'"} aria-pressed="${isCap}" aria-label="${esc(PLAYERS[x.id].name)}, ${PLAYERS[x.id].goals} gols${hint}">${figHTML(x.id,x.club,{compact:true,as:x.as,cap:isCap})}</button>`;
     }).join("");
   });
   S.lastSlot=null;
 }
 $("#pitch").addEventListener("click",e=>{
-  const b=e.target.closest("button.slot"); if(!b||!S.subMode)return;
+  const b=e.target.closest("button.slot"); if(!b)return;
   const pos=b.dataset.pos,i=+b.dataset.i,x=S.xi[pos][i];
-  S.xi[pos][i]=null; S.subs--; S.subMode=false;
+  if(!S.subMode){
+    if(!capOn()||S.phase==="done"||!x)return;
+    const was=capId()===x.id; S.cap=was?null:x.id;
+    const t=total(), d=TARGET-t;
+    setStatus(was?`${PLAYERS[x.id].name} deixou de ser capitão.`:`${PLAYERS[x.id].name} é o capitão: +${PLAYERS[x.id].goals} gols. `+(d>0?`Faltam ${d}.`:d===0?`Você está em ${TARGET} exatos!`:`Passou ${-d} do alvo.`));
+    renderAll(true); return;
+  }
+  if(capId()===x.id)S.cap=null;
+  S.xi[pos][i]=null; S.subs--; S.subMode=false; if(S.phase==="full")S.phase="idle";
   setStatus(`${PLAYERS[x.id].name} saiu (−${PLAYERS[x.id].goals} gols, −${PENALTY} pts). A vaga de ${SLOTNAME[ROWCODES[pos][i]].toLowerCase()} está livre.`);
   if(S.phase==="pick"){ // recalcula opções só se nenhuma servir mais? mantém as atuais
   }
@@ -2513,11 +2656,11 @@ function spinTo(club,done){
   const land=()=>club?showClub(club):showMix(S.offerClubs);
   $("#offers").innerHTML=""; $("#spin").disabled=true;
   if(reduce){land();done();return}
-  spinning=true; let i=0,delay=45;
+  spinning=true; let i=0,delay=45; const reel=$("#reel"); reel.classList.remove("landed"); reel.classList.add("rolling");
   (function tick(){
     showClub(codes[(i++)%codes.length]);
     delay*=1.12;
-    if(delay<260)setTimeout(tick,delay); else {land();spinning=false;done()}
+    if(delay<260)setTimeout(tick,delay); else {reel.classList.remove("rolling");land();void reel.offsetWidth;reel.classList.add("landed");spinning=false;done()}
   })();
 }
 function showClub(code){
@@ -2555,14 +2698,16 @@ function place(id,code){
   const club=offerClub(S.offers.indexOf(id));
   S.xi[s.row][s.i]={id,club,as:code}; S.offerClubs=[]; S.lastSlot=s.row+s.i; S.offers=[]; S.phase="idle"; S.subMode=false; S.pending=null;
   const t=total();
-  if(placed().length===11){renderAll(true);finish();return}
+  if(placed().length===11){
+    if(capOn()){S.phase="full";renderAll(true);const d=TARGET-t;setStatus(`Time completo: ${t} gols (${d>0?"faltam "+d:d===0?"exatos!":"passou "+(-d)}). ${capId()==null?"Escolha o capitão tocando num jogador e":"Troque o capitão se quiser e"} clique em Encerrar partida.`);return}
+    renderAll(true);finish();return}
   const diff=TARGET-t;
   setStatus(diff>0?`${p.name} trouxe ${p.goals} gols. Faltam ${diff}.`:diff===0?`${p.name} trouxe ${p.goals} gols. Você já está em ${TARGET} com vagas abertas: procure quem tem 0 gols.`:`${p.name} trouxe ${p.goals} gols. Passou ${-diff} do alvo. Uma substituição pode salvar.`);
   renderAll(true);
 }
 
 /* ---------- coringas ---------- */
-$("#spin").addEventListener("click",()=>{ if(S.phase==="idle")roll(); });
+$("#spin").addEventListener("click",()=>{ if(S.phase==="full"){finish();return} if(S.phase==="idle")roll(); });
 $("#w-reroll").addEventListener("click",()=>{ if(S.phase!=="pick"||S.rerolls<1)return; S.rerolls--; S.pending=null; roll(); renderWild(); });
 $("#w-scout").addEventListener("click",()=>{ if(S.phase!=="pick"||S.scouts<1||S.revealed)return; S.scouts--; S.revealed=true; renderOffers(); renderWild(); renderBoard(false); setStatus(`O olheiro abriu o jogo: gols revelados (−${PENALTY} pts).`); });
 $("#w-sub").addEventListener("click",()=>{ if(S.subs<1||!placed().length||S.phase==="done")return; S.subMode=!S.subMode; renderPitch(); renderWild(); setStatus(S.subMode?"Toque num jogador do campo para tirá-lo.":""); });
@@ -2572,8 +2717,9 @@ function renderWild(){
   $("#w-scout").disabled=S.phase!=="pick"||S.scouts<1||S.revealed;
   $("#w-sub").disabled=S.subs<1||!placed().length||S.phase==="done";
   $("#w-sub").setAttribute("aria-pressed",S.subMode?"true":"false");
-  $("#spin").disabled=S.phase!=="idle"||spinning;
-  $("#spin").textContent=S.phase==="done"?"Fim de jogo":S.phase==="pick"?"Escolha um jogador":"Girar";
+  $("#spin").disabled=!(S.phase==="idle"||S.phase==="full")||spinning;
+  $("#spin").textContent=S.phase==="done"?"Fim de jogo":S.phase==="pick"?"Escolha um jogador":S.phase==="full"?"Encerrar partida":"Girar";
+  $("#spin").classList.toggle("endgame",S.phase==="full");
 }
 
 /* ---------- final ---------- */
@@ -2599,10 +2745,11 @@ function finish(){
   const pts=Math.max(0,core+ch.bonus-pen);
   const best=+store("br433-best-"+TARGET)||0; const isBest=pts>best; if(isBest)store("br433-best-"+TARGET,String(pts));
   const title=diff===0?`Na mosca! ${TARGET} cravado`:diff<=md.thr[0]?"Na trave":diff<=md.thr[1]?"Bateu na rede pelo lado de fora":diff<=md.thr[2]?"Bom time, mira torta":"Rebaixado";
-  const r=$("#result"); r.hidden=false;
+  const r=$("#result"); r.hidden=false; r.classList.toggle("exact",diff===0); r.classList.toggle("near",diff>0&&diff<=md.thr[0]);
   r.innerHTML=`<h2>${title}</h2>
     <div class="pts">${pts} pts</div>
     <dl>
+      ${capId()!=null?`<dt>Capitão ${esc(PLAYERS[capId()].name)} (×2)</dt><dd>+${capBonus()} gols</dd>`:""}
       <dt>Gols do XI</dt><dd>${t} (${t-TARGET>0?"+":""}${t-TARGET})</dd>
       <dt>Precisão</dt><dd>${base}</dd>
       <dt>Bônus ${TARGET} exato</dt><dd>${exact}</dd>
@@ -2619,12 +2766,28 @@ function finish(){
   if(RANK_ON){$("#send-btn").onclick=sendScore;$("#nick").addEventListener("keydown",e=>{if(e.key==="Enter")sendScore()});$("#see-rank").onclick=()=>{$("#r-mode").value=md.key;fillRankEras();$("#r-era").value=S.era||"todas";showTab("rank")}}
   $("#copy").onclick=()=>{
     const txt=`${TARGET} Gols ${md.name} (4-3-3${ERA?", "+$("#opt-era").selectedOptions[0].text:""}): ${t} gols (${t-TARGET>0?"+":""}${t-TARGET}), ${pts} pts\n`+
-      ["ATA","MEI","DEF","GOL"].map(p=>S.xi[p].map(x=>`${x.as} ${PLAYERS[x.id].name}`).join(" · ")).join("\n");
+      ["ATA","MEI","DEF","GOL"].map(p=>S.xi[p].map(x=>`${x.as} ${PLAYERS[x.id].name}${capId()===x.id?" (C)":""}`).join(" · ")).join("\n");
     const b=$("#copy");
     try{navigator.clipboard.writeText(txt).then(()=>b.textContent="Copiado",()=>b.textContent="Não deu para copiar")}catch(e){b.textContent="Não deu para copiar"}
   };
   setStatus(diff===0?`Exatamente ${TARGET}. Craque.`:`Terminou com ${t} gols.`);
+  if(!restoring){ if(diff===0)confetti(260); else if(diff<=md.thr[0])confetti(90); else if(diff<=md.thr[1])confetti(35);
+    countUp(r.querySelector(".pts"),pts," pts"); }
   renderWild(); renderOffers();
+}
+let restoring=false;
+function countUp(el,to,suf){if(!el||reduce||to<=0)return;const t0=performance.now(),d=900;(function f(n){const k=Math.min(1,(n-t0)/d);el.textContent=Math.round(to*(1-Math.pow(1-k,3)))+suf;if(k<1)requestAnimationFrame(f)})(t0)}
+function confetti(n){
+  if(reduce)return; const c=document.createElement("canvas"); c.id="confetti"; document.body.appendChild(c);
+  const x=c.getContext("2d"), dpr=Math.min(2,window.devicePixelRatio||1); let W,H;
+  const size=()=>{W=c.width=innerWidth*dpr;H=c.height=innerHeight*dpr}; size();
+  const cols=["#ffb330","#4fd17a","#e9f1e6","#5aa0ff","#ff6b5a","#ffd27a"], ps=[];
+  for(let i=0;i<n;i++){const left=i%2===0;ps.push({x:(left?.08:.92)*W,y:H*.75,vx:(left?1:-1)*(4+Math.random()*9)*dpr,vy:-(10+Math.random()*12)*dpr,r:(3+Math.random()*5)*dpr,a:Math.random()*6,va:(Math.random()-.5)*.4,c:cols[i%cols.length],sh:Math.random()<.5})}
+  const t0=performance.now();
+  (function f(now){const el=now-t0; x.clearRect(0,0,W,H);
+    for(const p of ps){p.vy+=.32*dpr;p.vx*=.992;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.globalAlpha=Math.max(0,1-el/3200);x.fillStyle=p.c;
+      if(p.sh)x.fillRect(-p.r,-p.r/2,p.r*2,p.r);else{x.beginPath();x.arc(0,0,p.r*.7,0,7);x.fill()}x.restore()}
+    if(el<3200)requestAnimationFrame(f);else c.remove()})(t0);
 }
 function applyTarget(){$("#h-target").textContent=TARGET;$("#led-target").textContent=TARGET}
 function newGame(){ERA=$("#opt-era").value;applyTarget();S=fresh();shown=0;$("#result").hidden=true;$("#reel-badge").textContent="?";$("#reel-badge").style.background="";$("#reel-name").innerHTML=`Sorteio<small>${M().label}</small>`;setStatus(MODE==="leg"?"Gire para sortear as 3 primeiras lendas.":"Gire para sortear o primeiro clube.");renderAll(false)}
@@ -2763,7 +2926,7 @@ async function sendScore(){
   if(!NICK_RE.test(nick)){msg.textContent="Use de 2 a 20 letras, números, espaço, ponto, hífen ou _.";return}
   store("br433-nick",nick); btn.disabled=true; msg.textContent="Enviando…";
   try{
-    const lineup=[];for(const r in S.xi)S.xi[r].forEach(x=>lineup.push({id:x.id,vaga:x.as,clube:x.club}));
+    const lineup=[];for(const r in S.xi)S.xi[r].forEach(x=>lineup.push(capId()===x.id?{id:x.id,vaga:x.as,clube:x.club,cap:true}:{id:x.id,vaga:x.as,clube:x.club}));
     const res=await rpc(M().rpc,{p_apelido:nick,p_era:S.era||"",p_escalacao:lineup,p_olheiro:2-S.scouts,p_subs:2-S.subs});
     S.sent=true; btn.textContent="Enviado ✓";
     msg.innerHTML=`${res.pontos} pts registrados. Sua melhor marca está em <b>${res.posicao}º</b> no ranking (${esc(eraName(S.era))}).`;
@@ -2796,7 +2959,7 @@ function start(data){
   applyTarget(); shown=total();
   renderAll(false);
   showReel();
-  if(S.phase==="done")finish();
+  if(S.phase==="done"){restoring=true;finish();restoring=false}
   showTab("home");
 }
 start({});
