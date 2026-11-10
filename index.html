@@ -289,7 +289,7 @@ th{font-family:var(--f-body);font-weight:700}
   #view-players .tbl-tools select{padding-right:32px;background-position:right 11px center,0 0;font-size:13.5px}
   #view-players .tbl-tools label{justify-content:flex-start}
 }
-.capline{margin-top:8px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.capline{margin-top:8px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;line-height:1.35}
 .capline b{color:var(--chalk)} .capline small{font-size:12px;opacity:.85}
 .cbadge{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--led);color:#1d1300;font-family:var(--f-display);font-weight:900;font-size:13px;box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 12px rgba(255,179,48,.55);flex:0 0 auto}
 .cbadge.off{background:transparent;color:var(--led);box-shadow:inset 0 0 0 2px var(--led)}
@@ -298,8 +298,19 @@ th{font-family:var(--f-body);font-weight:700}
 .fig.capt{box-shadow:0 0 0 3px var(--led),0 0 18px rgba(255,179,48,.6),0 8px 18px rgba(0,0,0,.25)}
 .fig.capt .gl b{color:#a86e0b}
 .fig.capt .pos{padding-right:30px}
-.slot.capable{cursor:pointer}
-.slot.capable:hover .fig{transform:translateY(-2px)}
+.cap-btn{width:100%;margin-top:10px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center;text-align:left;border:1px solid rgba(255,179,48,.55);border-radius:10px;padding:9px 12px;background:linear-gradient(180deg,rgba(255,179,48,.16),rgba(255,179,48,.04));color:var(--chalk)}
+.cap-btn .cbadge{grid-row:1/3}
+.cap-btn .cb-t{font-family:var(--f-display);font-weight:800;font-size:16px;letter-spacing:.04em;text-transform:uppercase;color:var(--led)}
+.cap-btn small{font-size:12px;color:var(--muted)}
+@media (max-width:480px){.cap-btn .cb-t{font-size:15px}.cap-btn small{font-size:11px}}
+.cap-btn:disabled{opacity:.4;cursor:default}
+.cap-btn.on{border-color:var(--line);background:var(--panel)}
+.cap-btn.on .cb-t{color:var(--chalk)}
+.slot.capslot{cursor:pointer;background:none;border:0;padding:0}
+.slot .empty.capc{border-color:var(--led);color:var(--led);background:rgba(255,179,48,.18);box-shadow:0 0 16px rgba(255,179,48,.45)}
+.reel.capspin{border-color:var(--led);box-shadow:0 0 0 1px rgba(255,179,48,.6),0 0 28px rgba(255,179,48,.28),var(--sh-2)}
+.cappick .pp-q{display:flex;align-items:center;gap:8px;justify-content:center}
+.offer.capoffer .fig{box-shadow:0 0 0 2px var(--led),0 0 16px rgba(255,179,48,.4)}
 #spin.endgame{background:linear-gradient(180deg,#2fd06b,#1a9a4c);color:#03210f;box-shadow:0 5px 0 #0d6a32}
 
 /* ================= camada de acabamento: profundidade, brilho e movimento ================= */
@@ -376,7 +387,10 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 @keyframes ripple{0%{opacity:.9;transform:translate(-50%,-50%) scale(.3)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4)}}
 .slot .empty{transition:border-color .2s,background .2s;animation:breatheSlot 3.2s ease-in-out infinite}
 @keyframes breatheSlot{0%,100%{background:rgba(255,255,255,.03)}50%{background:rgba(255,255,255,.08)}}
-.slot.capable:hover .fig{box-shadow:0 0 0 2px rgba(255,179,48,.7),0 14px 22px -8px rgba(0,0,0,.6)}
+.cap-btn{box-shadow:var(--sh-1);transition:transform .15s,box-shadow .2s}
+.cap-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,179,48,.6),0 0 22px rgba(255,179,48,.3)}
+.cap-btn:not(:disabled):not(.on) .cbadge{animation:capPulse 2.4s ease-in-out infinite}
+@keyframes capPulse{0%,100%{box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 8px rgba(255,179,48,.4)}50%{box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 18px rgba(255,179,48,.9)}}
 .fig .cbadge{animation:capIn .5s cubic-bezier(.2,.9,.3,1.6)}
 @keyframes capIn{0%{transform:scale(0) rotate(-90deg)}100%{transform:scale(1) rotate(0)}}
 .fig.capt{animation:capGlow 2s ease-in-out infinite}
@@ -495,6 +509,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
           </div>
           <div class="offers" id="offers"></div>
           <button class="spin-btn" id="spin">Girar</button>
+          <button class="cap-btn" id="cap-btn" hidden><span class="cbadge">C</span><span class="cb-t">Girar capitão</span><small>escolha a posição · gols ×2</small></button>
         </div>
 
         <div class="wild" role="group" aria-label="Coringas">
@@ -2505,7 +2520,7 @@ const MODES={
       label:"33 seleções + Resto do Mundo",unit:"seleção",
       eras:[["","Todas as épocas"],["L1","Clássicos (até 1979)"],["L2","1980–1999"],["L3","2000–2026"]],
       desc:"Gire o caça-níquel, escolha entre 3 lendas de seleções diferentes e monte um 4-3-3 que some exatamente 2.000 gols na carreira (clubes + seleção).",
-      rules:'<b>Como jogar.</b> Cada giro mostra <b>3 lendas de 3 seleções diferentes</b>, sorteadas ao acaso entre <b>33 seleções</b> tradicionais em Copas e o <b>Resto do Mundo</b> (que reúne também os maiores ídolos de Gana, Tunísia, Romênia, Bulgária, Áustria, Irã, Arábia Saudita, Austrália, Costa Rica e Argélia). Base: <b>870 lendas</b>, incluindo os 100 maiores da revista <i>World Soccer</i>. Cada jogador vale os gols oficiais da <b>carreira toda</b> (clubes + seleção). Escolha um: ele entra numa vaga livre da posição dele no 4-3-3. Precisão e <b>2.000 em cheio</b> valem até <b>1000 pts</b> (−1 pt por gol de diferença). <b>Capitão:</b> toque num jogador em campo para que os gols dele contem <b>em dobro</b>; dá para trocar a qualquer momento, e com o time completo o jogo espera você clicar em <b>Encerrar partida</b>. <b>Entrosamento</b> extra: 3 da mesma seleção +20, 4 +40, 5 +70, 6 ou mais +100, e cada linha inteira de uma só seleção <b>+200</b>. Cada <b>Olheiro</b> ou <b>Substituição</b> tira <b>100 pts</b>; Girar de novo é grátis.'},
+      rules:'<b>Como jogar.</b> Cada giro mostra <b>3 lendas de 3 seleções diferentes</b>, sorteadas ao acaso entre <b>33 seleções</b> tradicionais em Copas e o <b>Resto do Mundo</b> (que reúne também os maiores ídolos de Gana, Tunísia, Romênia, Bulgária, Áustria, Irã, Arábia Saudita, Austrália, Costa Rica e Argélia). Base: <b>870 lendas</b>, incluindo os 100 maiores da revista <i>World Soccer</i>. Cada jogador vale os gols oficiais da <b>carreira toda</b> (clubes + seleção). Escolha um: ele entra numa vaga livre da posição dele no 4-3-3. Precisão e <b>2.000 em cheio</b> valem até <b>1000 pts</b> (−1 pt por gol de diferença). <b>Giro do capitão</b> (1 por partida): em vez de um giro normal, escolha a <b>posição</b> e gire; aparecem 3 lendas dessa posição, e quem você escolher vira o <b>capitão</b>, com gols <b>em dobro</b>. A escolha é com os gols escondidos e não tem troca; se o capitão for substituído, a braçadeira sai junto. <b>Entrosamento</b> extra: 3 da mesma seleção +20, 4 +40, 5 +70, 6 ou mais +100, e cada linha inteira de uma só seleção <b>+200</b>. Cada <b>Olheiro</b> ou <b>Substituição</b> tira <b>100 pts</b>; Girar de novo é grátis.'},
 };
 function M(){return MODES[MODE]}
 function applyMode(m){
@@ -2533,11 +2548,19 @@ function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localSto
 let S;
 function fresh(){
   return {target:TARGET,era:ERA,xi:{ATA:[null,null,null],MEI:[null,null,null],DEF:[null,null,null,null],GOL:[null]},
-    offers:[],club:null,rerolls:2,scouts:2,subs:2,subMode:false,revealed:false,phase:"idle",lastSlot:null,pending:null,cap:null,v:3,mode:MODE};
+    offers:[],club:null,rerolls:2,scouts:2,subs:2,subMode:false,revealed:false,phase:"idle",lastSlot:null,pending:null,cap:null,capUsed:false,capMode:false,capSlot:null,v:3,mode:MODE};
 }
 function placed(){const out=[];for(const p in S.xi)S.xi[p].forEach(x=>x&&out.push(x));return out}
 function capOn(){return MODE==="leg"}
 function capId(){return capOn()&&S.cap!=null&&placed().some(x=>x.id===S.cap)?S.cap:null}
+function capAvail(){return capOn()&&!S.capUsed&&S.cap==null}
+function capCodes(){ // posições abertas com pelo menos 1 lenda disponível na era
+  const by=eligibleByClub(), ok=new Set();
+  for(const c in by)for(const id of by[c])PLAYERS[id].slots.forEach(k=>ok.add(k));
+  const out=[],seen=new Set();
+  for(const r in S.xi)S.xi[r].forEach((v,i)=>{const c=ROWCODES[r][i];if(!v&&ok.has(c)&&!seen.has(c)){seen.add(c);out.push({row:r,i,code:c})}});
+  return out;
+}
 function capBonus(){const c=capId();return c==null?0:PLAYERS[c].goals}
 function total(){return placed().reduce((s,x)=>s+PLAYERS[x.id].goals,0)+capBonus()}
 function openCodes(){const s=new Set();for(const r in S.xi)S.xi[r].forEach((v,i)=>{if(!v)s.add(ROWCODES[r][i])});return s}
@@ -2554,8 +2577,11 @@ function renderBoard(animate){
   $("#slots-left").textContent=(11-n)+(11-n===1?" vaga":" vagas");
   const cl=$("#capline"); cl.hidden=!capOn();
   if(capOn()){const c=capId();
-    cl.innerHTML=c!=null?`<span class="cbadge">C</span> Capitão: <b>${esc(PLAYERS[c].name)}</b> · +${PLAYERS[c].goals} gols (×2)`+(S.phase!=="done"?` <small>Toque em outro jogador para trocar.</small>`:"")
-      :n?`<span class="cbadge off">C</span> Toque num jogador em campo para escolher o <b>capitão</b>: os gols dele contam em dobro.`:`<span class="cbadge off">C</span> No Legends você escolhe um <b>capitão</b> (gols ×2) quando quiser.`;}
+    cl.innerHTML=c!=null?`<span class="cbadge">C</span><span>Capitão: <b>${esc(PLAYERS[c].name)}</b> · +${PLAYERS[c].goals} gols (×2)</span>`
+      :S.capUsed||S.cap!=null?`<span class="cbadge off">C</span><span>O capitão foi substituído e levou a braçadeira.</span>`
+      :S.capSlot?`<span class="cbadge">C</span><span>Giro do capitão na posição <b>${S.capSlot.code}</b>: quem você escolher terá gols ×2.</span>`
+      :S.phase==="done"?`<span class="cbadge off">C</span><span>Partida sem capitão.</span>`
+      :`<span class="cbadge off">C</span><span>Você tem <b>1 giro do capitão</b>: escolha a posição e quem sair terá gols ×2.</span>`;}
   const from=shown; shown=t;
   if(animate&&!reduce&&from!==t){led.classList.remove("bump","shake");void led.offsetWidth;led.classList.add(t>TARGET&&from<=TARGET?"shake":"bump")}
   if(!animate||reduce||from===t){$("#total").textContent=String(t).padStart(3,"0");return}
@@ -2577,39 +2603,37 @@ function figHTML(p,club,{reveal=true,compact=false,as=null,cap=false}={}){
     <div class="gl ${reveal?"":"hidden"}"><b>${reveal?(cap?pl.goals*2:pl.goals):"??"}</b><small>${cap?"gols ×2":"gols"}</small></div></div>`;
 }
 function renderPitch(){
+  const capSet=S.capMode&&S.phase==="idle"?new Set(capCodes().map(k=>k.code)):null;
   document.querySelectorAll(".row").forEach(row=>{
     const pos=row.dataset.pos;
     row.innerHTML=S.xi[pos].map((x,i)=>{
-      if(!x){const c=ROWCODES[pos][i];const cand=S.pending!=null&&PLAYERS[S.pending].slots.includes(c)?" cand":"";return `<div class="slot"><div class="empty${cand}" title="${SLOTNAME[c]}">${c}</div></div>`;}
+      if(!x){const c=ROWCODES[pos][i];
+        if(capSet&&capSet.has(c))return `<button class="slot capslot" data-pos="${pos}" data-i="${i}" data-capcode="${c}" aria-label="Girar capitão na posição ${SLOTNAME[c]}"><div class="empty cand capc" title="${SLOTNAME[c]}">${c}</div></button>`;
+        const cand=(S.pending!=null&&PLAYERS[S.pending].slots.includes(c))||(S.capSlot&&S.capSlot.code===c)?" cand":"";return `<div class="slot"><div class="empty${cand}${S.capSlot&&S.capSlot.code===c?" capc":""}" title="${SLOTNAME[c]}">${c}</div></div>`;}
       const key=pos+i, just=S.lastSlot===key?" just":"";
-      const rem=S.subMode?" removable":"", isCap=capId()===x.id, canCap=capOn()&&!S.subMode&&S.phase!=="done";
-      const hint=S.subMode?" — toque para tirar do campo":canCap?(isCap?" — capitão; toque para tirar a braçadeira":" — toque para fazer capitão (gols ×2)"):"";
-      return `<button class="slot${rem}${just}${canCap?" capable":""}" data-pos="${pos}" data-i="${i}" ${S.subMode||canCap?"":"tabindex='-1'"} aria-pressed="${isCap}" aria-label="${esc(PLAYERS[x.id].name)}, ${PLAYERS[x.id].goals} gols${hint}">${figHTML(x.id,x.club,{compact:true,as:x.as,cap:isCap})}</button>`;
+      const rem=S.subMode?" removable":"", isCap=capId()===x.id;
+      const hint=S.subMode?" — toque para tirar do campo":isCap?" — capitão (gols ×2)":"";
+      return `<button class="slot${rem}${just}" data-pos="${pos}" data-i="${i}" ${S.subMode?"":"tabindex='-1'"} aria-label="${esc(PLAYERS[x.id].name)}, ${PLAYERS[x.id].goals} gols${hint}">${figHTML(x.id,x.club,{compact:true,as:x.as,cap:isCap})}</button>`;
     }).join("");
   });
   S.lastSlot=null;
 }
 $("#pitch").addEventListener("click",e=>{
   const b=e.target.closest("button.slot"); if(!b)return;
+  if(b.dataset.capcode){capSpin(b.dataset.capcode);return}
   const pos=b.dataset.pos,i=+b.dataset.i,x=S.xi[pos][i];
-  if(!S.subMode){
-    if(!capOn()||S.phase==="done"||!x)return;
-    const was=capId()===x.id; S.cap=was?null:x.id;
-    const t=total(), d=TARGET-t;
-    setStatus(was?`${PLAYERS[x.id].name} deixou de ser capitão.`:`${PLAYERS[x.id].name} é o capitão: +${PLAYERS[x.id].goals} gols. `+(d>0?`Faltam ${d}.`:d===0?`Você está em ${TARGET} exatos!`:`Passou ${-d} do alvo.`));
-    renderAll(true); return;
-  }
-  if(capId()===x.id)S.cap=null;
-  S.xi[pos][i]=null; S.subs--; S.subMode=false; if(S.phase==="full")S.phase="idle";
-  setStatus(`${PLAYERS[x.id].name} saiu (−${PLAYERS[x.id].goals} gols, −${PENALTY} pts). A vaga de ${SLOTNAME[ROWCODES[pos][i]].toLowerCase()} está livre.`);
+  if(!S.subMode||!x)return;
+  const wasCap=capId()===x.id;
+  S.xi[pos][i]=null; S.subs--; S.subMode=false;
+  setStatus(`${PLAYERS[x.id].name} saiu (−${PLAYERS[x.id].goals*(wasCap?2:1)} gols, −${PENALTY} pts)${wasCap?" e levou a braçadeira de capitão":""}. A vaga de ${SLOTNAME[ROWCODES[pos][i]].toLowerCase()} está livre.`);
   if(S.phase==="pick"){ // recalcula opções só se nenhuma servir mais? mantém as atuais
   }
   renderAll(true);
 });
 
 /* ---------- sorteio ---------- */
-function eligibleByClub(){
-  const used=usedIds(), open=openCodes(), usedNames=new Set(placed().map(x=>PLAYERS[x.id].name+"|"+PLAYERS[x.id].pos));
+function eligibleByClub(code){
+  const used=usedIds(), open=code?new Set([code]):openCodes(), usedNames=new Set(placed().map(x=>PLAYERS[x.id].name+"|"+PLAYERS[x.id].pos));
   const by={};
   for(const p of PLAYERS){
     if(used.has(p.id)||!p.slots.some(c=>open.has(c))||!inEra(p)||usedNames.has(p.name+"|"+p.pos))continue;
@@ -2620,7 +2644,7 @@ function eligibleByClub(){
 let spinning=false;
 function roll(){
   if(spinning)return;
-  const by=eligibleByClub();
+  const by=eligibleByClub(S.capSlot&&S.capSlot.code);
   let pool=Object.keys(by).filter(c=>by[c].length>=3);
   if(!pool.length)pool=Object.keys(by).filter(c=>by[c].length>=1);
   if(!pool.length){setStatus("Nenhum jogador disponível para as vagas abertas.");return}
@@ -2632,7 +2656,7 @@ function roll(){
       const c=rnd(any), id=shuffle(by[c]).find(i=>!pick.includes(i)); if(id==null)break; pick.push(id); pc.push(c);
     }
     S.offers=pick; S.offerClubs=pc; S.club=null; S.revealed=false; S.phase="pick"; S.pending=null;
-    spinTo(null,()=>{renderAll(false);setStatus(`Saíram ${listNames(pc)}. Escolha um jogador.`)});
+    spinTo(null,()=>{renderAll(false);setStatus(S.capSlot?`Giro do capitão (${SLOTNAME[S.capSlot.code].toLowerCase()}): saíram ${listNames(pc)}. Quem você escolher será o capitão, com gols ×2.`:`Saíram ${listNames(pc)}. Escolha um jogador.`)});
     return;
   }
   const club=rnd(pool);
@@ -2654,7 +2678,7 @@ function showReel(){ if(S.club)showClub(S.club); else if(S.offerClubs&&S.offerCl
 function spinTo(club,done){
   const codes=Object.keys(CLUBS);
   const land=()=>club?showClub(club):showMix(S.offerClubs);
-  $("#offers").innerHTML=""; $("#spin").disabled=true;
+  $("#offers").innerHTML=""; $("#spin").disabled=true; $("#reel").classList.toggle("capspin",!!S.capSlot);
   if(reduce){land();done();return}
   spinning=true; let i=0,delay=45; const reel=$("#reel"); reel.classList.remove("landed"); reel.classList.add("rolling");
   (function tick(){
@@ -2671,15 +2695,24 @@ function showClub(code){
 }
 function renderOffers(){
   const box=$("#offers");
+  $("#reel").classList.toggle("capspin",!!S.capSlot||(S.capMode&&S.phase==="idle"));
+  if(S.capMode&&S.phase==="idle"){
+    const cs=capCodes();
+    box.innerHTML=`<div class="pospick cappick"><div class="pp-q"><span class="cbadge">C</span><span>Em qual posição você quer girar o <b>capitão</b>?</span></div><div class="pp-opts">${cs.map(s=>`<button data-capcode="${s.code}"><b>${s.code}</b><span>${SLOTNAME[s.code]}</span></button>`).join("")}</div><button class="pp-back" data-capcancel="1">Cancelar e voltar ao giro normal</button></div>`;
+    return;
+  }
   if(S.phase!=="pick"){box.innerHTML="";return}
   if(S.pending!=null){
     const p=PLAYERS[S.pending];
     box.innerHTML=`<div class="pospick"><div class="pp-q">Em qual posição <b>${esc(p.name)}</b> vai jogar?</div><div class="pp-opts">${validSlots(p).map(s=>`<button data-code="${s.code}"><b>${s.code}</b><span>${SLOTNAME[s.code]}</span></button>`).join("")}</div><button class="pp-back" data-back="1">Voltar às opções</button></div>`;
     return;
   }
-  box.innerHTML=S.offers.map((id,i)=>`<button class="offer" data-id="${id}" aria-label="Escolher ${esc(PLAYERS[id].name)}">${figHTML(id,offerClub(i),{reveal:S.revealed})}</button>`).join("");
+  const cs=!!S.capSlot;
+  box.innerHTML=S.offers.map((id,i)=>`<button class="offer${cs?" capoffer":""}" data-id="${id}" aria-label="Escolher ${esc(PLAYERS[id].name)}${cs?" como capitão":""}">${figHTML(id,offerClub(i),{reveal:S.revealed,cap:cs})}</button>`).join("");
 }
 $("#offers").addEventListener("click",e=>{
+  const cc=e.target.closest("[data-capcode]"); if(cc&&S.capMode&&S.phase==="idle"){capSpin(cc.dataset.capcode);return}
+  if(e.target.closest("[data-capcancel]")){capCancel();return}
   if(S.phase!=="pick")return;
   const pc=e.target.closest("[data-code]"); if(pc&&S.pending!=null){place(S.pending,pc.dataset.code);return}
   if(e.target.closest("[data-back]")){S.pending=null;renderOffers();renderPitch();return}
@@ -2688,6 +2721,7 @@ $("#offers").addEventListener("click",e=>{
 });
 function choose(id){
   const p=PLAYERS[id]; const opts=validSlots(p);
+  if(S.capSlot&&opts.some(v=>v.code===S.capSlot.code)){place(id,S.capSlot.code);return}
   if(!opts.length){setStatus(`Não há vaga livre para ${p.slots.map(c=>SLOTNAME[c].toLowerCase()).join(" ou ")}. Escolha outro ou use uma substituição.`);return}
   if(opts.length===1){place(id,opts[0].code);return}
   S.pending=id; renderOffers(); renderPitch(); setStatus(`${p.name} joga em mais de uma posição. Escolha a vaga.`);
@@ -2697,29 +2731,39 @@ function place(id,code){
   const p=PLAYERS[id]; const s=validSlots(p).find(v=>v.code===code); if(!s)return;
   const club=offerClub(S.offers.indexOf(id));
   S.xi[s.row][s.i]={id,club,as:code}; S.offerClubs=[]; S.lastSlot=s.row+s.i; S.offers=[]; S.phase="idle"; S.subMode=false; S.pending=null;
-  const t=total();
-  if(placed().length===11){
-    if(capOn()){S.phase="full";renderAll(true);const d=TARGET-t;setStatus(`Time completo: ${t} gols (${d>0?"faltam "+d:d===0?"exatos!":"passou "+(-d)}). ${capId()==null?"Escolha o capitão tocando num jogador e":"Troque o capitão se quiser e"} clique em Encerrar partida.`);return}
-    renderAll(true);finish();return}
-  const diff=TARGET-t;
-  setStatus(diff>0?`${p.name} trouxe ${p.goals} gols. Faltam ${diff}.`:diff===0?`${p.name} trouxe ${p.goals} gols. Você já está em ${TARGET} com vagas abertas: procure quem tem 0 gols.`:`${p.name} trouxe ${p.goals} gols. Passou ${-diff} do alvo. Uma substituição pode salvar.`);
+  const isCap=!!S.capSlot; if(isCap){S.cap=id;S.capUsed=true;S.capSlot=null;S.capMode=false}
+  const t=total(), g=p.goals*(isCap?2:1);
+  if(placed().length===11){renderAll(true);finish();return}
+  const diff=TARGET-t, who=isCap?`O capitão ${p.name} trouxe ${p.goals}×2 = ${g} gols.`:`${p.name} trouxe ${g} gols.`;
+  setStatus(diff>0?`${who} Faltam ${diff}.`:diff===0?`${who} Você já está em ${TARGET} com vagas abertas: procure quem tem 0 gols.`:`${who} Passou ${-diff} do alvo. Uma substituição pode salvar.`);
   renderAll(true);
 }
 
 /* ---------- coringas ---------- */
-$("#spin").addEventListener("click",()=>{ if(S.phase==="full"){finish();return} if(S.phase==="idle")roll(); });
+$("#spin").addEventListener("click",()=>{ if(S.phase==="full"){finish();return} if(S.phase==="idle"&&!S.capMode)roll(); });
+$("#cap-btn").addEventListener("click",()=>{ if(S.capMode&&S.phase==="idle"){capCancel();return} if(!capAvail()||S.phase!=="idle"||spinning)return;
+  S.capMode=true; S.subMode=false; renderAll(false); showCapReel(); setStatus("Giro do capitão: escolha a posição (aqui ou tocando numa vaga livre do campo).") });
+function showCapReel(){const b=$("#reel-badge");b.style.background="linear-gradient(180deg,#ffc659,#e89a17)";b.innerHTML=`<span class="badge" style="background:#1d1300;color:#ffb330;font-size:15px;height:26px;padding:0 8px">C</span>`;$("#reel-name").innerHTML=`Giro do capitão<small>escolha a posição · gols ×2</small>`}
+function capSpin(code){ if(!S.capMode||S.phase!=="idle"||spinning)return; const s=capCodes().find(v=>v.code===code); if(!s)return;
+  S.capSlot=s; roll(); renderWild(); }
+function capCancel(){ if(S.phase!=="idle")return; S.capMode=false; S.capSlot=null; renderAll(false); $("#reel-badge").textContent="?";$("#reel-badge").style.background="";$("#reel-name").innerHTML=`Sorteio<small>${M().label}</small>`; setStatus("Giro do capitão guardado. Gire normalmente quando quiser."); }
 $("#w-reroll").addEventListener("click",()=>{ if(S.phase!=="pick"||S.rerolls<1)return; S.rerolls--; S.pending=null; roll(); renderWild(); });
 $("#w-scout").addEventListener("click",()=>{ if(S.phase!=="pick"||S.scouts<1||S.revealed)return; S.scouts--; S.revealed=true; renderOffers(); renderWild(); renderBoard(false); setStatus(`O olheiro abriu o jogo: gols revelados (−${PENALTY} pts).`); });
-$("#w-sub").addEventListener("click",()=>{ if(S.subs<1||!placed().length||S.phase==="done")return; S.subMode=!S.subMode; renderPitch(); renderWild(); setStatus(S.subMode?"Toque num jogador do campo para tirá-lo.":""); });
+$("#w-sub").addEventListener("click",()=>{ if(S.subs<1||!placed().length||S.phase==="done")return; S.subMode=!S.subMode; if(S.subMode&&S.phase==="idle"){S.capMode=false;S.capSlot=null;renderOffers()} renderPitch(); renderWild(); setStatus(S.subMode?"Toque num jogador do campo para tirá-lo.":""); });
 function renderWild(){
   $("#n-reroll").textContent=S.rerolls; $("#n-scout").textContent=S.scouts; $("#n-sub").textContent=S.subs;
   $("#w-reroll").disabled=S.phase!=="pick"||S.rerolls<1||spinning;
   $("#w-scout").disabled=S.phase!=="pick"||S.scouts<1||S.revealed;
   $("#w-sub").disabled=S.subs<1||!placed().length||S.phase==="done";
   $("#w-sub").setAttribute("aria-pressed",S.subMode?"true":"false");
-  $("#spin").disabled=!(S.phase==="idle"||S.phase==="full")||spinning;
-  $("#spin").textContent=S.phase==="done"?"Fim de jogo":S.phase==="pick"?"Escolha um jogador":S.phase==="full"?"Encerrar partida":"Girar";
+  const capPick=S.capMode&&S.phase==="idle";
+  $("#spin").disabled=!(S.phase==="idle"||S.phase==="full")||spinning||capPick;
+  $("#spin").textContent=S.phase==="done"?"Fim de jogo":S.phase==="pick"?(S.capSlot?"Escolha o capitão":"Escolha um jogador"):S.phase==="full"?"Encerrar partida":capPick?"Escolha a posição":"Girar";
   $("#spin").classList.toggle("endgame",S.phase==="full");
+  const cb=$("#cap-btn"); cb.hidden=!capOn()||!(capAvail()||S.capMode)||S.phase==="done"||!!S.capSlot;
+  cb.disabled=!(S.phase==="idle")||spinning; cb.classList.toggle("on",capPick);
+  cb.querySelector(".cb-t").textContent=capPick?"Cancelar capitão":"Girar capitão";
+  cb.querySelector("small").textContent=capPick?"volta ao giro normal":"1 por partida · escolha a posição · gols ×2";
 }
 
 /* ---------- final ---------- */
@@ -2958,7 +3002,8 @@ function start(data){
   $("#reel-name").innerHTML=`Sorteio<small>${M().label}</small>`;
   applyTarget(); shown=total();
   renderAll(false);
-  showReel();
+  showReel(); if(S.capMode&&S.phase==="idle")showCapReel();
+  if(S.phase==="full")finish();
   if(S.phase==="done"){restoring=true;finish();restoring=false}
   showTab("home");
 }
