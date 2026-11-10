@@ -1,0 +1,30 @@
+# Despertador do Supabase
+# O plano gratuito pausa o projeto depois de 7 dias com pouco uso.
+# Este workflow consulta o ranking 2x por dia (só leitura, não grava nada) para manter o projeto ativo.
+# A chave abaixo é a chave pública (publishable), a mesma que já está no index.html.
+
+name: Despertador do Supabase
+
+on:
+  schedule:
+    - cron: "17 9,21 * * *"   # 06:17 e 18:17 em Brasília (o GitHub usa horário UTC)
+  workflow_dispatch:           # botão "Run workflow" para testar na hora
+
+jobs:
+  acordar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Consultar o ranking
+        env:
+          SUPABASE_URL: https://xpfgzhfmgxyjgxpebpye.supabase.co
+          SUPABASE_KEY: sb_publishable_Le8_6WAj2LFZB0X6yIuUFQ_4tANEk5W
+        run: |
+          for modo in brasileirao legends; do
+            curl --fail-with-body -sS --retry 3 --retry-delay 10 \
+              -X POST "$SUPABASE_URL/rest/v1/rpc/top_ranking" \
+              -H "apikey: $SUPABASE_KEY" \
+              -H "Content-Type: application/json" \
+              -d "{\"p_periodo\":\"sempre\",\"p_era\":\"\",\"p_limite\":1,\"p_modo\":\"$modo\"}"
+            echo " <- $modo ok"
+          done
